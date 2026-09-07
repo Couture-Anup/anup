@@ -8,6 +8,7 @@ import { ToastProvider } from '@/contexts/ToastContext';
 import { CartSidebar } from '@/components/cart-sidebar';
 import { client } from '@/lib/sanity';
 import { ANNOUNCEMENT_BAR_QUERY, NAVIGATION_QUERY } from '@/lib/queries';
+import FloatingSocialBar from "@/components/FloatingSocialBar";
 
 export const metadata: Metadata = {
   title: 'Premium Men\'s Ethnic Wear & Party Shirts Online – Anup Gupta',
@@ -34,6 +35,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
               <div className="print:hidden">
                 <Footer />
               </div>
+              <FloatingSocialBar />
               <CartSidebar />
             </CartProvider>
           </AuthProvider>
