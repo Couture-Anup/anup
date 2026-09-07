@@ -1,62 +1,72 @@
 "use client";
 
-import {
-  FaWhatsapp,
-  FaFacebookF,
-  FaInstagram,
-  FaLinkedinIn,
-  FaYoutube,
-} from "react-icons/fa";
-
 export default function FloatingSocialBar() {
-  return (
-    <div className="fixed left-0 top-1/2 -translate-y-1/2 z-[9999] flex flex-col bg-white rounded-r-xl shadow-lg overflow-hidden">
+  const iconClass =
+    "w-14 h-14 flex items-center justify-center text-xl font-bold hover:bg-gray-100 transition-colors";
 
+  return (
+    <div className="fixed left-0 top-1/2 -translate-y-1/2 z-[9999] flex flex-col bg-white rounded-r-xl shadow-xl overflow-hidden">
+
+      {/* WhatsApp */}
       <a
-        href="https://wa.me/9625981155"
+        href="https://wa.me/919625981155"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="WhatsApp"
-        className="w-14 h-14 flex items-center justify-center text-green-500 text-2xl hover:bg-gray-100"
+        className={`${iconClass} text-green-500`}
       >
-        <FaWhatsapp />
+        WA
       </a>
 
-      <a
-        href="#"
-        aria-label="Facebook"
-        className="w-14 h-14 flex items-center justify-center text-blue-600 text-2xl hover:bg-gray-100"
-      >
-        <FaFacebookF />
-      </a>
-
+      {/* Facebook */}
       <a
         href="https://www.facebook.com/profile.php?id=61561000412885"
-        aria-label="Instagram"
-        className="w-14 h-14 flex items-center justify-center text-pink-500 text-2xl hover:bg-gray-100"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Facebook"
+        className={`${iconClass} text-blue-600 text-2xl`}
       >
-        <FaInstagram />
+        f
       </a>
 
+      {/* Instagram */}
+      <a
+        href="https://www.instagram.com/anupguptadesigner/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram"
+        className={`${iconClass} text-pink-500`}
+      >
+        IG
+      </a>
+
+      {/* LinkedIn */}
       <a
         href="https://www.linkedin.com/in/anup-gupta-b05b99425/"
+        target="_blank"
+        rel="noopener noreferrer"
         aria-label="LinkedIn"
-        className="w-14 h-14 flex items-center justify-center text-blue-700 text-2xl hover:bg-gray-100"
+        className={`${iconClass} text-blue-700`}
       >
-        <FaLinkedinIn />
+        in
       </a>
 
-      <a
-        href="#"
-        aria-label="YouTube"
-        className="w-14 h-14 flex items-center justify-center text-red-600 text-2xl hover:bg-gray-100"
-      >
-        <FaYoutube />
-      </a>
-
+      {/* YouTube */}
       <a
         href="https://www.youtube.com/channel/UCmSXqR5sF3Kz-FKenpm7rHg"
-        className="w-14 h-32 bg-blue-600 text-white flex items-center justify-center text-sm font-bold tracking-wider"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="YouTube"
+        className={`${iconClass} text-red-600`}
+      >
+        ▶
+      </a>
+
+      {/* Enquiry */}
+      <a
+        href="/contact"
+        aria-label="Enquiry"
+        className="w-14 h-32 bg-blue-600 text-white flex items-center justify-center text-xs font-bold tracking-wider"
         style={{
           writingMode: "vertical-rl",
           transform: "rotate(180deg)",
