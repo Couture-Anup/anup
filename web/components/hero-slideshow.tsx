@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import Image from 'next/image';
@@ -16,27 +16,27 @@ interface Slide {
 
 const SLIDES: Slide[] = [
   {
-    imageUrl: '/slider/slide-1.jpg',
+    imageUrl: '/slider/slider 1.png',
     link: '#',
   },
   {
-    imageUrl: '/slider/slide-2.jpg',
+    imageUrl: '/slider/slider 2.png',
     link: '#',
   },
   {
-    imageUrl: '/slider/slide-3.jpg',
+    imageUrl: '/slider/slider 3.png',
     link: '#',
   },
   {
-    imageUrl: '/slider/slide-4.jpg',
+    imageUrl: '/slider/slider 4.png',
     link: '#',
   },
   {
-    imageUrl: '/slider/slide-5.jpg',
+    imageUrl: '/slider/slider 5.png',
     link: '#',
   },
   {
-    imageUrl: '/slider/slide-6.jpg',
+    imageUrl: '/slider/slider 6.png',
     link: '#',
   },
 ];
@@ -46,26 +46,28 @@ export function HeroSlideshow({
 }: {
   slides?: Slide[];
 }) {
-  const activeSlides =
-    slides && slides.length > 0 ? slides : SLIDES;
+  const activeSlides = SLIDES;
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
       align: 'start',
+      containScroll: false,
     },
     [
       Autoplay({
         delay: 5000,
         stopOnInteraction: false,
+        stopOnMouseEnter: false,
       }),
     ]
   );
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
+
     setSelectedIndex(emblaApi.selectedScrollSnap());
   }, [emblaApi]);
 
@@ -86,7 +88,10 @@ export function HeroSlideshow({
   return (
     <section className="relative w-full bg-black">
 
-      {/* SLIDER */}
+      {/* =========================
+          EMBLA VIEWPORT
+      ========================== */}
+
       <div
         ref={emblaRef}
         className="w-full overflow-hidden"
@@ -98,21 +103,22 @@ export function HeroSlideshow({
               key={index}
               className="
                 relative
-                flex-[0_0_100%]
                 min-w-0
+                flex-[0_0_100%]
                 w-full
                 bg-black
               "
             >
+              {/* =========================
+                  FULL IMAGE
+                  NO CROP
+                  NO FIXED HEIGHT
+              ========================== */}
 
-              {/* FULL IMAGE - NO CROPPING */}
               {slide.imageUrl && (
                 <Image
                   src={slide.imageUrl}
-                  alt={
-                    slide.heading1 ||
-                    `Anup Gupta Studio Collection ${index + 1}`
-                  }
+                  alt={`Anup Gupta Studio Slider ${index + 1}`}
                   width={1920}
                   height={1080}
                   sizes="100vw"
@@ -129,19 +135,21 @@ export function HeroSlideshow({
                 />
               )}
 
-              {/* OPTIONAL LINK */}
+              {/* OPTIONAL CLICK LINK */}
+
               {slide.link && slide.link !== '#' && (
                 <Link
                   href={slide.link}
                   className="absolute inset-0 z-10"
                 >
                   <span className="sr-only">
-                    View {slide.heading1 || 'collection'}
+                    View collection
                   </span>
                 </Link>
               )}
 
-              {/* OPTIONAL TEXT */}
+              {/* OPTIONAL TEXT OVERLAY */}
+
               {(slide.heading1 ||
                 slide.heading2 ||
                 slide.description) && (
@@ -165,7 +173,7 @@ export function HeroSlideshow({
                     pointer-events-none
 
                     bg-gradient-to-t
-                    from-black/30
+                    from-black/35
                     via-transparent
                     to-transparent
                   "
@@ -174,6 +182,7 @@ export function HeroSlideshow({
                     <h1
                       className="
                         max-w-4xl
+
                         text-center
                         font-serif
 
@@ -197,6 +206,7 @@ export function HeroSlideshow({
                     <p
                       className="
                         mt-2
+
                         text-center
 
                         text-xs
@@ -205,8 +215,8 @@ export function HeroSlideshow({
 
                         uppercase
                         tracking-widest
-                        font-light
 
+                        font-light
                         drop-shadow-md
                       "
                     >
@@ -230,18 +240,20 @@ export function HeroSlideshow({
                   )}
                 </div>
               )}
-
             </div>
           ))}
-
         </div>
       </div>
 
-      {/* SLIDER DOTS */}
+      {/* =========================
+          SLIDER DOTS
+      ========================== */}
+
       <div
         className="
           absolute
           bottom-3
+          sm:bottom-4
           md:bottom-5
 
           left-0
@@ -268,16 +280,19 @@ export function HeroSlideshow({
               duration-300
 
               ${
-                index === selectedIndex
-                  ? 'w-6 h-2 bg-[#C9A35C]'
-                  : 'w-2 h-2 bg-white/70'
+                selectedIndex === index
+                  ? 'h-2 w-6 bg-[#C9A35C]'
+                  : 'h-2 w-2 bg-white/70 hover:bg-[#C9A35C]'
               }
             `}
           />
         ))}
       </div>
 
-      {/* GOLD BOTTOM LINE */}
+      {/* =========================
+          GOLD BOTTOM LINE
+      ========================== */}
+
       <div
         className="
           pointer-events-none
@@ -298,7 +313,6 @@ export function HeroSlideshow({
           to-transparent
         "
       />
-
     </section>
   );
 }
