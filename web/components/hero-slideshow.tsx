@@ -16,98 +16,289 @@ interface Slide {
 
 const SLIDES: Slide[] = [
   {
-    imageUrl: "https://picsum.photos/seed/hero_slide_1/1920/1080",
-    heading1: "From Dawn Till Dusk",
-    heading2: "Hand-Embroidered Contemporary Fits",
-    link: "#"
+    imageUrl: '/slider/slide-1.jpg',
+    link: '#',
   },
   {
-    imageUrl: "https://picsum.photos/seed/hero_slide_2/1920/1080",
-    heading1: "A New Narrative",
-    heading2: "Signature Evening Wear",
-    link: "#"
+    imageUrl: '/slider/slide-2.jpg',
+    link: '#',
   },
   {
-    imageUrl: "https://picsum.photos/seed/hero_slide_3/1920/1080",
-    heading1: "Classic Monochrome",
-    heading2: "The Timeless Collection",
-    link: "#"
-  }
+    imageUrl: '/slider/slide-3.jpg',
+    link: '#',
+  },
+  {
+    imageUrl: '/slider/slide-4.jpg',
+    link: '#',
+  },
+  {
+    imageUrl: '/slider/slide-5.jpg',
+    link: '#',
+  },
+  {
+    imageUrl: '/slider/slide-6.jpg',
+    link: '#',
+  },
 ];
 
+export function HeroSlideshow({
+  slides,
+}: {
+  slides?: Slide[];
+}) {
+  const activeSlides =
+    slides && slides.length > 0 ? slides : SLIDES;
 
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      align: 'start',
+    },
+    [
+      Autoplay({
+        delay: 5000,
+        stopOnInteraction: false,
+      }),
+    ]
+  );
 
-export function HeroSlideshow({ slides }: { slides?: Slide[] }) {
-  const activeSlides = slides && slides.length > 0 ? slides : SLIDES;
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 5000, stopOnInteraction: false })]);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi, setSelectedIndex]);
+  }, [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
+
+    onSelect();
+
     emblaApi.on('select', onSelect);
     emblaApi.on('reInit', onSelect);
+
+    return () => {
+      emblaApi.off('select', onSelect);
+      emblaApi.off('reInit', onSelect);
+    };
   }, [emblaApi, onSelect]);
 
   return (
-    <section className="relative w-full h-[calc(100vh-104px)] bg-gray-900 overflow-hidden">
-      <div className="overflow-hidden h-full" ref={emblaRef}>
-        <div className="flex h-full">
+    <section className="relative w-full bg-black">
+
+      {/* SLIDER */}
+      <div
+        ref={emblaRef}
+        className="w-full overflow-hidden"
+      >
+        <div className="flex w-full items-start">
+
           {activeSlides.map((slide, index) => (
-            <div className="relative flex-[0_0_100%] min-w-0 h-full" key={index}>
-              <Image 
-                src={slide.imageUrl || ''} 
-                alt={slide.heading1 || 'Hero Slide'}
-                fill
-                className="object-cover"
-                referrerPolicy="no-referrer"
-                priority={index === 0}
-              />
-              {slide.link ? (
-                <Link href={slide.link} className="absolute inset-0 z-10">
-                  <span className="sr-only">Go to {slide.heading1}</span>
+            <div
+              key={index}
+              className="
+                relative
+                flex-[0_0_100%]
+                min-w-0
+                w-full
+                bg-black
+              "
+            >
+
+              {/* FULL IMAGE - NO CROPPING */}
+              {slide.imageUrl && (
+                <Image
+                  src={slide.imageUrl}
+                  alt={
+                    slide.heading1 ||
+                    `Anup Gupta Studio Collection ${index + 1}`
+                  }
+                  width={1920}
+                  height={1080}
+                  sizes="100vw"
+                  priority={index === 0}
+                  draggable={false}
+                  className="
+                    block
+                    w-full
+                    h-auto
+                    object-contain
+                    object-center
+                    select-none
+                  "
+                />
+              )}
+
+              {/* OPTIONAL LINK */}
+              {slide.link && slide.link !== '#' && (
+                <Link
+                  href={slide.link}
+                  className="absolute inset-0 z-10"
+                >
+                  <span className="sr-only">
+                    View {slide.heading1 || 'collection'}
+                  </span>
                 </Link>
-              ) : null}
-              <div className="absolute inset-0 bg-black/20 flex flex-col items-center justify-end text-white pb-16 pointer-events-none">
-                 {slide.heading1 && (
-                   <h1 className="text-4xl md:text-5xl lg:text-7xl font-serif uppercase tracking-[0.05em] text-center mb-2 max-w-4xl leading-tight text-white drop-shadow-lg">
-                     {slide.heading1}
-                   </h1>
-                 )}
-                 {slide.heading2 && (
-                   <p className="text-sm md:text-lg tracking-widest uppercase font-light drop-shadow-md mb-8">
-                     {slide.heading2}
-                   </p>
-                 )}
-                 {slide.description && (
-                   <p className="text-sm md:text-base font-light mb-8 max-w-2xl text-center">
-                     {slide.description}
-                   </p>
-                 )}
-               </div>
+              )}
+
+              {/* OPTIONAL TEXT */}
+              {(slide.heading1 ||
+                slide.heading2 ||
+                slide.description) && (
+                <div
+                  className="
+                    absolute
+                    inset-0
+                    z-[5]
+
+                    flex
+                    flex-col
+                    items-center
+                    justify-end
+
+                    px-5
+                    pb-12
+                    md:pb-16
+
+                    text-white
+
+                    pointer-events-none
+
+                    bg-gradient-to-t
+                    from-black/30
+                    via-transparent
+                    to-transparent
+                  "
+                >
+                  {slide.heading1 && (
+                    <h1
+                      className="
+                        max-w-4xl
+                        text-center
+                        font-serif
+
+                        text-2xl
+                        sm:text-3xl
+                        md:text-5xl
+                        lg:text-6xl
+
+                        uppercase
+                        tracking-[0.05em]
+                        leading-tight
+
+                        drop-shadow-lg
+                      "
+                    >
+                      {slide.heading1}
+                    </h1>
+                  )}
+
+                  {slide.heading2 && (
+                    <p
+                      className="
+                        mt-2
+                        text-center
+
+                        text-xs
+                        sm:text-sm
+                        md:text-lg
+
+                        uppercase
+                        tracking-widest
+                        font-light
+
+                        drop-shadow-md
+                      "
+                    >
+                      {slide.heading2}
+                    </p>
+                  )}
+
+                  {slide.description && (
+                    <p
+                      className="
+                        mt-4
+                        max-w-2xl
+                        text-center
+                        text-sm
+                        md:text-base
+                        font-light
+                      "
+                    >
+                      {slide.description}
+                    </p>
+                  )}
+                </div>
+              )}
+
             </div>
           ))}
+
         </div>
       </div>
-      
-      {/* Navigation Dots */}
-      <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2 z-10">
+
+      {/* SLIDER DOTS */}
+      <div
+        className="
+          absolute
+          bottom-3
+          md:bottom-5
+
+          left-0
+          right-0
+
+          z-20
+
+          flex
+          items-center
+          justify-center
+          gap-2
+        "
+      >
         {activeSlides.map((_, index) => (
           <button
             suppressHydrationWarning
             key={index}
-            className={`w-2 h-2 rounded-full transition-all ${
-              index === selectedIndex ? 'bg-white scale-125' : 'bg-white/50'
-            }`}
+            type="button"
             onClick={() => emblaApi?.scrollTo(index)}
             aria-label={`Go to slide ${index + 1}`}
+            className={`
+              rounded-full
+              transition-all
+              duration-300
+
+              ${
+                index === selectedIndex
+                  ? 'w-6 h-2 bg-[#C9A35C]'
+                  : 'w-2 h-2 bg-white/70'
+              }
+            `}
           />
         ))}
       </div>
+
+      {/* GOLD BOTTOM LINE */}
+      <div
+        className="
+          pointer-events-none
+          absolute
+          bottom-0
+          left-1/2
+
+          z-10
+
+          h-px
+          w-[92%]
+
+          -translate-x-1/2
+
+          bg-gradient-to-r
+          from-transparent
+          via-[#C9A35C]/60
+          to-transparent
+        "
+      />
+
     </section>
   );
 }
