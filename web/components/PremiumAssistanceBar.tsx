@@ -16,7 +16,7 @@ export default function PremiumAssistanceBar() {
         no-underline
       "
     >
-      {/* PREMIUM BACKGROUND */}
+      {/* Premium Background */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -25,33 +25,36 @@ export default function PremiumAssistanceBar() {
         }}
       />
 
-      {/* LEFT DECORATION */}
+      {/* Left Decoration */}
       <div className="pointer-events-none absolute left-4 top-1/2 hidden -translate-y-1/2 items-center lg:flex">
         <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#D4AF70]" />
         <span className="mx-2 h-2 w-2 rotate-45 border border-[#D4AF70]" />
         <div className="h-px w-6 bg-[#D4AF70]/60" />
       </div>
 
-      {/* RIGHT DECORATION */}
+      {/* Right Decoration */}
       <div className="pointer-events-none absolute right-4 top-1/2 hidden -translate-y-1/2 items-center lg:flex">
         <div className="h-px w-6 bg-[#D4AF70]/60" />
         <span className="mx-2 h-2 w-2 rotate-45 border border-[#D4AF70]" />
         <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#D4AF70]" />
       </div>
 
-      {/* CONTENT */}
+      {/* Main Content */}
       <div className="relative mx-auto flex min-h-[42px] max-w-[1500px] items-center justify-center px-3 py-2 md:min-h-[48px] md:px-20">
         <div className="flex flex-col items-center justify-center gap-1 text-center md:flex-row md:gap-4">
 
+          {/* Assistance Text */}
           <span className="font-serif text-[9px] leading-[13px] text-[#D6B16A] sm:text-[10px] md:text-[13px] lg:text-[15px]">
             Need assistance with your order, delivery, or any questions?
           </span>
 
+          {/* Divider */}
           <span className="hidden h-6 w-px bg-[#D4AF70]/50 md:block" />
 
+          {/* WhatsApp Section */}
           <div className="flex items-center justify-center gap-2">
 
-            {/* WHATSAPP ICON */}
+            {/* WhatsApp Icon */}
             <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[#D4AF70]/70 md:h-7 md:w-7">
               <svg
                 viewBox="0 0 24 24"
@@ -62,6 +65,7 @@ export default function PremiumAssistanceBar() {
               </svg>
             </span>
 
+            {/* WhatsApp Number */}
             <span className="font-serif text-[8.5px] leading-[13px] text-[#D6B16A] sm:text-[10px] md:text-[13px] lg:text-[15px]">
               Connect with us on WhatsApp at{" "}
               <strong className="font-semibold text-[#E9C979]">
@@ -73,11 +77,8 @@ export default function PremiumAssistanceBar() {
         </div>
       </div>
 
-      {/* GOLD LINE */}
+      {/* Bottom Gold Line */}
       <div className="pointer-events-none absolute bottom-0 left-1/2 h-px w-[82%] -translate-x-1/2 bg-gradient-to-r from-transparent via-[#D4AF70]/70 to-transparent" />
     </a>
   );
 }
-
-
-ye code pull nhi ho rha hai 
