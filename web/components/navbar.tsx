@@ -33,7 +33,6 @@ function NavItem({
     links: { label: string; href: string }[];
   }[];
   images?: { src: string; label: string; href: string }[];
-  rightAlign?: boolean;
 }) {
   return (
     <div className="group flex h-full items-center">
@@ -52,7 +51,7 @@ function NavItem({
       {(links || columns) && (
         <div
           className="
-            invisible absolute left-0 top-[78px] z-50
+            invisible absolute left-0 top-[118px] z-50
             w-full
             border-t border-[#C9A35C]/25
             bg-[#080808]
@@ -122,13 +121,21 @@ function NavItem({
                   <Link
                     href={img.href}
                     key={i}
-                    className="group/img relative block aspect-[3/4] w-[300px] cursor-pointer overflow-hidden"
+                    className="
+                      group/img relative block
+                      aspect-[3/4] w-[300px]
+                      cursor-pointer overflow-hidden
+                    "
                   >
                     <Image
                       src={img.src}
                       alt={img.label}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover/img:scale-105"
+                      className="
+                        object-cover
+                        transition-transform duration-700
+                        group-hover/img:scale-105
+                      "
                       referrerPolicy="no-referrer"
                     />
 
@@ -212,20 +219,19 @@ export function Navbar({
 
   return (
     <>
-      {/* =========================================================
+      {/* =====================================================
           SIZE-INCLUSIVE BAR
-          WHITE + THIN
-      ========================================================== */}
+          WHITE + SLIM
+      ====================================================== */}
 
       <div
         className="
           relative
-          flex min-h-[28px]
+          flex min-h-[24px]
           items-center justify-center
-          border-b border-[#C9A35C]/20
+          border-b border-[#C9A35C]/15
           bg-white
-          px-4
-          py-1
+          px-4 py-[3px]
           text-black
         "
       >
@@ -241,7 +247,7 @@ export function Navbar({
               md:left-8
             "
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-3.5 w-3.5" />
           </button>
         )}
 
@@ -253,8 +259,8 @@ export function Navbar({
             font-bold
             tracking-wide
             duration-500
-            sm:text-[10px]
-            md:text-[11px]
+            sm:text-[9.5px]
+            md:text-[10px]
           "
           key={currentAnnouncementIndex}
         >
@@ -284,14 +290,14 @@ export function Navbar({
               md:right-8
             "
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-3.5 w-3.5" />
           </button>
         )}
       </div>
 
-      {/* =========================================================
-          MAIN BLACK + GOLD NAVBAR
-      ========================================================== */}
+      {/* =====================================================
+          MAIN PREMIUM BLACK + GOLD NAVBAR
+      ====================================================== */}
 
       <header
         className="
@@ -301,11 +307,13 @@ export function Navbar({
           shadow-[0_6px_25px_rgba(0,0,0,0.22)]
         "
       >
-        {/* ================= MOBILE HEADER ================= */}
+        {/* =====================================================
+            MOBILE HEADER
+        ====================================================== */}
 
         <div
           className="
-            flex h-[64px]
+            flex h-[76px]
             items-center justify-between
             px-4
             lg:hidden
@@ -326,41 +334,33 @@ export function Navbar({
             </button>
           </div>
 
-          {/* MOBILE LOGO - ZOOMED */}
+          {/* MOBILE LOGO - FULL VISIBLE */}
 
           <Link
             href="/"
             className="
-              relative
-              flex h-[58px]
-              w-[170px]
+              flex h-full
+              w-[150px]
               shrink-0
               items-center justify-center
-              overflow-hidden
             "
           >
             <Image
               src="/anup-gupta-gold-logo.png"
               alt="Anup Gupta Menswear Designer"
-              width={500}
-              height={500}
+              width={150}
+              height={150}
               priority
               className="
-                h-[118px]
-                w-[118px]
+                h-[70px]
+                w-[70px]
                 object-contain
-                scale-[1.35]
               "
             />
           </Link>
 
-          <div
-            className="
-              flex flex-1
-              items-center justify-end
-              gap-4
-            "
-          >
+          <div className="flex flex-1 items-center justify-end gap-4">
+
             <SearchModal
               triggerClass="
                 text-[#C9A35C]
@@ -406,48 +406,51 @@ export function Navbar({
           </div>
         </div>
 
-        {/* ================= DESKTOP HEADER ================= */}
+        {/* =====================================================
+            DESKTOP HEADER
+        ====================================================== */}
 
         <div
           className="
             mx-auto hidden
-            h-[78px]
-            max-w-[1800px]
+            h-[118px]
+            max-w-[1900px]
             items-center justify-between
             px-8
             lg:flex
           "
         >
-          {/* DESKTOP LOGO - LARGE + ZOOMED */}
+          {/* =====================================================
+              DESKTOP LOGO
+              FULL IMAGE - NO CROP - NO OVERFLOW HIDDEN
+          ====================================================== */}
 
           <Link
             href="/"
             className="
-              relative
-              flex h-[78px]
-              w-[260px]
+              flex h-full
+              w-[300px]
               shrink-0
-              items-center
-              overflow-hidden
+              items-center justify-start
             "
           >
             <Image
               src="/anup-gupta-gold-logo.png"
               alt="Anup Gupta Menswear Designer"
-              width={600}
-              height={600}
+              width={200}
+              height={200}
               priority
               className="
-                h-[150px]
-                w-[150px]
+                h-[108px]
+                w-[108px]
                 object-contain
-                scale-[1.6]
-                origin-left
               "
             />
           </Link>
 
-          {/* ================= NAVIGATION ================= */}
+          {/* =====================================================
+              NAVIGATION
+          ====================================================== */}
 
           <nav
             className="
@@ -534,7 +537,9 @@ export function Navbar({
             />
           </nav>
 
-          {/* ================= RIGHT ICONS ================= */}
+          {/* =====================================================
+              RIGHT ICONS
+          ====================================================== */}
 
           <div
             className="
@@ -556,6 +561,7 @@ export function Navbar({
             {/* PROFILE */}
 
             <div className="group/profile relative flex h-full items-center">
+
               {user ? (
                 <Link
                   href="/profile"
@@ -766,9 +772,9 @@ export function Navbar({
         initialMode={authModalMode}
       />
 
-      {/* =========================================================
+      {/* =====================================================
           MOBILE MENU
-      ========================================================== */}
+      ====================================================== */}
 
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[100] lg:hidden">
@@ -803,16 +809,14 @@ export function Navbar({
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="-mr-2 p-2 text-[#C9A35C] transition-colors hover:text-[#F1D18A]"
               >
-                <X
-                  className="h-5 w-5"
-                  strokeWidth={1.5}
-                />
+                <X className="h-5 w-5" strokeWidth={1.5} />
               </button>
             </div>
 
             {/* MOBILE LINKS */}
 
             <div className="flex-1 overflow-y-auto py-4">
+
               <nav
                 className="
                   flex flex-col
