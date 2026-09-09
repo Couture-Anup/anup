@@ -14,7 +14,8 @@ export default function FloatingSocialBar() {
   return (
     <>
       {/* =====================================================
-          PREMIUM BLACK + GOLD WHATSAPP HEADER BAR
+          PREMIUM BLACK + GOLD TOP WHATSAPP BAR
+          FIXED AT TOP ON ALL PAGES
       ====================================================== */}
 
       <a
@@ -23,14 +24,13 @@ export default function FloatingSocialBar() {
         rel="noopener noreferrer"
         aria-label="Connect with Anup Gupta Studio on WhatsApp"
         className="
-          group relative z-[50]
-          block w-full
-          overflow-hidden
+          group fixed left-0 right-0 top-0 z-[99999]
+          block w-full overflow-hidden
           border-y border-[#b8955d]/60
           bg-[#050505]
         "
       >
-        {/* LUXURY BACKGROUND GLOW */}
+        {/* BACKGROUND GLOW */}
         <div
           className="pointer-events-none absolute inset-0 opacity-60"
           style={{
@@ -39,9 +39,9 @@ export default function FloatingSocialBar() {
           }}
         />
 
-        {/* VERY SUBTLE GOLD TEXTURE */}
+        {/* SUBTLE GOLD TEXTURE */}
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.12]"
+          className="pointer-events-none absolute inset-0 opacity-[0.10]"
           style={{
             backgroundImage:
               "repeating-linear-gradient(135deg, transparent 0px, transparent 12px, rgba(212,175,112,0.12) 13px, transparent 14px)",
@@ -50,33 +50,29 @@ export default function FloatingSocialBar() {
 
         {/* LEFT DECORATION */}
         <div className="pointer-events-none absolute left-0 top-1/2 hidden -translate-y-1/2 items-center lg:flex">
-          <div className="w-12 xl:w-20 h-px bg-gradient-to-r from-transparent to-[#d4af70]" />
-
+          <div className="h-px w-14 bg-gradient-to-r from-transparent to-[#d4af70]" />
           <span className="mx-2 h-2 w-2 rotate-45 border border-[#d4af70] bg-black" />
-
-          <div className="h-px w-8 bg-[#d4af70]/60" />
+          <div className="h-px w-7 bg-[#d4af70]/60" />
         </div>
 
         {/* RIGHT DECORATION */}
         <div className="pointer-events-none absolute right-0 top-1/2 hidden -translate-y-1/2 items-center lg:flex">
-          <div className="h-px w-8 bg-[#d4af70]/60" />
-
+          <div className="h-px w-7 bg-[#d4af70]/60" />
           <span className="mx-2 h-2 w-2 rotate-45 border border-[#d4af70] bg-black" />
-
-          <div className="w-12 xl:w-20 h-px bg-gradient-to-l from-transparent to-[#d4af70]" />
+          <div className="h-px w-14 bg-gradient-to-l from-transparent to-[#d4af70]" />
         </div>
 
         {/* CONTENT */}
         <div
           className="
             relative mx-auto
-            flex min-h-[56px]
+            flex min-h-[54px]
             max-w-[1600px]
             items-center justify-center
-            px-3 py-2.5
-            sm:min-h-[60px]
+            px-3 py-2
+            sm:min-h-[58px]
             sm:px-5
-            md:min-h-[68px]
+            md:min-h-[66px]
             md:px-24
             lg:px-32
           "
@@ -87,41 +83,34 @@ export default function FloatingSocialBar() {
               flex-col items-center justify-center
               gap-1.5
               text-center
-              md:flex-row
-              md:gap-5
+              md:flex-row md:gap-5
             "
           >
-            {/* FIRST MESSAGE */}
-
+            {/* MESSAGE */}
             <p
               className="
                 font-serif
                 text-[10px]
-                leading-[16px]
+                leading-4
                 tracking-[0.02em]
                 text-[#d6b16a]
                 sm:text-[11px]
-                md:text-[15px]
-                lg:text-[17px]
-                xl:text-[19px]
+                md:text-[14px]
+                lg:text-[16px]
+                xl:text-[18px]
               "
             >
               Need assistance with your order, delivery, or any questions?
             </p>
 
-            {/* DESKTOP SEPARATOR */}
-
+            {/* SEPARATOR */}
             <span className="hidden h-7 w-px bg-[#b8955d]/60 md:block" />
 
-            {/* WHATSAPP SECTION */}
-
+            {/* WHATSAPP AREA */}
             <div className="flex items-center justify-center gap-2 md:gap-3">
-              {/* WHATSAPP ICON */}
-
               <div
                 className="
-                  flex h-6 w-6
-                  shrink-0
+                  flex h-6 w-6 shrink-0
                   items-center justify-center
                   rounded-full
                   border border-[#d4af70]/70
@@ -134,25 +123,18 @@ export default function FloatingSocialBar() {
               >
                 <svg
                   viewBox="0 0 24 24"
-                  className="
-                    h-3.5 w-3.5
-                    fill-[#d4af70]
-                    sm:h-4 sm:w-4
-                    md:h-5 md:w-5
-                  "
+                  className="h-3.5 w-3.5 fill-[#d4af70] sm:h-4 sm:w-4 md:h-5 md:w-5"
                   aria-hidden="true"
                 >
                   <path d="M12.04 2a9.84 9.84 0 0 0-8.42 14.93L2 22l5.21-1.56A9.93 9.93 0 1 0 12.04 2Zm0 17.98a8.14 8.14 0 0 1-4.15-1.13l-.3-.18-3.09.92.94-3.01-.2-.31A8.13 8.13 0 1 1 12.04 19.98Zm4.46-6.09c-.24-.12-1.44-.71-1.66-.79-.22-.08-.38-.12-.54.12-.16.24-.62.79-.76.95-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.95-1.2-.72-.64-1.21-1.44-1.35-1.68-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.31-.74-1.79-.2-.47-.4-.41-.54-.42h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.16 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.58.18 1.1.16 1.52.1.46-.07 1.44-.59 1.64-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28Z" />
                 </svg>
               </div>
 
-              {/* WHATSAPP TEXT */}
-
               <p
                 className="
                   font-serif
                   text-[9.5px]
-                  leading-[15px]
+                  leading-4
                   text-[#d6b16a]
                   sm:text-[11px]
                   md:text-[14px]
@@ -161,7 +143,7 @@ export default function FloatingSocialBar() {
                 "
               >
                 Connect with us on WhatsApp at{" "}
-                <span className="font-semibold tracking-[0.02em] text-[#e9c979]">
+                <span className="font-semibold text-[#e9c979]">
                   +91 96259 81155
                 </span>
               </p>
@@ -169,8 +151,7 @@ export default function FloatingSocialBar() {
           </div>
         </div>
 
-        {/* PREMIUM BOTTOM GOLD GLOW */}
-
+        {/* GOLD BOTTOM LINE */}
         <div
           className="
             pointer-events-none
@@ -186,8 +167,13 @@ export default function FloatingSocialBar() {
       </a>
 
       {/* =====================================================
-          GLOBAL WHATSAPP FLOATING BUTTON
-          BOTTOM RIGHT - ALL DEVICES
+          SPACE RESERVED FOR FIXED TOP BAR
+      ====================================================== */}
+
+      <div className="h-[54px] sm:h-[58px] md:h-[66px]" />
+
+      {/* =====================================================
+          GLOBAL WHATSAPP BUTTON - BOTTOM RIGHT
       ====================================================== */}
 
       <a
@@ -197,9 +183,7 @@ export default function FloatingSocialBar() {
         aria-label="WhatsApp Anup Gupta Studio"
         title="WhatsApp"
         className="
-          fixed
-          bottom-4 right-4
-          z-[9999]
+          fixed bottom-4 right-4 z-[9999]
           flex h-10 w-10
           items-center justify-center
           rounded-full
@@ -215,11 +199,7 @@ export default function FloatingSocialBar() {
       >
         <svg
           viewBox="0 0 24 24"
-          className="
-            h-5 w-5
-            fill-white
-            md:h-7 md:w-7
-          "
+          className="h-5 w-5 fill-white md:h-7 md:w-7"
           aria-hidden="true"
         >
           <path d="M12.04 2a9.84 9.84 0 0 0-8.42 14.93L2 22l5.21-1.56A9.93 9.93 0 1 0 12.04 2Zm0 17.98a8.14 8.14 0 0 1-4.15-1.13l-.3-.18-3.09.92.94-3.01-.2-.31A8.13 8.13 0 1 1 12.04 19.98Zm4.46-6.09c-.24-.12-1.44-.71-1.66-.79-.22-.08-.38-.12-.54.12-.16.24-.62.79-.76.95-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.95-1.2-.72-.64-1.21-1.44-1.35-1.68-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.31-.74-1.79-.2-.47-.4-.41-.54-.42h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.16 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.58.18 1.1.16 1.52.1.46-.07 1.44-.59 1.64-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28Z" />
@@ -244,7 +224,7 @@ export default function FloatingSocialBar() {
           md:shadow-2xl
         "
       >
-        {/* CALL BUTTON - LIGHT GREEN */}
+        {/* CALL BUTTON */}
 
         <button
           type="button"
@@ -252,8 +232,7 @@ export default function FloatingSocialBar() {
           aria-label="Contact Anup Gupta Studio"
           title="Call"
           className="
-            group flex
-            h-8 w-8
+            group flex h-8 w-8
             items-center justify-center
             border-b border-green-100
             bg-[#dcfce7]
@@ -266,12 +245,7 @@ export default function FloatingSocialBar() {
         >
           <svg
             viewBox="0 0 24 24"
-            className="
-              h-3.5 w-3.5
-              fill-[#15803d]
-              sm:h-4 sm:w-4
-              md:h-6 md:w-6
-            "
+            className="h-3.5 w-3.5 fill-[#15803d] sm:h-4 sm:w-4 md:h-6 md:w-6"
             aria-hidden="true"
           >
             <path d="M6.62 10.79a15.46 15.46 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z" />
@@ -290,12 +264,7 @@ export default function FloatingSocialBar() {
         >
           <svg
             viewBox="0 0 24 24"
-            className="
-              h-3.5 w-3.5
-              fill-[#1877F2]
-              sm:h-4 sm:w-4
-              md:h-6 md:w-6
-            "
+            className="h-3.5 w-3.5 fill-[#1877F2] sm:h-4 sm:w-4 md:h-6 md:w-6"
             aria-hidden="true"
           >
             <path d="M13.5 22v-9h3l.45-3.5H13.5V7.27c0-1.01.28-1.7 1.73-1.7H17V2.44A23.5 23.5 0 0 0 14.4 2c-2.57 0-4.33 1.57-4.33 4.45V9.5H7v3.5h3.07v9h3.43Z" />
@@ -314,11 +283,7 @@ export default function FloatingSocialBar() {
         >
           <svg
             viewBox="0 0 24 24"
-            className="
-              h-3.5 w-3.5
-              sm:h-4 sm:w-4
-              md:h-6 md:w-6
-            "
+            className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-6 md:w-6"
             aria-hidden="true"
           >
             <defs>
@@ -355,12 +320,7 @@ export default function FloatingSocialBar() {
         >
           <svg
             viewBox="0 0 24 24"
-            className="
-              h-3.5 w-3.5
-              fill-[#0A66C2]
-              sm:h-4 sm:w-4
-              md:h-6 md:w-6
-            "
+            className="h-3.5 w-3.5 fill-[#0A66C2] sm:h-4 sm:w-4 md:h-6 md:w-6"
             aria-hidden="true"
           >
             <path d="M5.34 3.5A2.34 2.34 0 1 1 .66 3.5a2.34 2.34 0 0 1 4.68 0ZM1 7h4.67v15H1V7Zm7.5 0h4.48v2.05h.06c.62-1.18 2.15-2.42 4.42-2.42 4.73 0 5.6 3.11 5.6 7.16V22h-4.67v-7.27c0-1.74-.03-3.97-2.42-3.97-2.42 0-2.79 1.89-2.79 3.84V22H8.5V7Z" />
@@ -379,11 +339,7 @@ export default function FloatingSocialBar() {
         >
           <svg
             viewBox="0 0 24 24"
-            className="
-              h-4 w-4
-              fill-[#FF0000]
-              md:h-7 md:w-7
-            "
+            className="h-4 w-4 fill-[#FF0000] md:h-7 md:w-7"
             aria-hidden="true"
           >
             <path d="M23.5 6.2a3.02 3.02 0 0 0-2.13-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.37.51A3.02 3.02 0 0 0 .5 6.2 31.58 31.58 0 0 0 0 12a31.58 31.58 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.13 2.14c1.87.51 9.37.51 9.37.51s7.5 0 9.37-.51a3.02 3.02 0 0 0 2.13-2.14A31.58 31.58 0 0 0 24 12a31.58 31.58 0 0 0-.5-5.8ZM9.6 15.62V8.38L15.86 12 9.6 15.62Z" />
@@ -392,25 +348,22 @@ export default function FloatingSocialBar() {
       </div>
 
       {/* =====================================================
-          CALL / WHATSAPP CHOICE POPUP
+          CALL / WHATSAPP POPUP
       ====================================================== */}
 
       {showContactOptions && (
         <div
           className="
-            fixed inset-0
-            z-[100000]
+            fixed inset-0 z-[100000]
             flex items-center justify-center
-            bg-black/45
-            px-5
+            bg-black/45 px-5
             backdrop-blur-sm
           "
           onClick={() => setShowContactOptions(false)}
         >
           <div
             className="
-              relative
-              w-full max-w-[340px]
+              relative w-full max-w-[340px]
               rounded-3xl
               border border-[#d4af70]/20
               bg-white
@@ -419,8 +372,6 @@ export default function FloatingSocialBar() {
             "
             onClick={(e) => e.stopPropagation()}
           >
-            {/* CLOSE */}
-
             <button
               type="button"
               onClick={() => setShowContactOptions(false)}
@@ -440,8 +391,6 @@ export default function FloatingSocialBar() {
               ×
             </button>
 
-            {/* BRAND */}
-
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#a18150]">
               Anup Gupta Studio
             </p>
@@ -459,9 +408,7 @@ export default function FloatingSocialBar() {
             </p>
 
             <div className="mt-6 space-y-3">
-
-              {/* CALL NOW */}
-
+              {/* CALL */}
               <a
                 href={`tel:${CALL_NUMBER}`}
                 className="
@@ -490,7 +437,6 @@ export default function FloatingSocialBar() {
               </a>
 
               {/* WHATSAPP */}
-
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}`}
                 target="_blank"
