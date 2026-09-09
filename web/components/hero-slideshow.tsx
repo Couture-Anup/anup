@@ -16,27 +16,15 @@ interface Slide {
 
 const SLIDES: Slide[] = [
   {
-    imageUrl: '/slider/slider 1.png',
+    imageUrl: '/banner/slider-1.png',
     link: '#',
   },
   {
-    imageUrl: '/slider/slider 2.png',
+    imageUrl: '/banner/slider-2.png',
     link: '#',
   },
   {
-    imageUrl: '/slider/slider 3.png',
-    link: '#',
-  },
-  {
-    imageUrl: '/slider/slider 4.png',
-    link: '#',
-  },
-  {
-    imageUrl: '/slider/slider 5.png',
-    link: '#',
-  },
-  {
-    imageUrl: '/slider/slider 6.png',
+    imageUrl: '/banner/slider-3.png',
     link: '#',
   },
 ];
@@ -87,69 +75,39 @@ export function HeroSlideshow({
 
   return (
     <section className="relative w-full bg-black">
-
-      {/* =========================
-          EMBLA VIEWPORT
-      ========================== */}
-
-      <div
-        ref={emblaRef}
-        className="w-full overflow-hidden"
-      >
+      {/* SLIDER */}
+      <div ref={emblaRef} className="w-full overflow-hidden">
         <div className="flex w-full items-start">
-
           {activeSlides.map((slide, index) => (
             <div
               key={index}
-              className="
-                relative
-                min-w-0
-                flex-[0_0_100%]
-                w-full
-                bg-black
-              "
+              className="relative min-w-0 flex-[0_0_100%] w-full bg-black"
             >
-              {/* =========================
-                  FULL IMAGE
-                  NO CROP
-                  NO FIXED HEIGHT
-              ========================== */}
-
+              {/* BANNER IMAGE */}
               {slide.imageUrl && (
                 <Image
                   src={slide.imageUrl}
-                  alt={`Anup Gupta Studio Slider ${index + 1}`}
+                  alt={`Anup Gupta Studio Banner ${index + 1}`}
                   width={1920}
                   height={1080}
                   sizes="100vw"
                   priority={index === 0}
                   draggable={false}
-                  className="
-                    block
-                    w-full
-                    h-auto
-                    object-contain
-                    object-center
-                    select-none
-                  "
+                  className="block w-full h-auto object-contain object-center select-none"
                 />
               )}
 
-              {/* OPTIONAL CLICK LINK */}
-
+              {/* OPTIONAL LINK */}
               {slide.link && slide.link !== '#' && (
                 <Link
                   href={slide.link}
                   className="absolute inset-0 z-10"
                 >
-                  <span className="sr-only">
-                    View collection
-                  </span>
+                  <span className="sr-only">View collection</span>
                 </Link>
               )}
 
-              {/* OPTIONAL TEXT OVERLAY */}
-
+              {/* OPTIONAL TEXT */}
               {(slide.heading1 ||
                 slide.heading2 ||
                 slide.description) && (
@@ -158,20 +116,15 @@ export function HeroSlideshow({
                     absolute
                     inset-0
                     z-[5]
-
                     flex
                     flex-col
                     items-center
                     justify-end
-
                     px-5
                     pb-12
                     md:pb-16
-
                     text-white
-
                     pointer-events-none
-
                     bg-gradient-to-t
                     from-black/35
                     via-transparent
@@ -182,19 +135,15 @@ export function HeroSlideshow({
                     <h1
                       className="
                         max-w-4xl
-
                         text-center
                         font-serif
-
                         text-2xl
                         sm:text-3xl
                         md:text-5xl
                         lg:text-6xl
-
                         uppercase
                         tracking-[0.05em]
                         leading-tight
-
                         drop-shadow-lg
                       "
                     >
@@ -206,16 +155,12 @@ export function HeroSlideshow({
                     <p
                       className="
                         mt-2
-
                         text-center
-
                         text-xs
                         sm:text-sm
                         md:text-lg
-
                         uppercase
                         tracking-widest
-
                         font-light
                         drop-shadow-md
                       "
@@ -245,22 +190,16 @@ export function HeroSlideshow({
         </div>
       </div>
 
-      {/* =========================
-          SLIDER DOTS
-      ========================== */}
-
+      {/* SLIDER DOTS */}
       <div
         className="
           absolute
           bottom-3
           sm:bottom-4
           md:bottom-5
-
           left-0
           right-0
-
           z-20
-
           flex
           items-center
           justify-center
@@ -278,7 +217,6 @@ export function HeroSlideshow({
               rounded-full
               transition-all
               duration-300
-
               ${
                 selectedIndex === index
                   ? 'h-2 w-6 bg-[#C9A35C]'
@@ -289,24 +227,17 @@ export function HeroSlideshow({
         ))}
       </div>
 
-      {/* =========================
-          GOLD BOTTOM LINE
-      ========================== */}
-
+      {/* GOLD BOTTOM LINE */}
       <div
         className="
           pointer-events-none
           absolute
           bottom-0
           left-1/2
-
           z-10
-
           h-px
           w-[92%]
-
           -translate-x-1/2
-
           bg-gradient-to-r
           from-transparent
           via-[#C9A35C]/60
