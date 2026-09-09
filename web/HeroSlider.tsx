@@ -119,23 +119,17 @@ export default function HeroSlider() {
       onTouchEnd={handleTouchEnd}
     >
       {/* =====================================================
-          RESPONSIVE IMAGE AREA
-          OBJECT-CONTAIN = NO IMAGE CROPPING
+          SLIDE AREA
+          FULL IMAGE VISIBLE
+          NO CROP / NO CUT
       ====================================================== */}
 
       <div
         className="
           relative
           w-full
-
-          aspect-[16/9]
-
-          sm:aspect-[16/8]
-          md:aspect-[16/7]
-          lg:aspect-[16/6]
-          xl:aspect-[16/5.5]
-
           bg-black
+          aspect-[16/9]
         "
       >
         {slides.map((slide, index) => (
@@ -143,6 +137,7 @@ export default function HeroSlider() {
             key={slide.src}
             className={`
               absolute inset-0
+              flex items-center justify-center
               transition-opacity
               duration-1000
               ease-in-out
@@ -154,19 +149,30 @@ export default function HeroSlider() {
             `}
             aria-hidden={index !== currentSlide}
           >
-            <Image
-              src={slide.src}
-              alt={slide.alt}
-              fill
-              priority={index === 0}
-              sizes="100vw"
+            <div
               className="
-                object-contain
-                object-center
-                select-none
+                relative
+                h-full
+                w-full
+                flex
+                items-center
+                justify-center
               "
-              draggable={false}
-            />
+            >
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                fill
+                priority={index === 0}
+                sizes="100vw"
+                draggable={false}
+                className="
+                  object-contain
+                  object-center
+                  select-none
+                "
+              />
+            </div>
           </div>
         ))}
       </div>
@@ -192,7 +198,7 @@ export default function HeroSlider() {
 
           rounded-full
           border border-[#C9A35C]/40
-          bg-black/35
+          bg-black/40
           text-[#D4AF70]
 
           backdrop-blur-sm
@@ -201,7 +207,7 @@ export default function HeroSlider() {
           duration-300
 
           hover:border-[#E7C77E]
-          hover:bg-black/65
+          hover:bg-black/70
           hover:text-[#F1D18A]
 
           sm:left-4
@@ -244,7 +250,7 @@ export default function HeroSlider() {
 
           rounded-full
           border border-[#C9A35C]/40
-          bg-black/35
+          bg-black/40
           text-[#D4AF70]
 
           backdrop-blur-sm
@@ -253,7 +259,7 @@ export default function HeroSlider() {
           duration-300
 
           hover:border-[#E7C77E]
-          hover:bg-black/65
+          hover:bg-black/70
           hover:text-[#F1D18A]
 
           sm:right-4
@@ -276,7 +282,7 @@ export default function HeroSlider() {
       </button>
 
       {/* =====================================================
-          SLIDER DOTS
+          DOTS
       ====================================================== */}
 
       <div
@@ -291,7 +297,7 @@ export default function HeroSlider() {
           gap-2
 
           rounded-full
-          bg-black/25
+          bg-black/30
           px-3
           py-2
 
