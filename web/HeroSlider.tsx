@@ -37,6 +37,7 @@ const slides = [
 ];
 
 const AUTOPLAY_DELAY = 5000;
+const SWIPE_DISTANCE = 45;
 
 export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -45,25 +46,45 @@ export default function HeroSlider() {
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
+  /* =========================================================
+     NEXT SLIDE
+  ========================================================== */
+
   const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    setCurrentSlide((current) => {
+      return (current + 1) % slides.length;
+    });
   }, []);
 
+  /* =========================================================
+     PREVIOUS SLIDE
+  ========================================================== */
+
   const previousSlide = useCallback(() => {
-    setCurrentSlide(
-      (prev) => (prev - 1 + slides.length) % slides.length
-    );
+    setCurrentSlide((current) => {
+      return (current - 1 + slides.length) % slides.length;
+    });
   }, []);
+
+  /* =========================================================
+     AUTOPLAY
+  ========================================================== */
 
   useEffect(() => {
     if (isPaused) return;
 
-    const timer = window.setInterval(() => {
+    const interval = window.setInterval(() => {
       nextSlide();
     }, AUTOPLAY_DELAY);
 
-    return () => window.clearInterval(timer);
+    return () => {
+      window.clearInterval(interval);
+    };
   }, [isPaused, nextSlide]);
+
+  /* =========================================================
+     MOBILE SWIPE
+  ========================================================== */
 
   const handleTouchStart = (
     event: React.TouchEvent<HTMLDivElement>
@@ -83,19 +104,19 @@ export default function HeroSlider() {
       touchStartX.current === null ||
       touchEndX.current === null
     ) {
+      touchStartX.current = null;
+      touchEndX.current = null;
       return;
     }
 
     const distance =
       touchStartX.current - touchEndX.current;
 
-    const minimumSwipeDistance = 45;
-
-    if (distance > minimumSwipeDistance) {
+    if (distance > SWIPE_DISTANCE) {
       nextSlide();
     }
 
-    if (distance < -minimumSwipeDistance) {
+    if (distance < -SWIPE_DISTANCE) {
       previousSlide();
     }
 
@@ -108,8 +129,8 @@ export default function HeroSlider() {
       className="
         relative
         w-full
-        overflow-hidden
         bg-black
+        overflow-hidden
       "
       aria-label="Anup Gupta Studio featured collection"
       onMouseEnter={() => setIsPaused(true)}
@@ -119,62 +140,54 @@ export default function HeroSlider() {
       onTouchEnd={handleTouchEnd}
     >
       {/* =====================================================
-          SLIDE AREA
-          FULL IMAGE VISIBLE
-          NO CROP / NO CUT
+          IMAGES
+
+          IMPORTANT:
+          NO fill
+          NO object-cover
+          NO fixed height
+          NO fixed aspect ratio
+
+          w-full + h-auto = COMPLETE IMAGE
       ====================================================== */}
 
-      <div
-        className="
-          relative
-          w-full
-          bg-black
-          aspect-[16/9]
-        "
-      >
-        {slides.map((slide, index) => (
-          <div
-            key={slide.src}
-            className={`
-              absolute inset-0
-              flex items-center justify-center
-              transition-opacity
-              duration-1000
-              ease-in-out
-              ${
-                index === currentSlide
-                  ? 'z-10 opacity-100'
-                  : 'z-0 opacity-0'
-              }
-            `}
-            aria-hidden={index !== currentSlide}
-          >
+      <div className="relative w-full bg-black">
+        {slides.map((slide, index) => {
+          const isActive = index === currentSlide;
+
+          return (
             <div
-              className="
+              key={slide.src}
+              className={`
                 relative
-                h-full
                 w-full
-                flex
-                items-center
-                justify-center
-              "
+                ${
+                  isActive
+                    ? 'block'
+                    : 'hidden'
+                }
+              `}
+              aria-hidden={!isActive}
             >
               <Image
                 src={slide.src}
                 alt={slide.alt}
-                fill
+                width={1920}
+                height={1080}
                 priority={index === 0}
                 sizes="100vw"
                 draggable={false}
                 className="
-                  object-contain
-                  object-center
+                  block
+                  w-full
+                  h-auto
+                  max-w-none
                   select-none
                 "
               />
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* =====================================================
@@ -188,17 +201,34 @@ export default function HeroSlider() {
         className="
           absolute
           left-2
+          sm:left-4
+          lg:left-6
+
           top-1/2
-          z-30
           -translate-y-1/2
 
+          z-30
+
           flex
-          h-8 w-8
-          items-center justify-center
+          items-center
+          justify-center
+
+          h-8
+          w-8
+
+          sm:h-10
+          sm:w-10
+
+          lg:h-12
+          lg:w-12
 
           rounded-full
-          border border-[#C9A35C]/40
-          bg-black/40
+
+          border
+          border-[#C9A35C]/50
+
+          bg-black/35
+
           text-[#D4AF70]
 
           backdrop-blur-sm
@@ -206,24 +236,21 @@ export default function HeroSlider() {
           transition-all
           duration-300
 
-          hover:border-[#E7C77E]
           hover:bg-black/70
+          hover:border-[#E7C77E]
           hover:text-[#F1D18A]
-
-          sm:left-4
-          sm:h-10
-          sm:w-10
-
-          lg:left-6
-          lg:h-12
-          lg:w-12
         "
       >
         <ChevronLeft
           className="
-            h-4 w-4
-            sm:h-5 sm:w-5
-            lg:h-6 lg:w-6
+            h-4
+            w-4
+
+            sm:h-5
+            sm:w-5
+
+            lg:h-6
+            lg:w-6
           "
           strokeWidth={1.5}
         />
@@ -240,17 +267,34 @@ export default function HeroSlider() {
         className="
           absolute
           right-2
+          sm:right-4
+          lg:right-6
+
           top-1/2
-          z-30
           -translate-y-1/2
 
+          z-30
+
           flex
-          h-8 w-8
-          items-center justify-center
+          items-center
+          justify-center
+
+          h-8
+          w-8
+
+          sm:h-10
+          sm:w-10
+
+          lg:h-12
+          lg:w-12
 
           rounded-full
-          border border-[#C9A35C]/40
-          bg-black/40
+
+          border
+          border-[#C9A35C]/50
+
+          bg-black/35
+
           text-[#D4AF70]
 
           backdrop-blur-sm
@@ -258,69 +302,88 @@ export default function HeroSlider() {
           transition-all
           duration-300
 
-          hover:border-[#E7C77E]
           hover:bg-black/70
+          hover:border-[#E7C77E]
           hover:text-[#F1D18A]
-
-          sm:right-4
-          sm:h-10
-          sm:w-10
-
-          lg:right-6
-          lg:h-12
-          lg:w-12
         "
       >
         <ChevronRight
           className="
-            h-4 w-4
-            sm:h-5 sm:w-5
-            lg:h-6 lg:w-6
+            h-4
+            w-4
+
+            sm:h-5
+            sm:w-5
+
+            lg:h-6
+            lg:w-6
           "
           strokeWidth={1.5}
         />
       </button>
 
       {/* =====================================================
-          DOTS
+          SLIDER DOTS
       ====================================================== */}
 
       <div
         className="
           absolute
+
           bottom-3
+          sm:bottom-4
+          md:bottom-5
+
           left-1/2
-          z-30
-          flex
           -translate-x-1/2
+
+          z-30
+
+          flex
           items-center
+          justify-center
           gap-2
 
           rounded-full
+
           bg-black/30
+
           px-3
           py-2
 
           backdrop-blur-sm
-
-          md:bottom-5
         "
       >
-        {slides.map((_, index) => (
+        {slides.map((slide, index) => (
           <button
-            key={index}
+            key={slide.src}
             type="button"
-            aria-label={`Go to slide ${index + 1}`}
             onClick={() => setCurrentSlide(index)}
+            aria-label={`Go to slide ${index + 1}`}
+            aria-current={
+              currentSlide === index
+                ? 'true'
+                : undefined
+            }
             className={`
               rounded-full
+
               transition-all
               duration-300
 
               ${
                 currentSlide === index
-                  ? 'h-2 w-6 bg-[#D4AF70]'
-                  : 'h-2 w-2 bg-white/60 hover:bg-[#D4AF70]/70'
+                  ? `
+                    h-2
+                    w-6
+                    bg-[#D4AF70]
+                  `
+                  : `
+                    h-2
+                    w-2
+                    bg-white/60
+                    hover:bg-[#D4AF70]/80
+                  `
               }
             `}
           />
@@ -328,24 +391,27 @@ export default function HeroSlider() {
       </div>
 
       {/* =====================================================
-          PREMIUM BOTTOM GOLD LINE
+          BOTTOM GOLD DETAIL
       ====================================================== */}
 
       <div
         className="
           pointer-events-none
+
           absolute
           bottom-0
           left-1/2
+          -translate-x-1/2
+
           z-20
 
           h-px
           w-[90%]
-          -translate-x-1/2
 
           bg-gradient-to-r
+
           from-transparent
-          via-[#C9A35C]/50
+          via-[#C9A35C]/60
           to-transparent
         "
       />
