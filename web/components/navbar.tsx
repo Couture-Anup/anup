@@ -6,230 +6,182 @@ import {
   Search,
   UserRound,
   ShoppingBag,
-  MessageCircle,
-  Diamond,
+  Menu,
+  X,
 } from "lucide-react";
+import { useState } from "react";
 
-const WHATSAPP_NUMBER = "919625981155";
+type NavbarProps = {
+  announcements?: any;
+  navigation?: any;
+};
 
 const menuItems = [
-  { name: "SHIRTS", href: "/collections/shirts" },
-  { name: "KURTAS", href: "/collections/kurtas" },
-  { name: "BUNDI KURTA", href: "/collections/bundi-kurta" },
-  { name: "TUXEDO", href: "/collections/tuxedo" },
-  { name: "BANDHGALA", href: "/collections/bandhgala" },
-  { name: "INDO LUXE", href: "/collections/indo-luxe" },
-  { name: "ACCESSORIES", href: "/collections/accessories" },
-  { name: "SHOP BY", href: "/collections" },
+  { label: "SHIRTS", href: "/category/shirts" },
+  { label: "KURTAS", href: "/category/kurtas" },
+  { label: "BUNDI KURTA", href: "/category/bundi-kurta" },
+  { label: "TUXEDO", href: "/category/tuxedo" },
+  { label: "BANDHGALA", href: "/category/bandhgala" },
+  { label: "INDO LUXE", href: "/category/indo-western" },
+  { label: "ACCESSORIES", href: "/category/accessories" },
+  { label: "SHOP BY", href: "/collection/all" },
 ];
 
-export function Navbar() {
+export function Navbar({
+  announcements,
+  navigation,
+}: NavbarProps) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
-    <header className="w-full">
-      {/* ============================= */}
-      {/* PREMIUM ASSISTANCE BAR */}
-      {/* ============================= */}
+    <header className="relative z-50 w-full bg-[#050505] border-b border-[#1d1d1d]">
 
-      <a
-        href={`https://wa.me/${WHATSAPP_NUMBER}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Connect with Anup Gupta Studio on WhatsApp"
-        className="
-          group relative flex min-h-[62px] w-full
-          items-center justify-center overflow-hidden
-          border-b border-[#8f7138]/50
-          bg-[#070604]
-          px-5
-          no-underline
-        "
-      >
-        {/* Premium background */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(circle at 5% 50%, rgba(196,154,73,0.13), transparent 20%), radial-gradient(circle at 95% 50%, rgba(196,154,73,0.13), transparent 20%), linear-gradient(90deg,#090806 0%,#151108 50%,#090806 100%)",
-          }}
-        />
+      <div className="w-full px-6 md:px-10 lg:px-14">
+        <div className="relative flex h-[125px] items-center">
 
-        {/* Left ornament */}
-        <div className="absolute left-5 hidden items-center gap-2 xl:flex">
-          <span className="h-px w-14 bg-gradient-to-r from-transparent to-[#9f7c3b]" />
-          <Diamond
-            strokeWidth={1}
-            className="h-3.5 w-3.5 text-[#c39a50]"
-          />
-          <span className="h-px w-8 bg-[#9f7c3b]" />
-        </div>
-
-        {/* Content */}
-        <div className="relative flex flex-wrap items-center justify-center gap-x-7 gap-y-1 text-center">
-          <span
-            className="
-              font-serif text-[17px] leading-none
-              text-[#e8b94f]
-              md:text-[19px]
-            "
+          {/* LOGO */}
+          <Link
+            href="/"
+            aria-label="Anup Gupta Studio"
+            className="relative z-10 flex shrink-0 items-center"
           >
-            Need assistance with your order, delivery, or any questions?
-          </span>
+            <Image
+              src="/logo.png"
+              alt="Anup Gupta Studio"
+              width={145}
+              height={100}
+              priority
+              className="h-auto w-[105px] object-contain md:w-[120px] lg:w-[130px]"
+            />
+          </Link>
 
-          <span className="hidden h-6 w-px bg-[#8e7139]/50 md:block" />
+          {/* DESKTOP NAVIGATION */}
+          <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 xl:flex 2xl:gap-9">
+            {menuItems.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="
+                  relative
+                  whitespace-nowrap
+                  text-[13px]
+                  font-semibold
+                  tracking-[0.10em]
+                  text-[#b8954e]
+                  transition-colors
+                  duration-300
+                  hover:text-[#e3bd68]
 
-          <span className="flex items-center gap-3 font-serif text-[17px] font-semibold text-[#e8b94f] md:text-[18px]">
-            <span
-              className="
-                flex h-36px w-36px items-center justify-center
-                rounded-full border border-[#c69b48]
-              "
+                  after:absolute
+                  after:-bottom-3
+                  after:left-1/2
+                  after:h-px
+                  after:w-0
+                  after:-translate-x-1/2
+                  after:bg-[#d0a557]
+                  after:transition-all
+                  after:duration-300
+
+                  hover:after:w-full
+                "
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* RIGHT ICONS */}
+          <div className="ml-auto flex items-center gap-6 text-[#bd974d]">
+
+            {/* SEARCH */}
+            <button
+              type="button"
+              aria-label="Search"
+              className="transition-all duration-300 hover:scale-110 hover:text-[#e3bd68]"
             >
-              <MessageCircle className="h-4 w-4" strokeWidth={1.7} />
-            </span>
+              <Search
+                className="h-[23px] w-[23px]"
+                strokeWidth={1.6}
+              />
+            </button>
 
-            <span>
-              Connect with us on WhatsApp at{" "}
-              <strong className="font-bold tracking-[0.02em]">
-                +91 96259 81155
-              </strong>
-            </span>
-          </span>
+            {/* ACCOUNT */}
+            <Link
+              href="/account"
+              aria-label="Account"
+              className="transition-all duration-300 hover:scale-110 hover:text-[#e3bd68]"
+            >
+              <UserRound
+                className="h-[23px] w-[23px]"
+                strokeWidth={1.6}
+              />
+            </Link>
+
+            {/* CART */}
+            <Link
+              href="/cart"
+              aria-label="Cart"
+              className="relative transition-all duration-300 hover:scale-110 hover:text-[#e3bd68]"
+            >
+              <ShoppingBag
+                className="h-[23px] w-[23px]"
+                strokeWidth={1.6}
+              />
+            </Link>
+
+            {/* MOBILE HAMBURGER */}
+            <button
+              type="button"
+              aria-label="Open menu"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="xl:hidden transition-colors hover:text-[#e3bd68]"
+            >
+              {mobileOpen ? (
+                <X
+                  className="h-[25px] w-[25px]"
+                  strokeWidth={1.6}
+                />
+              ) : (
+                <Menu
+                  className="h-[25px] w-[25px]"
+                  strokeWidth={1.6}
+                />
+              )}
+            </button>
+
+          </div>
         </div>
-
-        {/* Right ornament */}
-        <div className="absolute right-5 hidden items-center gap-2 xl:flex">
-          <span className="h-px w-8 bg-[#9f7c3b]" />
-          <Diamond
-            strokeWidth={1}
-            className="h-3.5 w-3.5 text-[#c39a50]"
-          />
-          <span className="h-px w-14 bg-gradient-to-l from-transparent to-[#9f7c3b]" />
-        </div>
-      </a>
-
-      {/* ============================= */}
-      {/* SIZE INCLUSIVE BAR */}
-      {/* ============================= */}
-
-      <div
-        className="
-          flex h-[30px] items-center justify-center
-          bg-white px-4 text-center
-          text-[12px] font-bold text-black
-        "
-      >
-        All our products are Size-Inclusive
       </div>
 
-      {/* ============================= */}
-      {/* MAIN NAVIGATION */}
-      {/* ============================= */}
+      {/* MOBILE MENU */}
+      {mobileOpen && (
+        <div className="absolute left-0 top-full w-full border-t border-[#242424] bg-[#050505] shadow-2xl xl:hidden">
+          <nav className="flex flex-col px-6 py-4">
 
-      <nav
-        className="
-          relative flex min-h-[145px] w-full
-          items-center justify-between
-          border-b border-white/5
-          bg-[#030303]
-          px-7
-          lg:px-14
-        "
-      >
-        {/* Logo */}
-        <Link
-          href="/"
-          className="
-            relative flex w-[150px]
-            flex-shrink-0 items-center
-            justify-start
-          "
-          aria-label="Anup Gupta Studio"
-        >
-          <Image
-            src="/logo.png"
-            alt="Anup Gupta Studio"
-            width={125}
-            height={100}
-            priority
-            className="h-auto w-[110px] object-contain md:w-[125px]"
-          />
-        </Link>
+            {menuItems.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className="
+                  border-b border-[#1d1d1d]
+                  py-4
+                  text-[13px]
+                  font-semibold
+                  tracking-[0.12em]
+                  text-[#b8954e]
+                  transition-colors
+                  hover:text-[#e3bd68]
+                "
+              >
+                {item.label}
+              </Link>
+            ))}
 
-        {/* Desktop Menu */}
-        <div
-          className="
-            absolute left-1/2 top-1/2
-            hidden -translate-x-1/2 -translate-y-1/2
-            items-center gap-8
-            xl:flex
-          "
-        >
-          {menuItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="
-                relative whitespace-nowrap
-                text-[14px] font-semibold
-                tracking-[0.085em]
-                text-[#b99348]
-                transition-all duration-300
-                hover:text-[#f0c96d]
-                after:absolute after:-bottom-2
-                after:left-1/2 after:h-px after:w-0
-                after:-translate-x-1/2
-                after:bg-[#c79b49]
-                after:transition-all after:duration-300
-                hover:after:w-full
-              "
-            >
-              {item.name}
-            </Link>
-          ))}
+          </nav>
         </div>
+      )}
 
-        {/* Right Icons */}
-        <div className="ml-auto flex items-center gap-7 text-[#c39a49]">
-          <button
-            type="button"
-            aria-label="Search"
-            className="
-              transition-all duration-300
-              hover:scale-110 hover:text-[#efc96e]
-            "
-          >
-            <Search strokeWidth={1.7} className="h-[24px] w-[24px]" />
-          </button>
-
-          <Link
-            href="/account"
-            aria-label="Account"
-            className="
-              transition-all duration-300
-              hover:scale-110 hover:text-[#efc96e]
-            "
-          >
-            <UserRound
-              strokeWidth={1.6}
-              className="h-[23px] w-[23px]"
-            />
-          </Link>
-
-          <Link
-            href="/cart"
-            aria-label="Cart"
-            className="
-              relative transition-all duration-300
-              hover:scale-110 hover:text-[#efc96e]
-            "
-          >
-            <ShoppingBag
-              strokeWidth={1.6}
-              className="h-[23px] w-[23px]"
-            />
-          </Link>
-        </div>
-      </nav>
     </header>
   );
 }
