@@ -34,26 +34,17 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body
-        className="antialiased bg-white"
-        suppressHydrationWarning
-      >
+      <body className="antialiased bg-white" suppressHydrationWarning>
         <ToastProvider>
           <AuthProvider>
             <CartProvider>
 
-              {/* ======================================
-                  NEW PREMIUM ASSISTANCE BAR
-                  ABOVE EXISTING NAVBAR
-              ======================================= */}
+              {/* NEW ASSISTANCE BAR */}
               <div className="print:hidden">
                 <PremiumAssistanceBar />
               </div>
 
-              {/* ======================================
-                  EXISTING NAVBAR
-                  SIZE-INCLUSIVE BAR STAYS HERE
-              ======================================= */}
+              {/* EXISTING SIZE-INCLUSIVE BAR + NAVIGATION */}
               <div className="print:hidden contents">
                 <Navbar
                   announcements={announcements}
@@ -61,20 +52,17 @@ export default async function RootLayout({
                 />
               </div>
 
-              {/* PAGE CONTENT */}
               <main>
                 {children}
               </main>
 
-              {/* EXISTING FOOTER */}
               <div className="print:hidden">
                 <Footer />
               </div>
 
-              {/* EXISTING FLOATING BUTTONS */}
+              {/* KEEP EXISTING FLOATING FEATURES SAME */}
               <FloatingSocialBar />
 
-              {/* EXISTING CART */}
               <CartSidebar />
 
             </CartProvider>
