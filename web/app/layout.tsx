@@ -34,26 +34,16 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-
       <body
         className="antialiased bg-white"
         suppressHydrationWarning
       >
-
-        {/* ======================================
-            GOOGLE ADS GLOBAL SITE TAG
-            Google Ads ID: AW-412936166
-        ======================================= */}
-
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-412936166"
           strategy="afterInteractive"
         />
 
-        <Script
-          id="google-ads-tag"
-          strategy="afterInteractive"
-        >
+        <Script id="google-ads-tag" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -62,21 +52,9 @@ export default async function RootLayout({
           `}
         </Script>
 
-
         <ToastProvider>
           <AuthProvider>
             <CartProvider>
-
-              {/* ======================================
-                  NEW PREMIUM ASSISTANCE BAR
-                  ABOVE EXISTING NAVBAR
-              ======================================= */
-
-
-              {/* ======================================
-                  EXISTING NAVBAR
-                  SIZE-INCLUSIVE BAR STAYS HERE
-              ======================================= */}
               <div className="print:hidden contents">
                 <Navbar
                   announcements={announcements}
@@ -84,30 +62,18 @@ export default async function RootLayout({
                 />
               </div>
 
+              <main>{children}</main>
 
-              {/* PAGE CONTENT */}
-              <main>
-                {children}
-              </main>
-
-
-              {/* EXISTING FOOTER */}
               <div className="print:hidden">
                 <Footer />
               </div>
 
-
-              {/* EXISTING FLOATING BUTTONS */}
               <FloatingSocialBar />
 
-
-              {/* EXISTING CART */}
               <CartSidebar />
-
             </CartProvider>
           </AuthProvider>
         </ToastProvider>
-
       </body>
     </html>
   );
