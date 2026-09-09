@@ -15,7 +15,6 @@ import {
 } from '@/lib/queries';
 
 import FloatingSocialBar from '@/components/FloatingSocialBar';
-import PremiumAssistanceBar from '@/components/PremiumAssistanceBar';
 
 export const metadata: Metadata = {
   title: "Premium Men's Ethnic Wear & Party Shirts Online – Anup Gupta",
@@ -71,10 +70,7 @@ export default async function RootLayout({
               {/* ======================================
                   NEW PREMIUM ASSISTANCE BAR
                   ABOVE EXISTING NAVBAR
-              ======================================= */}
-              <div className="print:hidden">
-                <PremiumAssistanceBar />
-              </div>
+              ======================================= */
 
 
               {/* ======================================
