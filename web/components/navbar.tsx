@@ -18,8 +18,6 @@ import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
 import { useCart } from '@/contexts/CartContext';
 
-const GOLD = '#C9A35C';
-
 function NavItem({
   label,
   href = '#',
@@ -38,14 +36,14 @@ function NavItem({
   rightAlign?: boolean;
 }) {
   return (
-    <div className="group h-full flex items-center">
+    <div className="group flex h-full items-center">
       <Link
         href={href}
         className="
-          h-full flex items-center gap-1
+          flex h-full items-center gap-1
           text-[#C9A35C]
-          hover:text-[#F1D18A]
           transition-colors duration-300
+          hover:text-[#F1D18A]
         "
       >
         {label}
@@ -54,30 +52,30 @@ function NavItem({
       {(links || columns) && (
         <div
           className="
-            absolute top-[64px] left-0 w-full
+            invisible absolute left-0 top-[78px] z-50
+            w-full
+            border-t border-[#C9A35C]/25
             bg-[#080808]
-            border-t border-[#C9A35C]/30
+            opacity-0
             shadow-2xl
-            opacity-0 invisible
-            group-hover:opacity-100
-            group-hover:visible
             transition-all duration-300
-            z-50
+            group-hover:visible
+            group-hover:opacity-100
           "
         >
-          <div className="max-w-[1600px] mx-auto px-8 py-10 flex">
+          <div className="mx-auto flex max-w-[1600px] px-8 py-10">
 
             {links && !columns && (
-              <div className="w-[400px] flex flex-col gap-4">
+              <div className="flex w-[400px] flex-col gap-4">
                 {links.map((link) => (
                   <Link
                     key={link.label}
                     href={link.href}
                     className="
-                      text-sm font-medium tracking-wide
+                      text-sm font-medium uppercase tracking-wide
                       text-[#C9A35C]
+                      transition-colors
                       hover:text-[#F1D18A]
-                      transition-colors uppercase
                     "
                   >
                     {link.label}
@@ -91,16 +89,10 @@ function NavItem({
                 {columns.map((col, idx) => (
                   <div
                     key={idx}
-                    className="flex flex-col gap-4 w-[250px]"
+                    className="flex w-[250px] flex-col gap-4"
                   >
                     {col.title && (
-                      <h4
-                        className="
-                          text-xs text-[#8F7444]
-                          font-semibold tracking-widest
-                          uppercase mb-1
-                        "
-                      >
+                      <h4 className="mb-1 text-xs font-semibold uppercase tracking-widest text-[#8F7444]">
                         {col.title}
                       </h4>
                     )}
@@ -110,10 +102,10 @@ function NavItem({
                         key={link.label}
                         href={link.href}
                         className="
-                          text-sm font-medium tracking-wide
+                          text-sm font-medium uppercase tracking-wide
                           text-[#C9A35C]
+                          transition-colors
                           hover:text-[#F1D18A]
-                          transition-colors uppercase
                         "
                       >
                         {link.label}
@@ -125,47 +117,23 @@ function NavItem({
             )}
 
             {images && (
-              <div className="flex-1 flex gap-6 justify-end">
+              <div className="flex flex-1 justify-end gap-6">
                 {images.map((img, i) => (
                   <Link
                     href={img.href}
                     key={i}
-                    className="
-                      relative w-[300px]
-                      aspect-[3/4]
-                      group/img
-                      overflow-hidden
-                      cursor-pointer block
-                    "
+                    className="group/img relative block aspect-[3/4] w-[300px] cursor-pointer overflow-hidden"
                   >
                     <Image
                       src={img.src}
                       alt={img.label}
                       fill
-                      className="
-                        object-cover
-                        transition-transform
-                        duration-700
-                        group-hover/img:scale-105
-                      "
+                      className="object-cover transition-transform duration-700 group-hover/img:scale-105"
                       referrerPolicy="no-referrer"
                     />
 
-                    <div
-                      className="
-                        absolute inset-x-0 bottom-0 p-4
-                        bg-gradient-to-t
-                        from-black/80
-                        to-transparent
-                      "
-                    >
-                      <span
-                        className="
-                          text-[#E8C675]
-                          text-xs font-semibold
-                          uppercase tracking-wider
-                        "
-                      >
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-[#E8C675]">
                         {img.label}
                       </span>
                     </div>
@@ -189,6 +157,7 @@ export function Navbar({
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
   const [authModalMode, setAuthModalMode] =
     useState<'login' | 'signup'>('login');
 
@@ -244,18 +213,20 @@ export function Navbar({
   return (
     <>
       {/* =========================================================
-          SIZE-INCLUSIVE ANNOUNCEMENT BAR
-          WHITE BACKGROUND + BLACK TEXT
+          SIZE-INCLUSIVE BAR
+          WHITE + THIN
       ========================================================== */}
 
       <div
         className="
-          bg-white text-black
-          min-h-[44px]
-          py-2.5
           relative
-          flex items-center justify-center
-          border-b border-[#C9A35C]/30
+          flex min-h-[28px]
+          items-center justify-center
+          border-b border-[#C9A35C]/20
+          bg-white
+          px-4
+          py-1
+          text-black
         "
       >
         {activeAnnouncements.length > 1 && (
@@ -263,24 +234,27 @@ export function Navbar({
             suppressHydrationWarning
             onClick={prevAnnouncement}
             className="
-              absolute left-4 md:left-8
-              text-gray-500
-              hover:text-black
+              absolute left-4
+              text-gray-400
               transition-colors
+              hover:text-black
+              md:left-8
             "
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="h-4 w-4" />
           </button>
         )}
 
         <div
           className="
-            text-[11px] sm:text-xs
+            animate-in fade-in
             text-center
+            text-[9px]
             font-bold
             tracking-wide
-            animate-in fade-in
             duration-500
+            sm:text-[10px]
+            md:text-[11px]
           "
           key={currentAnnouncementIndex}
         >
@@ -303,26 +277,27 @@ export function Navbar({
             suppressHydrationWarning
             onClick={nextAnnouncement}
             className="
-              absolute right-4 md:right-8
-              text-gray-500
-              hover:text-black
+              absolute right-4
+              text-gray-400
               transition-colors
+              hover:text-black
+              md:right-8
             "
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="h-4 w-4" />
           </button>
         )}
       </div>
 
       {/* =========================================================
-          PREMIUM BLACK + GOLD NAVIGATION
+          MAIN BLACK + GOLD NAVBAR
       ========================================================== */}
 
       <header
         className="
           sticky top-0 z-50
+          border-b border-[#C9A35C]/30
           bg-[#050505]
-          border-b border-[#C9A35C]/40
           shadow-[0_6px_25px_rgba(0,0,0,0.22)]
         "
       >
@@ -330,90 +305,98 @@ export function Navbar({
 
         <div
           className="
-            lg:hidden
+            flex h-[64px]
+            items-center justify-between
             px-4
-            h-[64px]
-            flex items-center justify-between
+            lg:hidden
           "
         >
-          <div className="flex items-center gap-4 flex-1">
+          <div className="flex flex-1 items-center">
             <button
               className="
+                -ml-1 p-1
                 text-[#C9A35C]
-                hover:text-[#F1D18A]
                 transition-colors
-                p-1 -ml-1
+                hover:text-[#F1D18A]
               "
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open menu"
             >
-              <Menu className="w-6 h-6" strokeWidth={1.5} />
+              <Menu className="h-6 w-6" strokeWidth={1.5} />
             </button>
           </div>
 
-          {/* MOBILE GOLD LOGO */}
+          {/* MOBILE LOGO - ZOOMED */}
 
           <Link
             href="/"
             className="
-              flex items-center justify-center
+              relative
+              flex h-[58px]
+              w-[170px]
               shrink-0
+              items-center justify-center
+              overflow-hidden
             "
           >
             <Image
               src="/anup-gupta-gold-logo.png"
               alt="Anup Gupta Menswear Designer"
-              width={180}
-              height={180}
+              width={500}
+              height={500}
               priority
               className="
-                h-[54px]
-                w-auto
+                h-[118px]
+                w-[118px]
                 object-contain
+                scale-[1.35]
               "
             />
           </Link>
 
           <div
             className="
-              flex items-center gap-4
-              justify-end flex-1
+              flex flex-1
+              items-center justify-end
+              gap-4
             "
           >
             <SearchModal
               triggerClass="
                 text-[#C9A35C]
                 hover:text-[#F1D18A]
-                transition-colors p-1
+                transition-colors
+                p-1
               "
             />
 
             <button
               onClick={() => setIsCartOpen(true)}
               className="
+                relative -mr-1
+                cursor-pointer p-1
                 text-[#C9A35C]
-                hover:text-[#F1D18A]
                 transition-colors
-                relative p-1 -mr-1
-                cursor-pointer
+                hover:text-[#F1D18A]
               "
+              aria-label="Open shopping bag"
             >
               <ShoppingBag
-                className="w-5 h-5"
+                className="h-5 w-5"
                 strokeWidth={1.5}
               />
 
               {cartCount > 0 && (
                 <span
                   className="
-                    absolute -top-1 -right-1
+                    absolute -right-1 -top-1
+                    flex h-4 w-4
+                    items-center justify-center
+                    rounded-full
                     bg-[#C9A35C]
-                    text-black
                     text-[9px]
                     font-bold
-                    w-4 h-4
-                    rounded-full
-                    flex items-center justify-center
+                    text-black
                   "
                 >
                   {cartCount}
@@ -427,36 +410,39 @@ export function Navbar({
 
         <div
           className="
-            hidden lg:flex
-            px-8
+            mx-auto hidden
             h-[78px]
-            items-center justify-between
             max-w-[1800px]
-            mx-auto
+            items-center justify-between
+            px-8
+            lg:flex
           "
         >
-          {/* GOLD LOGO */}
+          {/* DESKTOP LOGO - LARGE + ZOOMED */}
 
           <Link
             href="/"
             className="
-              flex items-center
-              justify-start
+              relative
+              flex h-[78px]
+              w-[260px]
               shrink-0
-              w-[220px]
-              h-full
+              items-center
+              overflow-hidden
             "
           >
             <Image
               src="/anup-gupta-gold-logo.png"
               alt="Anup Gupta Menswear Designer"
-              width={260}
-              height={260}
+              width={600}
+              height={600}
               priority
               className="
-                h-[70px]
-                w-auto
+                h-[150px]
+                w-[150px]
                 object-contain
+                scale-[1.6]
+                origin-left
               "
             />
           </Link>
@@ -465,15 +451,14 @@ export function Navbar({
 
           <nav
             className="
-              flex
-              gap-6 xl:gap-8
+              flex h-full flex-1
+              items-center justify-center
+              gap-5
               text-[11px]
               font-semibold
-              tracking-[0.12em]
               uppercase
-              h-full
-              flex-1
-              justify-center
+              tracking-[0.11em]
+              xl:gap-7
             "
           >
             {navigation?.categories?.map((cat: any) => {
@@ -513,25 +498,17 @@ export function Navbar({
                   label={cat.title}
                   href={`/category/${cat.slug}`}
                   links={links}
-                  images={
-                    images.length > 0
-                      ? images
-                      : undefined
-                  }
+                  images={images.length > 0 ? images : undefined}
                 />
               );
             })}
-
-            {/* SHOP BY */}
 
             <NavItem
               label="Shop By"
               columns={[
                 {
                   title: 'Collections',
-                  links: (
-                    navigation?.collections || []
-                  ).map((col: any) => ({
+                  links: (navigation?.collections || []).map((col: any) => ({
                     label: col.title,
                     href: `/collection/${col.slug}`,
                   })),
@@ -561,44 +538,36 @@ export function Navbar({
 
           <div
             className="
-              flex items-center gap-5
-              justify-end
-              w-[220px]
-              h-full
+              flex h-full
+              w-[210px]
+              items-center justify-end
+              gap-5
             "
           >
             <SearchModal
               triggerClass="
                 text-[#C9A35C]
                 hover:text-[#F1D18A]
-                transition-colors p-1
+                transition-colors
+                p-1
               "
             />
 
             {/* PROFILE */}
 
-            <div
-              className="
-                relative
-                group/profile
-                h-full
-                flex items-center
-              "
-            >
+            <div className="group/profile relative flex h-full items-center">
               {user ? (
                 <Link
                   href="/profile"
                   className="
+                    flex h-full items-center p-1
                     text-[#C9A35C]
-                    hover:text-[#F1D18A]
                     transition-colors
-                    p-1
-                    flex items-center
-                    h-full
+                    hover:text-[#F1D18A]
                   "
                 >
                   <User
-                    className="w-[18px] h-[18px]"
+                    className="h-[18px] w-[18px]"
                     strokeWidth={2}
                   />
                 </Link>
@@ -610,16 +579,14 @@ export function Navbar({
                     setIsAuthModalOpen(true);
                   }}
                   className="
+                    flex h-full items-center p-1
                     text-[#C9A35C]
-                    hover:text-[#F1D18A]
                     transition-colors
-                    p-1
-                    flex items-center
-                    h-full
+                    hover:text-[#F1D18A]
                   "
                 >
                   <User
-                    className="w-[18px] h-[18px]"
+                    className="h-[18px] w-[18px]"
                     strokeWidth={2}
                   />
                 </button>
@@ -629,39 +596,25 @@ export function Navbar({
 
               <div
                 className="
-                  absolute top-full right-0
-                  w-[200px]
-                  bg-[#080808]
-                  border border-[#C9A35C]/30
-                  shadow-xl
-                  opacity-0 invisible
-                  group-hover/profile:opacity-100
-                  group-hover/profile:visible
-                  transition-all duration-300
-                  z-50
-                  flex flex-col
-                  py-2
+                  invisible absolute
+                  right-0 top-full z-50
+                  flex w-[200px]
+                  flex-col
                   rounded-b-md
+                  border border-[#C9A35C]/25
+                  bg-[#080808]
+                  py-2
+                  opacity-0
+                  shadow-xl
+                  transition-all duration-300
+                  group-hover/profile:visible
+                  group-hover/profile:opacity-100
                 "
               >
                 {user ? (
                   <>
-                    <div
-                      className="
-                        px-4 py-2
-                        border-b border-[#C9A35C]/20
-                        mb-1
-                      "
-                    >
-                      <span
-                        className="
-                          block
-                          text-[11px]
-                          font-semibold
-                          text-[#E7C77E]
-                          truncate
-                        "
-                      >
+                    <div className="mb-1 border-b border-[#C9A35C]/20 px-4 py-2">
+                      <span className="block truncate text-[11px] font-semibold text-[#E7C77E]">
                         {user.displayName || user.email}
                       </span>
                     </div>
@@ -672,9 +625,8 @@ export function Navbar({
                         className="
                           px-4 py-2.5
                           text-[11px]
-                          font-bold
+                          font-bold uppercase
                           tracking-wider
-                          uppercase
                           text-[#E7C77E]
                           hover:bg-[#15120c]
                         "
@@ -688,12 +640,11 @@ export function Navbar({
                       className="
                         px-4 py-2.5
                         text-[11px]
-                        font-semibold
+                        font-semibold uppercase
                         tracking-wider
-                        uppercase
                         text-[#C9A35C]
-                        hover:text-[#F1D18A]
                         hover:bg-[#15120c]
+                        hover:text-[#F1D18A]
                       "
                     >
                       Profile
@@ -702,18 +653,16 @@ export function Navbar({
                     <button
                       onClick={() => signOut(auth)}
                       className="
-                        text-left
+                        mt-1 w-full
                         cursor-pointer
-                        px-4 py-2.5
+                        border-t border-[#C9A35C]/20
+                        px-4 py-3
+                        text-left
                         text-[11px]
-                        font-semibold
+                        font-semibold uppercase
                         tracking-wider
-                        uppercase
                         text-red-400
                         hover:bg-[#15120c]
-                        border-t border-[#C9A35C]/20
-                        mt-1 pt-3.5
-                        w-full
                       "
                     >
                       Logout
@@ -728,16 +677,16 @@ export function Navbar({
                         setIsAuthModalOpen(true);
                       }}
                       className="
-                        text-left w-full
+                        w-full
                         cursor-pointer
                         px-4 py-2.5
+                        text-left
                         text-[11px]
-                        font-semibold
+                        font-semibold uppercase
                         tracking-wider
-                        uppercase
                         text-[#C9A35C]
-                        hover:text-[#F1D18A]
                         hover:bg-[#15120c]
+                        hover:text-[#F1D18A]
                       "
                     >
                       Log In
@@ -750,16 +699,16 @@ export function Navbar({
                         setIsAuthModalOpen(true);
                       }}
                       className="
-                        text-left w-full
+                        w-full
                         cursor-pointer
                         px-4 py-2.5
+                        text-left
                         text-[11px]
-                        font-semibold
+                        font-semibold uppercase
                         tracking-wider
-                        uppercase
                         text-[#C9A35C]
-                        hover:text-[#F1D18A]
                         hover:bg-[#15120c]
+                        hover:text-[#F1D18A]
                       "
                     >
                       Create Account
@@ -775,29 +724,30 @@ export function Navbar({
               suppressHydrationWarning
               onClick={() => setIsCartOpen(true)}
               className="
+                relative -mr-1
+                cursor-pointer p-1
                 text-[#C9A35C]
-                hover:text-[#F1D18A]
                 transition-colors
-                relative p-1 -mr-1
-                cursor-pointer
+                hover:text-[#F1D18A]
               "
+              aria-label="Open shopping bag"
             >
               <ShoppingBag
-                className="w-[18px] h-[18px]"
+                className="h-[18px] w-[18px]"
                 strokeWidth={2}
               />
 
               {cartCount > 0 && (
                 <span
                   className="
-                    absolute -top-1 -right-1
+                    absolute -right-1 -top-1
+                    flex h-4 w-4
+                    items-center justify-center
+                    rounded-full
                     bg-[#C9A35C]
-                    text-black
                     text-[9px]
                     font-bold
-                    w-4 h-4
-                    rounded-full
-                    flex items-center justify-center
+                    text-black
                   "
                 >
                   {cartCount}
@@ -824,64 +774,37 @@ export function Navbar({
         <div className="fixed inset-0 z-[100] lg:hidden">
 
           <div
-            className="
-              absolute inset-0
-              bg-black/70
-              transition-opacity
-            "
+            className="absolute inset-0 bg-black/70"
             onClick={() => setIsMobileMenuOpen(false)}
           />
 
           <div
             className="
               absolute inset-y-0 left-0
+              flex h-full
               w-[85%]
               max-w-[400px]
-              bg-[#070707]
-              flex flex-col
-              h-full
-              shadow-2xl
-              animate-in
-              slide-in-from-left
-              duration-300
+              flex-col
               border-r border-[#C9A35C]/30
+              bg-[#070707]
+              shadow-2xl
+              animate-in slide-in-from-left
+              duration-300
             "
           >
-            {/* MOBILE MENU HEADER */}
+            {/* MENU HEADER */}
 
-            <div
-              className="
-                flex items-center justify-between
-                p-4
-                border-b border-[#C9A35C]/20
-              "
-            >
-              <span
-                className="
-                  text-[13px]
-                  font-semibold
-                  uppercase
-                  tracking-wider
-                  text-[#C9A35C]
-                "
-              >
+            <div className="flex items-center justify-between border-b border-[#C9A35C]/20 p-4">
+              <span className="text-[13px] font-semibold uppercase tracking-wider text-[#C9A35C]">
                 Menu
               </span>
 
               <button
-                onClick={() =>
-                  setIsMobileMenuOpen(false)
-                }
-                className="
-                  p-2
-                  text-[#C9A35C]
-                  hover:text-[#F1D18A]
-                  transition-colors
-                  -mr-2
-                "
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="-mr-2 p-2 text-[#C9A35C] transition-colors hover:text-[#F1D18A]"
               >
                 <X
-                  className="w-5 h-5"
+                  className="h-5 w-5"
                   strokeWidth={1.5}
                 />
               </button>
@@ -890,118 +813,78 @@ export function Navbar({
             {/* MOBILE LINKS */}
 
             <div className="flex-1 overflow-y-auto py-4">
-
               <nav
                 className="
                   flex flex-col
                   text-[13px]
-                  font-semibold
+                  font-semibold uppercase
                   tracking-wider
-                  uppercase
                   text-[#C9A35C]
                 "
               >
                 <Link
                   href="/collection/new-in"
                   className="
-                    px-6 py-4
-                    border-b border-[#C9A35C]/10
                     flex items-center justify-between
+                    border-b border-[#C9A35C]/10
+                    px-6 py-4
                   "
-                  onClick={() =>
-                    setIsMobileMenuOpen(false)
-                  }
+                  onClick={() => setIsMobileMenuOpen(false)}
                 >
                   New In
 
-                  <ChevronRight
-                    className="
-                      w-4 h-4
-                      text-[#8F7444]
-                    "
-                  />
+                  <ChevronRight className="h-4 w-4 text-[#8F7444]" />
                 </Link>
 
-                {navigation?.categories?.map(
-                  (cat: any) => (
-                    <div
-                      key={cat.slug}
-                      className="
-                        flex flex-col
-                        border-b border-[#C9A35C]/10
-                      "
-                    >
-                      <Link
-                        href={`/category/${cat.slug}`}
-                        className="
-                          px-6 py-4
-                          flex items-center
-                          justify-between
-                        "
-                        onClick={() =>
-                          setIsMobileMenuOpen(false)
-                        }
-                      >
-                        {cat.title}
-
-                        <ChevronRight
-                          className="
-                            w-4 h-4
-                            text-[#8F7444]
-                          "
-                        />
-                      </Link>
-
-                      {cat.subcategories?.map(
-                        (sub: any) => (
-                          <Link
-                            key={sub.slug}
-                            href={`/category/${sub.slug}`}
-                            className="
-                              px-10 py-3
-                              text-[11px]
-                              text-[#A98B52]
-                              flex items-center
-                              justify-between
-                            "
-                            onClick={() =>
-                              setIsMobileMenuOpen(false)
-                            }
-                          >
-                            {sub.title}
-                          </Link>
-                        )
-                      )}
-                    </div>
-                  )
-                )}
-
-                {navigation?.collections?.map(
-                  (col: any) => (
+                {navigation?.categories?.map((cat: any) => (
+                  <div
+                    key={cat.slug}
+                    className="flex flex-col border-b border-[#C9A35C]/10"
+                  >
                     <Link
-                      key={col.slug}
-                      href={`/collection/${col.slug}`}
-                      className="
-                        px-6 py-4
-                        border-b border-[#C9A35C]/10
-                        flex items-center
-                        justify-between
-                      "
-                      onClick={() =>
-                        setIsMobileMenuOpen(false)
-                      }
+                      href={`/category/${cat.slug}`}
+                      className="flex items-center justify-between px-6 py-4"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      {col.title}
+                      {cat.title}
 
-                      <ChevronRight
-                        className="
-                          w-4 h-4
-                          text-[#8F7444]
-                        "
-                      />
+                      <ChevronRight className="h-4 w-4 text-[#8F7444]" />
                     </Link>
-                  )
-                )}
+
+                    {cat.subcategories?.map((sub: any) => (
+                      <Link
+                        key={sub.slug}
+                        href={`/category/${sub.slug}`}
+                        className="
+                          flex items-center justify-between
+                          px-10 py-3
+                          text-[11px]
+                          text-[#A98B52]
+                        "
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {sub.title}
+                      </Link>
+                    ))}
+                  </div>
+                ))}
+
+                {navigation?.collections?.map((col: any) => (
+                  <Link
+                    key={col.slug}
+                    href={`/collection/${col.slug}`}
+                    className="
+                      flex items-center justify-between
+                      border-b border-[#C9A35C]/10
+                      px-6 py-4
+                    "
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {col.title}
+
+                    <ChevronRight className="h-4 w-4 text-[#8F7444]" />
+                  </Link>
+                ))}
               </nav>
             </div>
 
@@ -1009,10 +892,10 @@ export function Navbar({
 
             <div
               className="
-                p-6
-                bg-[#0C0C0C]
-                border-t border-[#C9A35C]/20
                 flex flex-col gap-4
+                border-t border-[#C9A35C]/20
+                bg-[#0C0C0C]
+                p-6
               "
             >
               {user ? (
@@ -1020,27 +903,21 @@ export function Navbar({
                   <div
                     className="
                       flex items-center gap-3
+                      border-b border-[#C9A35C]/20
+                      pb-2
                       text-sm font-medium
                       text-[#C9A35C]
-                      pb-2
-                      border-b border-[#C9A35C]/20
                     "
                   >
                     <User
-                      className="w-5 h-5"
+                      className="h-5 w-5"
                       strokeWidth={1.5}
                     />
 
                     <div className="flex flex-col">
                       <span>My Account</span>
 
-                      <span
-                        className="
-                          text-[11px]
-                          font-normal
-                          text-[#8F7444]
-                        "
-                      >
+                      <span className="text-[11px] font-normal text-[#8F7444]">
                         {user.displayName || user.email}
                       </span>
                     </div>
@@ -1052,17 +929,15 @@ export function Navbar({
                       <Link
                         href="/admin"
                         className="
-                          text-left w-full
+                          w-full rounded-lg
+                          bg-[#15120c]
                           px-4 py-3
+                          text-left
                           text-[13px]
                           font-semibold
                           text-[#E7C77E]
-                          bg-[#15120c]
-                          rounded-lg
                         "
-                        onClick={() =>
-                          setIsMobileMenuOpen(false)
-                        }
+                        onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Admin Portal
                       </Link>
@@ -1071,17 +946,15 @@ export function Navbar({
                     <Link
                       href="/profile"
                       className="
-                        text-left w-full
+                        w-full rounded-lg
+                        bg-[#111]
                         px-4 py-3
+                        text-left
                         text-[13px]
                         font-semibold
                         text-[#C9A35C]
-                        bg-[#111]
-                        rounded-lg
                       "
-                      onClick={() =>
-                        setIsMobileMenuOpen(false)
-                      }
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Profile
                     </Link>
@@ -1092,13 +965,13 @@ export function Navbar({
                         signOut(auth);
                       }}
                       className="
-                        text-left w-full
+                        w-full rounded-lg
+                        bg-[#111]
                         px-4 py-3
+                        text-left
                         text-[13px]
                         font-semibold
                         text-red-400
-                        bg-[#111]
-                        rounded-lg
                       "
                     >
                       Logout
@@ -1115,20 +988,19 @@ export function Navbar({
                       setIsAuthModalOpen(true);
                     }}
                     className="
-                      w-full
+                      flex w-full
+                      items-center justify-center
+                      gap-2
+                      rounded-lg
+                      border border-[#C9A35C]/40
+                      bg-[#111]
                       px-4 py-3.5
                       text-[13px]
                       font-semibold
                       text-[#C9A35C]
-                      border border-[#C9A35C]/40
-                      bg-[#111]
-                      rounded-lg
-                      flex items-center
-                      justify-center
-                      gap-2
                     "
                   >
-                    <User className="w-4 h-4" />
+                    <User className="h-4 w-4" />
                     Log In
                   </button>
 
@@ -1139,16 +1011,15 @@ export function Navbar({
                       setIsAuthModalOpen(true);
                     }}
                     className="
-                      w-full
+                      w-full rounded-lg
+                      bg-[#C9A35C]
                       px-4 py-3.5
+                      text-center
                       text-[13px]
                       font-semibold
                       text-black
-                      bg-[#C9A35C]
-                      hover:bg-[#E2C176]
                       transition-colors
-                      rounded-lg
-                      text-center
+                      hover:bg-[#E2C176]
                     "
                   >
                     Create Account
