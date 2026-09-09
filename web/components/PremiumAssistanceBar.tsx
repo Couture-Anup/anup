@@ -10,7 +10,7 @@ export default function PremiumAssistanceBar() {
       rel="noopener noreferrer"
       aria-label="Connect with Anup Gupta Studio on WhatsApp"
       className="
-        group relative flex min-h-[62px] w-full
+        relative flex min-h-[62px] w-full
         items-center justify-center overflow-hidden
         border-b border-[#8f7138]/50
         bg-[#070604]
@@ -18,7 +18,6 @@ export default function PremiumAssistanceBar() {
         no-underline
       "
     >
-      {/* Background */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -27,14 +26,12 @@ export default function PremiumAssistanceBar() {
         }}
       />
 
-      {/* Left Decoration */}
       <div className="absolute left-5 hidden items-center gap-2 xl:flex">
         <span className="h-px w-14 bg-gradient-to-r from-transparent to-[#9f7c3b]" />
         <span className="h-3 w-3 rotate-45 border border-[#c39a50]" />
         <span className="h-px w-8 bg-[#9f7c3b]" />
       </div>
 
-      {/* Center Content */}
       <div className="relative flex flex-wrap items-center justify-center gap-x-7 gap-y-2 text-center">
         <span className="font-serif text-[17px] text-[#e8b94f] md:text-[19px]">
           Need assistance with your order, delivery, or any questions?
@@ -56,7 +53,6 @@ export default function PremiumAssistanceBar() {
         </span>
       </div>
 
-      {/* Right Decoration */}
       <div className="absolute right-5 hidden items-center gap-2 xl:flex">
         <span className="h-px w-8 bg-[#9f7c3b]" />
         <span className="h-3 w-3 rotate-45 border border-[#c39a50]" />
