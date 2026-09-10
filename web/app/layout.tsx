@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import './globals.css';
 
 import { Navbar } from '@/components/navbar';
@@ -33,13 +34,50 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        {/* Google Tag Manager */}
+        <Script id="google-tag-manager" strategy="beforeInteractive">
+          {`
+            (function(w,d,s,l,i){
+              w[l]=w[l]||[];
+              w[l].push({
+                'gtm.start': new Date().getTime(),
+                event:'gtm.js'
+              });
+              var f=d.getElementsByTagName(s)[0],
+                  j=d.createElement(s),
+                  dl=l!='dataLayer'?'&l='+l:'';
+              j.async=true;
+              j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+              f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-5MHQ73ZH');
+          `}
+        </Script>
+        {/* End Google Tag Manager */}
+      </head>
+
       <body
         className="antialiased bg-white"
         suppressHydrationWarning
       >
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-5MHQ73ZH"
+            height="0"
+            width="0"
+            style={{
+              display: 'none',
+              visibility: 'hidden',
+            }}
+          />
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
+
         <ToastProvider>
           <AuthProvider>
             <CartProvider>
+
               <div className="print:hidden contents">
                 <Navbar
                   announcements={announcements}
@@ -56,6 +94,7 @@ export default async function RootLayout({
               <FloatingSocialBar />
 
               <CartSidebar />
+
             </CartProvider>
           </AuthProvider>
         </ToastProvider>
