@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import './globals.css';
 
 import { Navbar } from '@/components/navbar';
@@ -38,20 +37,6 @@ export default async function RootLayout({
         className="antialiased bg-white"
         suppressHydrationWarning
       >
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-412936166"
-          strategy="afterInteractive"
-        />
-
-        <Script id="google-ads-tag" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-412936166');
-          `}
-        </Script>
-
         <ToastProvider>
           <AuthProvider>
             <CartProvider>
