@@ -21,6 +21,17 @@ export const metadata: Metadata = {
   title: "Premium Men's Ethnic Wear & Party Shirts Online – Anup Gupta",
   description:
     "Premium Men's Ethnic Wear & Party Shirts Online. Crafted to stand out with signature hand embroidery.",
+
+  icons: {
+    icon: [
+      {
+        url: '/icon/icon.png',
+        type: 'image/png',
+      },
+    ],
+    shortcut: '/icon/icon.png',
+    apple: '/icon/icon.png',
+  },
 };
 
 export default async function RootLayout({
