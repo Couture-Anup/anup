@@ -25,12 +25,12 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: '/logo/icon.png.png',
+        url: '/logo/icon.png',
         type: 'image/png',
       },
     ],
-    shortcut: '/logo/icon.png.png',
-    apple: '/logo/icon.png.png',
+    shortcut: '/logo/icon.png',
+    apple: '/logo/icon.png',
   },
 };
 
@@ -89,6 +89,7 @@ export default async function RootLayout({
         <ToastProvider>
           <AuthProvider>
             <CartProvider>
+
               <div className="print:hidden contents">
                 <Navbar
                   announcements={announcements}
@@ -110,6 +111,7 @@ export default async function RootLayout({
 
               {/* CART SIDEBAR */}
               <CartSidebar />
+
             </CartProvider>
           </AuthProvider>
         </ToastProvider>
