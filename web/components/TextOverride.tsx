@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 export default function TextOverride() {
   useEffect(() => {
     const OLD_TEXT = 'OUR CUSTOMERS ARE CELEBRITIES FOR US';
-    const NEW_TEXT = 'EVERY CLIENT IS A CELEBRITY';
+    const NEW_TEXT = 'Every Customer Is a Celebrity to Us !';
 
     const normalize = (value: string) =>
       value.replace(/\s+/g, ' ').trim().toUpperCase();
@@ -19,26 +19,13 @@ export default function TextOverride() {
         const fullText = normalize(element.innerText || '');
 
         if (fullText === OLD_TEXT) {
-          element.innerHTML = NEW_TEXT;
+          element.textContent = NEW_TEXT;
+
+          // PREMIUM BOLD STYLE
+          element.style.fontWeight = '700';
+          element.style.letterSpacing = '0.03em';
+
           return;
-        }
-      }
-
-      const walker = document.createTreeWalker(
-        document.body,
-        NodeFilter.SHOW_TEXT
-      );
-
-      let node: Node | null;
-
-      while ((node = walker.nextNode())) {
-        const text = node.textContent || '';
-
-        if (normalize(text).includes(OLD_TEXT)) {
-          node.textContent = text.replace(
-            /OUR\s+CUSTOMERS\s+ARE\s+CELEBRITIES\s+FOR\s+US/gi,
-            NEW_TEXT
-          );
         }
       }
     };
