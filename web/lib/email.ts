@@ -22,7 +22,7 @@ export async function sendEmail({
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: 'Anup Gupta Studio <orders@anupguptastudio.com>',
+        from: 'Anup Gupta Studio <studio.anupgupta@gmail.com>',
         to: [to],
         subject,
         html,
