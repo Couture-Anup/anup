@@ -15,31 +15,16 @@ export default function PremiumTicker() {
     <div className="flex shrink-0 items-center">
       {items.map((item, index) => (
         <div
-          key={index}
+          key={`${item}-${index}`}
           className="flex shrink-0 items-center"
         >
-          <span
-            className="
-              whitespace-nowrap
-              text-xs
-              md:text-sm
-              font-semibold
-              tracking-[0.18em]
-              text-[#D4AF70]
-            "
-          >
+          <span className="whitespace-nowrap text-xs md:text-sm font-semibold tracking-[0.18em] text-[#D4AF70]">
             {item}
           </span>
 
           <span
-            className="
-              mx-5
-              md:mx-7
-              text-[10px]
-              md:text-xs
-              text-[#D4AF70]
-            "
             aria-hidden="true"
+            className="mx-5 md:mx-7 text-[10px] md:text-xs text-[#D4AF70]"
           >
             ✦
           </span>
@@ -49,15 +34,7 @@ export default function PremiumTicker() {
   );
 
   return (
-    <div
-      className="
-        w-full
-        overflow-hidden
-        bg-black
-        border-y
-        border-[#C9A35C]/40
-      "
-    >
+    <div className="w-full overflow-hidden bg-black border-y border-[#C9A35C]/40">
       <div className="ticker-track flex w-max items-center py-3">
         <TickerContent />
         <TickerContent />
