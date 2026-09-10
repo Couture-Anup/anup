@@ -18,7 +18,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
 import { useCart } from '@/contexts/CartContext';
-import anupGuptaIcon from '@/assets/ANUP_GUPTA_ICON.jpg-removebg-preview.png';
+import anupGuptaIcon from '@/assets/ANUP GUPTA LOGO.jpg.jpeg.png';
 
 function NavItem({
   label,
