@@ -15,6 +15,7 @@ import {
 } from '@/lib/queries';
 
 import FloatingSocialBar from '@/components/FloatingSocialBar';
+import TextOverride from '@/components/TextOverride';
 
 export const metadata: Metadata = {
   title: "Premium Men's Ethnic Wear & Party Shirts Online – Anup Gupta",
@@ -91,8 +92,13 @@ export default async function RootLayout({
                 <Footer />
               </div>
 
+              {/* TEXT OVERRIDE */}
+              <TextOverride />
+
+              {/* FLOATING SOCIAL BUTTONS */}
               <FloatingSocialBar />
 
+              {/* CART SIDEBAR */}
               <CartSidebar />
 
             </CartProvider>
