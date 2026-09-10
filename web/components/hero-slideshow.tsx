@@ -27,6 +27,22 @@ const SLIDES: Slide[] = [
     imageUrl: '/banner/slider-3.png',
     link: '#',
   },
+  {
+    imageUrl: '/banner/slider-4 (2).png',
+    link: '#',
+  },
+  {
+    imageUrl: '/banner/slider-5.png',
+    link: '#',
+  },
+  {
+    imageUrl: '/banner/slider-6.png',
+    link: '#',
+  },
+  {
+    imageUrl: '/banner/slider-7.png',
+    link: '#',
+  },
 ];
 
 export function HeroSlideshow({
