@@ -24,6 +24,7 @@ export default function TextOverride() {
           // PREMIUM BOLD STYLE
           element.style.fontWeight = '700';
           element.style.letterSpacing = '0.03em';
+           element.style.fontSize = '1.3em';
 
           return;
         }
