@@ -91,7 +91,7 @@ function NavItem({
         <div
           className={`
             absolute
-            top-[64px]
+            top-[92px]
             left-0
             w-full
             bg-white
@@ -388,7 +388,7 @@ export function Navbar({
         <div className="
           lg:hidden
           px-4
-          h-[52px]
+          h-[80px]
           flex
           items-center
           justify-between
@@ -400,12 +400,14 @@ export function Navbar({
                 hover:text-gray-600
                 transition-colors
                 p-1
+                [&_svg]:w-[27px]
+                [&_svg]:h-[27px]
                 -ml-1
               "
               onClick={() => setIsMobileMenuOpen(true)}
             >
               <Menu
-                className="w-6 h-6"
+                className="w-9 h-9"
                 strokeWidth={1.5}
               />
             </button>
@@ -425,11 +427,11 @@ export function Navbar({
             <Image
               src="/logo/ANUP GUPTA LOGO.png.png"
               alt="Anup Gupta Studio"
-              width={70}
-              height={70}
+              width={105}
+              height={105}
               priority
               className="
-                h-12
+                h-[72px]
                 w-auto
                 object-contain
                 mix-blend-multiply
@@ -451,6 +453,8 @@ export function Navbar({
                 hover:text-gray-500
                 transition-colors
                 p-1
+                [&_svg]:w-[27px]
+                [&_svg]:h-[27px]
               "
             />
 
@@ -467,7 +471,7 @@ export function Navbar({
               "
             >
               <ShoppingBag
-                className="w-5 h-5"
+                className="w-[30px] h-[30px]"
                 strokeWidth={1.5}
               />
 
@@ -499,7 +503,7 @@ export function Navbar({
           hidden
           lg:flex
           px-8
-          h-[64px]
+          h-[92px]
           items-center
           justify-between
           max-w-[1800px]
@@ -526,11 +530,11 @@ export function Navbar({
               <Image
                 src="/logo/ANUP GUPTA LOGO.png.png"
                 alt="Anup Gupta Studio"
-                width={90}
-                height={90}
+                width={135}
+                height={135}
                 priority
                 className="
-                  h-14
+                  h-[84px]
                   w-auto
                   object-contain
                   mix-blend-multiply
@@ -678,7 +682,7 @@ export function Navbar({
                   "
                 >
                   <User
-                    className="w-[18px] h-[18px]"
+                    className="w-[27px] h-[27px]"
                     strokeWidth={2}
                   />
                 </Link>
@@ -700,7 +704,7 @@ export function Navbar({
                   "
                 >
                   <User
-                    className="w-[18px] h-[18px]"
+                    className="w-[27px] h-[27px]"
                     strokeWidth={2}
                   />
                 </button>
@@ -880,7 +884,7 @@ export function Navbar({
               "
             >
               <ShoppingBag
-                className="w-[18px] h-[18px]"
+                className="w-[27px] h-[27px]"
                 strokeWidth={2}
               />
 
