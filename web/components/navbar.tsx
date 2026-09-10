@@ -18,7 +18,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
 import { useCart } from '@/contexts/CartContext';
-import anupGuptaIcon from '@/assets/ANUP GUPTA LOGO.jpg.jpeg.png';
 
 function NavItem({
   label,
@@ -424,8 +423,11 @@ export function Navbar({
             "
           >
             <Image
-              src={anupGuptaIcon}
-              alt="Anup Gupta Studio Icon"
+              src="/logo/ANUP GUPTA LOGO.jpg.jpeg.png"
+              alt="Anup Gupta Studio"
+              width={40}
+              height={40}
+              priority
               className="
                 h-8
                 w-auto
@@ -433,18 +435,6 @@ export function Navbar({
                 mix-blend-multiply
               "
             />
-
-            <span className="
-              text-[11px]
-              font-serif
-              tracking-[0.1em]
-              uppercase
-              text-black
-              leading-none
-              mt-1
-            ">
-              Anup Gupta
-            </span>
           </Link>
 
           {/* MOBILE ICONS */}
@@ -534,8 +524,11 @@ export function Navbar({
               w-fit
             ">
               <Image
-                src={anupGuptaIcon}
-                alt="Anup Gupta Studio Icon"
+                src="/logo/ANUP GUPTA LOGO.jpg.jpeg.png"
+                alt="Anup Gupta Studio"
+                width={50}
+                height={50}
+                priority
                 className="
                   h-10
                   w-auto
@@ -543,18 +536,6 @@ export function Navbar({
                   mix-blend-multiply
                 "
               />
-
-              <span className="
-                text-[14px]
-                font-serif
-                tracking-[0.1em]
-                uppercase
-                text-black
-                leading-none
-                mt-1
-              ">
-                Anup Gupta
-              </span>
             </div>
           </Link>
 
