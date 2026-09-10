@@ -425,11 +425,11 @@ export function Navbar({
             <Image
               src="/logo/ANUP GUPTA LOGO.png.png"
               alt="Anup Gupta Studio"
-              width={40}
-              height={40}
+              width={70}
+              height={70}
               priority
               className="
-                h-8
+                h-12
                 w-auto
                 object-contain
                 mix-blend-multiply
@@ -526,11 +526,11 @@ export function Navbar({
               <Image
                 src="/logo/ANUP GUPTA LOGO.png.png"
                 alt="Anup Gupta Studio"
-                width={50}
-                height={50}
+                width={90}
+                height={90}
                 priority
                 className="
-                  h-10
+                  h-14
                   w-auto
                   object-contain
                   mix-blend-multiply
