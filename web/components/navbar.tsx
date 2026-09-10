@@ -423,7 +423,7 @@ export function Navbar({
             "
           >
             <Image
-              src="/logo/ANUP GUPTA LOGO.jpg.jpeg.png"
+              src="/logo/ANUP GUPTA LOGO.png.png"
               alt="Anup Gupta Studio"
               width={40}
               height={40}
@@ -524,7 +524,7 @@ export function Navbar({
               w-fit
             ">
               <Image
-                src="/logo/ANUP GUPTA LOGO.jpg.jpeg.png"
+                src="/logo/ANUP GUPTA LOGO.png.png"
                 alt="Anup Gupta Studio"
                 width={50}
                 height={50}
