@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  Search,
   User,
   ShoppingBag,
   Menu,
@@ -11,13 +10,22 @@ import {
   ChevronRight,
   ChevronLeft,
 } from 'lucide-react';
+
 import { useState, useEffect } from 'react';
+
 import { SearchModal } from './search-modal';
 import { AuthModal } from './auth-modal';
+
 import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
+
 import { useCart } from '@/contexts/CartContext';
+
+
+/* =========================================================
+   NAVIGATION ITEM
+========================================================= */
 
 function NavItem({
   label,
@@ -28,74 +36,138 @@ function NavItem({
 }: {
   label: string;
   href?: string;
-  links?: { label: string; href: string }[];
+
+  links?: {
+    label: string;
+    href: string;
+  }[];
+
   columns?: {
     title?: string;
-    links: { label: string; href: string }[];
+    links: {
+      label: string;
+      href: string;
+    }[];
   }[];
+
   images?: {
     src: string;
     label: string;
     href: string;
   }[];
 }) {
+
   const [isOpen, setIsOpen] = useState(false);
-  const [preventReopen, setPreventReopen] = useState(false);
+
+  const [preventReopen, setPreventReopen] =
+    useState(false);
+
 
   const handleMouseEnter = () => {
+
     if (!preventReopen) {
       setIsOpen(true);
     }
+
   };
+
 
   const handleMouseLeave = () => {
+
     setIsOpen(false);
+
     setPreventReopen(false);
+
   };
+
 
   const handleNavigation = () => {
+
     setIsOpen(false);
+
     setPreventReopen(true);
+
   };
 
+
   return (
+
     <div
-      className="h-full flex items-center"
+
+      className="
+        h-full
+        flex
+        items-center
+      "
+
       onMouseEnter={handleMouseEnter}
+
       onMouseLeave={handleMouseLeave}
+
     >
+
       {/* MAIN NAVIGATION LINK */}
+
       <Link
+
         href={href}
+
         onClick={handleNavigation}
+
         className={`
           text-gray-900
+
           hover:text-gray-500
+
           transition-colors
+
           h-full
+
           flex
+
           items-center
+
           gap-1
+
           ${isOpen ? 'text-gray-500' : ''}
         `}
+
       >
+
         {label}
+
       </Link>
 
-      {/* DESKTOP DROPDOWN */}
+
+      {/* =================================================
+          DESKTOP DROPDOWN
+      ================================================= */}
+
       {(links || columns) && (
+
         <div
+
           className={`
             absolute
+
             top-[92px]
+
             left-0
+
             w-full
+
             bg-white
+
             border-t
+
             border-gray-100
+
             shadow-xl
+
             transition-all
+
             duration-300
+
             z-50
 
             ${
@@ -104,144 +176,295 @@ function NavItem({
                 : 'opacity-0 invisible pointer-events-none'
             }
           `}
+
         >
-          <div className="max-w-[1600px] mx-auto px-8 py-10 flex">
+
+          <div
+            className="
+              max-w-[1600px]
+              mx-auto
+              px-8
+              py-10
+              flex
+            "
+          >
+
 
             {/* STANDARD LINKS COLUMN */}
+
             {links && !columns && (
-              <div className="w-[400px] flex flex-col gap-4">
+
+              <div
+                className="
+                  w-[400px]
+                  flex
+                  flex-col
+                  gap-4
+                "
+              >
+
                 {links.map((link) => (
+
                   <Link
+
                     key={link.label}
+
                     href={link.href}
+
                     onClick={handleNavigation}
+
                     className="
                       text-sm
+
                       font-medium
+
                       tracking-wide
+
                       text-gray-900
+
                       hover:text-gray-500
+
                       transition-colors
+
                       uppercase
                     "
+
                   >
+
                     {link.label}
+
                   </Link>
+
                 ))}
+
               </div>
+
             )}
 
+
             {/* MULTIPLE COLUMNS */}
+
             {columns && (
-              <div className="flex gap-16">
+
+              <div
+                className="
+                  flex
+                  gap-16
+                "
+              >
+
                 {columns.map((col, idx) => (
+
                   <div
+
                     key={idx}
-                    className="flex flex-col gap-4 w-[250px]"
+
+                    className="
+                      flex
+                      flex-col
+                      gap-4
+                      w-[250px]
+                    "
+
                   >
+
                     {col.title && (
+
                       <h4
                         className="
                           text-xs
+
                           text-gray-500
+
                           font-semibold
+
                           tracking-widest
+
                           uppercase
+
                           mb-1
                         "
                       >
+
                         {col.title}
+
                       </h4>
+
                     )}
 
+
                     {col.links.map((link) => (
+
                       <Link
+
                         key={link.label}
+
                         href={link.href}
+
                         onClick={handleNavigation}
+
                         className="
                           text-sm
+
                           font-medium
+
                           tracking-wide
+
                           text-gray-900
+
                           hover:text-gray-500
+
                           transition-colors
+
                           uppercase
                         "
+
                       >
+
                         {link.label}
+
                       </Link>
+
                     ))}
+
                   </div>
+
                 ))}
+
               </div>
+
             )}
 
+
             {/* IMAGE COLUMNS */}
+
             {images && (
-              <div className="flex-1 flex gap-6 justify-end">
+
+              <div
+                className="
+                  flex-1
+
+                  flex
+
+                  gap-6
+
+                  justify-end
+                "
+              >
+
                 {images.map((img, i) => (
+
                   <Link
+
                     href={img.href}
+
                     key={i}
+
                     onClick={handleNavigation}
+
                     className="
                       relative
+
                       w-[300px]
+
                       aspect-[3/4]
+
                       group/img
+
                       overflow-hidden
+
                       cursor-pointer
+
                       block
                     "
+
                   >
+
                     <Image
+
                       src={img.src}
+
                       alt={img.label}
+
                       fill
+
                       className="
                         object-cover
+
                         transition-transform
+
                         duration-700
+
                         group-hover/img:scale-105
                       "
+
                       referrerPolicy="no-referrer"
+
                     />
+
 
                     <div
                       className="
                         absolute
+
                         inset-x-0
+
                         bottom-0
+
                         p-4
+
                         bg-gradient-to-t
+
                         from-black/60
+
                         to-transparent
                       "
                     >
+
                       <span
                         className="
                           text-white
+
                           text-xs
+
                           font-semibold
+
                           uppercase
+
                           tracking-wider
                         "
                       >
+
                         {img.label}
+
                       </span>
+
                     </div>
+
                   </Link>
+
                 ))}
+
               </div>
+
             )}
 
           </div>
+
         </div>
+
       )}
+
     </div>
+
   );
+
 }
+
+
+/* =========================================================
+   MAIN NAVBAR
+========================================================= */
 
 export function Navbar({
   announcements,
@@ -250,1202 +473,2382 @@ export function Navbar({
   announcements?: any[];
   navigation?: any;
 }) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] =
+    useState(false);
+
+  const [isAuthModalOpen, setIsAuthModalOpen] =
+    useState(false);
 
   const [authModalMode, setAuthModalMode] =
     useState<'login' | 'signup'>('login');
 
-  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] =
-    useState(0);
+  const [
+    currentAnnouncementIndex,
+    setCurrentAnnouncementIndex,
+  ] = useState(0);
+
 
   const { user, sanityUser } = useAuth();
-  const { cartCount, setIsCartOpen } = useCart();
+
+  const {
+    cartCount,
+    setIsCartOpen,
+  } = useCart();
+
 
   const activeAnnouncements =
-    announcements && announcements.length > 0
+    announcements &&
+    announcements.length > 0
       ? announcements
-      : [{ text: 'All our products are Size-Inclusive' }];
+      : [
+          {
+            text:
+              'All our products are Size-Inclusive',
+          },
+        ];
+
+
+  /* ======================================================
+     ANNOUNCEMENT AUTO ROTATE
+  ====================================================== */
 
   useEffect(() => {
-    if (activeAnnouncements.length <= 1) return;
+
+    if (activeAnnouncements.length <= 1)
+      return;
+
 
     const interval = setInterval(() => {
+
       setCurrentAnnouncementIndex(
-        (prev) => (prev + 1) % activeAnnouncements.length
+        (prev) =>
+          (prev + 1) %
+          activeAnnouncements.length
       );
+
     }, 4000);
 
-    return () => clearInterval(interval);
+
+    return () =>
+      clearInterval(interval);
+
   }, [activeAnnouncements.length]);
 
-  const nextAnnouncement = () => {
-    setCurrentAnnouncementIndex(
-      (prev) => (prev + 1) % activeAnnouncements.length
-    );
-  };
 
-  const prevAnnouncement = () => {
+  const nextAnnouncement = () => {
+
     setCurrentAnnouncementIndex(
       (prev) =>
-        (prev - 1 + activeAnnouncements.length) %
+        (prev + 1) %
         activeAnnouncements.length
     );
+
   };
 
+
+  const prevAnnouncement = () => {
+
+    setCurrentAnnouncementIndex(
+      (prev) =>
+        (prev -
+          1 +
+          activeAnnouncements.length) %
+        activeAnnouncements.length
+    );
+
+  };
+
+
+  /* ======================================================
+     MOBILE SCROLL LOCK
+  ====================================================== */
+
   useEffect(() => {
+
     if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
+
+      document.body.style.overflow =
+        'hidden';
+
     } else {
-      document.body.style.overflow = 'unset';
+
+      document.body.style.overflow =
+        'unset';
+
     }
 
+
     return () => {
-      document.body.style.overflow = 'unset';
+
+      document.body.style.overflow =
+        'unset';
+
     };
+
   }, [isMobileMenuOpen]);
 
+
   return (
+
     <>
-      {/* ================================================= */}
-      {/* ANNOUNCEMENT BAR */}
-      {/* ================================================= */}
+
+
+      {/* ===================================================
+          BLACK ANNOUNCEMENT BAR
+      =================================================== */}
 
       <div
+
         className="
           bg-[#1c1c1c]
+
           text-white
+
           py-2.5
+
           relative
+
           flex
+
           items-center
+
           justify-center
         "
+
       >
+
         {activeAnnouncements.length > 1 && (
+
           <button
+
             suppressHydrationWarning
+
             onClick={prevAnnouncement}
+
             className="
               absolute
+
               left-4
+
               md:left-8
+
               text-gray-400
+
               hover:text-white
+
               transition-colors
             "
+
           >
-            <ChevronLeft className="w-4 h-4" />
+
+            <ChevronLeft
+              className="w-4 h-4"
+            />
+
           </button>
+
         )}
 
+
         <div
+
           className="
             text-[11px]
+
             sm:text-xs
+
             text-center
+
             font-bold
+
             tracking-wide
+
             animate-in
+
             fade-in
+
             duration-500
           "
-          key={currentAnnouncementIndex}
-        >
-          {activeAnnouncements[currentAnnouncementIndex].text}{' '}
 
-          {activeAnnouncements[currentAnnouncementIndex].code && (
-            <span
-              className={
-                activeAnnouncements[currentAnnouncementIndex].codeColor ||
-                'text-gray-300'
-              }
-            >
-              {activeAnnouncements[currentAnnouncementIndex].code}
-            </span>
-          )}
+          key={currentAnnouncementIndex}
+
+        >
+
+          {
+            activeAnnouncements[
+              currentAnnouncementIndex
+            ].text
+          }{' '}
+
+
+          {
+            activeAnnouncements[
+              currentAnnouncementIndex
+            ].code && (
+
+              <span
+
+                className={
+                  activeAnnouncements[
+                    currentAnnouncementIndex
+                  ].codeColor ||
+                  'text-gray-300'
+                }
+
+              >
+
+                {
+                  activeAnnouncements[
+                    currentAnnouncementIndex
+                  ].code
+                }
+
+              </span>
+
+            )
+          }
+
         </div>
 
+
         {activeAnnouncements.length > 1 && (
+
           <button
+
             suppressHydrationWarning
+
             onClick={nextAnnouncement}
+
             className="
               absolute
+
               right-4
+
               md:right-8
+
               text-gray-400
+
               hover:text-white
+
               transition-colors
             "
+
           >
-            <ChevronRight className="w-4 h-4" />
+
+            <ChevronRight
+              className="w-4 h-4"
+            />
+
           </button>
+
         )}
+
       </div>
 
-      {/* ================================================= */}
-      {/* WHATSAPP ASSISTANCE BAR */}
-      {/* ================================================= */}
+
+
+      {/* ===================================================
+          WHATSAPP ASSISTANCE BAR
+      =================================================== */}
 
       <a
-        href="https://wa.me/9625981155"
+
+        href="https://wa.me/919625981155"
+
         target="_blank"
+
         rel="noopener noreferrer"
-        aria-label="Contact us on WhatsApp"
+
+        aria-label="WhatsApp Anup Gupta Studio"
+
         className="
           w-full
-          min-h-[42px]
+
+          min-h-[44px]
+
           bg-white
+
           border-b
+
           border-gray-200
-          px-3
+
+          px-4
+
           py-2
+
           flex
+
           items-center
+
           justify-center
+
           gap-2.5
+
           text-black
+
           hover:bg-gray-50
+
           transition-colors
         "
+
       >
-        {/* WhatsApp Icon */}
+
+        {/* WHATSAPP LOGO */}
+
         <svg
+
           xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+
+          viewBox="0 0 32 32"
+
           className="
-            w-[19px]
-            h-[19px]
-            md:w-[21px]
-            md:h-[21px]
+            w-[20px]
+
+            h-[20px]
+
+            md:w-[22px]
+
+            md:h-[22px]
+
             shrink-0
           "
+
+          aria-hidden="true"
+
         >
-          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z" />
+
+          <path
+
+            fill="#25D366"
+
+            d="
+              M16.002 3
+              C8.82 3
+              3 8.82
+              3 16
+              c0 2.51
+              .714 4.86
+              1.955 6.852
+              L3 29
+              l6.33-1.91
+              A12.93 12.93 0 0 0 16.002 29
+              C23.18 29
+              29 23.18
+              29 16
+              S23.18 3
+              16.002 3
+              z
+            "
+
+          />
+
+
+          <path
+
+            fill="#ffffff"
+
+            d="
+              M22.83 19.38
+              c-.38-.19
+              -2.24-1.1
+              -2.59-1.23
+              -.35-.13
+              -.6-.19
+              -.85.19
+              -.25.38
+              -.98 1.23
+              -1.2 1.48
+              -.22.25
+              -.44.28
+              -.82.09
+              -2.23-1.11
+              -3.69-1.98
+              -5.16-4.49
+              -.39-.67
+              .39-.62
+              1.11-2.08
+              .25-.51
+              .12-.95
+              -.06-1.33
+              -.19-.38
+              -1.7-4.1
+              -2.33-3.97
+              -.6.13
+              -1.3.25
+              -1.86.85
+              -.57.63
+              -2.17 2.12
+              -2.17 5.17
+              s2.23 6
+              2.55 6.42
+              c.32.41
+              4.39 6.71
+              10.83 9.41
+              1.51.63
+              2.69 1
+              3.62 1.28
+              1.52.48
+              2.9.41
+              3.99.25
+              1.22-.18
+              3.77-1.54
+              4.3-3.03
+              .53-1.49
+              .53-2.77
+              .38-3.03
+              -.16-.26
+              -.57-.41
+              -.95-.6
+              z
+            "
+
+          />
+
         </svg>
 
+
         <span
+
           className="
             text-[10px]
+
             sm:text-xs
+
             md:text-[14px]
+
             lg:text-[15px]
+
             font-normal
+
             leading-tight
+
             text-center
           "
+
         >
-          For any assistance, queries, or early delivery requests, WhatsApp us
-          at{' '}
-          <strong className="text-red-600 font-bold whitespace-nowrap">
-            +91 96259 81155
-          </strong>
-        </span>
-      </a>
 
-      {/* ================================================= */}
-      {/* MAIN HEADER */}
-      {/* ================================================= */}
+          For any assistance, queries, or early
+          delivery requests, WhatsApp us at{' '}
 
-      <header
-        className="
-          sticky
-          top-0
-          z-50
-          bg-white
-          border-b
-          border-gray-100
-        "
-      >
-        {/* MOBILE HEADER */}
-        <div
-          className="
-            lg:hidden
-            px-4
-            h-[80px]
-            flex
-            items-center
-            justify-between
-          "
-        >
-          <div className="flex items-center gap-4 flex-1">
-            <button
-              className="
-                text-gray-900
-                hover:text-gray-600
-                transition-colors
-                p-1
-                [&_svg]:w-[27px]
-                [&_svg]:h-[27px]
-                -ml-1
-              "
-              onClick={() => setIsMobileMenuOpen(true)}
-            >
-              <Menu
-                className="w-9 h-9"
-                strokeWidth={1.5}
-              />
-            </button>
-          </div>
-
-          {/* MOBILE LOGO */}
-          <Link
-            href="/"
+          <strong
             className="
-              flex
-              flex-col
-              items-center
-              justify-center
-              shrink-0
+              text-red-600
+
+              font-bold
+
+              whitespace-nowrap
             "
           >
-            <Image
-              src="/logo/ANUP GUPTA LOGO.png.png"
-              alt="Anup Gupta Studio"
-              width={105}
-              height={105}
-              priority
-              className="
-                h-[72px]
-                w-auto
-                object-contain
-                mix-blend-multiply
-              "
-            />
-          </Link>
 
-          {/* MOBILE ICONS */}
+            +91 96259 81155
+
+          </strong>
+
+        </span>
+
+      </a>
+
+
+
+      {/* ===================================================
+          MAIN HEADER
+      =================================================== */}
+
+      <header
+
+        className="
+          sticky
+
+          top-0
+
+          z-50
+
+          bg-white
+
+          border-b
+
+          border-gray-100
+        "
+
+      >
+
+
+        {/* =================================================
+            MOBILE HEADER
+        ================================================= */}
+
+        <div
+
+          className="
+            lg:hidden
+
+            px-4
+
+            h-[80px]
+
+            flex
+
+            items-center
+
+            justify-between
+          "
+
+        >
+
+
+          {/* MOBILE MENU BUTTON */}
+
           <div
             className="
               flex
               items-center
               gap-4
-              justify-end
               flex-1
             "
           >
-            <SearchModal
-              triggerClass="
-                text-gray-900
-                hover:text-gray-500
-                transition-colors
-                p-1
-                [&_svg]:w-[27px]
-                [&_svg]:h-[27px]
-              "
-            />
 
             <button
-              onClick={() => setIsCartOpen(true)}
+
               className="
                 text-gray-900
-                hover:text-gray-500
+
+                hover:text-gray-600
+
                 transition-colors
-                relative
+
                 p-1
-                -mr-1
-                cursor-pointer
+
+                [&_svg]:w-[27px]
+
+                [&_svg]:h-[27px]
+
+                -ml-1
               "
+
+              onClick={() =>
+                setIsMobileMenuOpen(true)
+              }
+
             >
-              <ShoppingBag
-                className="w-[30px] h-[30px]"
+
+              <Menu
+
+                className="w-9 h-9"
+
                 strokeWidth={1.5}
+
               />
 
-              {cartCount > 0 && (
-                <span
-                  className="
-                    absolute
-                    -top-1
-                    -right-1
-                    bg-black
-                    text-white
-                    text-[9px]
-                    font-bold
-                    w-4
-                    h-4
-                    rounded-full
-                    flex
-                    items-center
-                    justify-center
-                  "
-                >
-                  {cartCount}
-                </span>
-              )}
             </button>
+
           </div>
-        </div>
 
-        {/* ================================================= */}
-        {/* DESKTOP HEADER */}
-        {/* ================================================= */}
 
-        <div
-          className="
-            hidden
-            lg:flex
-            px-8
-            h-[92px]
-            items-center
-            justify-between
-            max-w-[1800px]
-            mx-auto
-          "
-        >
-          {/* DESKTOP LOGO */}
+
+          {/* MOBILE LOGO */}
+
           <Link
+
             href="/"
+
             className="
               flex
+
               flex-col
-              items-start
+
+              items-center
+
               justify-center
+
               shrink-0
-              w-[200px]
             "
+
           >
-            <div
+
+            <Image
+
+              src="/logo/ANUP GUPTA LOGO.png.png"
+
+              alt="Anup Gupta Studio"
+
+              width={105}
+
+              height={105}
+
+              priority
+
               className="
-                flex
-                flex-col
-                items-center
-                w-fit
+                h-[72px]
+
+                w-auto
+
+                object-contain
+
+                mix-blend-multiply
               "
-            >
-              <Image
-                src="/logo/ANUP GUPTA LOGO.png.png"
-                alt="Anup Gupta Studio"
-                width={135}
-                height={135}
-                priority
-                className="
-                  h-[84px]
-                  w-auto
-                  object-contain
-                  mix-blend-multiply
-                "
-              />
-            </div>
+
+            />
+
           </Link>
 
-          {/* ================================================= */}
-          {/* DESKTOP NAVIGATION */}
-          {/* ================================================= */}
 
-          <nav
+
+          {/* MOBILE RIGHT ICONS */}
+
+          <div
+
             className="
               flex
-              gap-6
-              xl:gap-8
-              text-[11px]
-              font-semibold
-              tracking-wider
-              uppercase
-              h-full
+
+              items-center
+
+              gap-4
+
+              justify-end
+
               flex-1
+            "
+
+          >
+
+            <SearchModal
+
+              triggerClass="
+                text-gray-900
+
+                hover:text-gray-500
+
+                transition-colors
+
+                p-1
+
+                [&_svg]:w-[27px]
+
+                [&_svg]:h-[27px]
+              "
+
+            />
+
+
+            {/* MOBILE CART */}
+
+            <button
+
+              onClick={() =>
+                setIsCartOpen(true)
+              }
+
+              className="
+                text-gray-900
+
+                hover:text-gray-500
+
+                transition-colors
+
+                relative
+
+                p-1
+
+                -mr-1
+
+                cursor-pointer
+              "
+
+            >
+
+              <ShoppingBag
+
+                className="
+                  w-[30px]
+                  h-[30px]
+                "
+
+                strokeWidth={1.5}
+
+              />
+
+
+              {cartCount > 0 && (
+
+                <span
+
+                  className="
+                    absolute
+
+                    -top-1
+
+                    -right-1
+
+                    bg-black
+
+                    text-white
+
+                    text-[9px]
+
+                    font-bold
+
+                    w-4
+
+                    h-4
+
+                    rounded-full
+
+                    flex
+
+                    items-center
+
+                    justify-center
+                  "
+
+                >
+
+                  {cartCount}
+
+                </span>
+
+              )}
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+        {/* =================================================
+            DESKTOP HEADER
+        ================================================= */}
+
+        <div
+
+          className="
+            hidden
+
+            lg:flex
+
+            px-8
+
+            h-[92px]
+
+            items-center
+
+            justify-between
+
+            max-w-[1800px]
+
+            mx-auto
+          "
+
+        >
+
+
+          {/* DESKTOP LOGO */}
+
+          <Link
+
+            href="/"
+
+            className="
+              flex
+
+              flex-col
+
+              items-start
+
+              justify-center
+
+              shrink-0
+
+              w-[200px]
+            "
+
+          >
+
+            <div
+
+              className="
+                flex
+
+                flex-col
+
+                items-center
+
+                w-fit
+              "
+
+            >
+
+              <Image
+
+                src="/logo/ANUP GUPTA LOGO.png.png"
+
+                alt="Anup Gupta Studio"
+
+                width={135}
+
+                height={135}
+
+                priority
+
+                className="
+                  h-[84px]
+
+                  w-auto
+
+                  object-contain
+
+                  mix-blend-multiply
+                "
+
+              />
+
+            </div>
+
+          </Link>
+
+
+
+          {/* =================================================
+              DESKTOP NAVIGATION
+          ================================================= */}
+
+          <nav
+
+            className="
+              flex
+
+              gap-6
+
+              xl:gap-8
+
+              text-[11px]
+
+              font-semibold
+
+              tracking-wider
+
+              uppercase
+
+              h-full
+
+              flex-1
+
               justify-center
             "
+
           >
-            {navigation?.categories?.map((cat: any) => {
-              const links =
-                cat.subcategories?.length > 0
-                  ? cat.subcategories.map((sub: any) => ({
-                      label: sub.title,
-                      href: `/category/${sub.slug}`,
-                    }))
-                  : undefined;
 
-              const images: {
-                src: string;
-                label: string;
-                href: string;
-              }[] = [];
+            {navigation?.categories?.map(
+              (cat: any) => {
 
-              if (cat.imageUrl) {
-                images.push({
-                  src: cat.imageUrl,
-                  label: `All ${cat.title} Products`,
-                  href: `/category/${cat.slug}`,
-                });
-              }
+                const links =
+                  cat.subcategories?.length > 0
+                    ? cat.subcategories.map(
+                        (sub: any) => ({
+                          label: sub.title,
 
-              const subWithImage =
-                cat.subcategories?.find(
-                  (sub: any) => sub.imageUrl
+                          href:
+                            `/category/${sub.slug}`,
+                        })
+                      )
+                    : undefined;
+
+
+                const images: {
+                  src: string;
+                  label: string;
+                  href: string;
+                }[] = [];
+
+
+                if (cat.imageUrl) {
+
+                  images.push({
+
+                    src: cat.imageUrl,
+
+                    label:
+                      `All ${cat.title} Products`,
+
+                    href:
+                      `/category/${cat.slug}`,
+
+                  });
+
+                }
+
+
+                const subWithImage =
+                  cat.subcategories?.find(
+                    (sub: any) =>
+                      sub.imageUrl
+                  );
+
+
+                if (subWithImage) {
+
+                  images.push({
+
+                    src:
+                      subWithImage.imageUrl,
+
+                    label:
+                      `All ${subWithImage.title} Products`,
+
+                    href:
+                      `/category/${subWithImage.slug}`,
+
+                  });
+
+                }
+
+
+                return (
+
+                  <NavItem
+
+                    key={cat.slug}
+
+                    label={cat.title}
+
+                    href={
+                      `/category/${cat.slug}`
+                    }
+
+                    links={links}
+
+                    images={
+                      images.length > 0
+                        ? images
+                        : undefined
+                    }
+
+                  />
+
                 );
 
-              if (subWithImage) {
-                images.push({
-                  src: subWithImage.imageUrl,
-                  label: `All ${subWithImage.title} Products`,
-                  href: `/category/${subWithImage.slug}`,
-                });
               }
+            )}
 
-              return (
-                <NavItem
-                  key={cat.slug}
-                  label={cat.title}
-                  href={`/category/${cat.slug}`}
-                  links={links}
-                  images={
-                    images.length > 0
-                      ? images
-                      : undefined
-                  }
-                />
-              );
-            })}
+
 
             {/* SHOP BY */}
+
             <NavItem
+
               label="Shop By"
+
               columns={[
                 {
+
                   title: 'Collections',
+
                   links: (
-                    navigation?.collections || []
+                    navigation?.collections ||
+                    []
                   ).map((col: any) => ({
+
                     label: col.title,
-                    href: `/collection/${col.slug}`,
+
+                    href:
+                      `/collection/${col.slug}`,
+
                   })),
+
                 },
 
                 {
+
                   title: 'Featured',
+
                   links: [
+
                     {
                       label: 'Shop All',
                       href: '/collection/all',
                     },
+
                     {
                       label: 'New Arrivals',
-                      href: '/collection/new-in',
+                      href:
+                        '/collection/new-in',
                     },
+
                     {
                       label: 'Bestsellers',
-                      href: '/collection/bestsellers',
+                      href:
+                        '/collection/bestsellers',
                     },
+
                   ],
+
                 },
               ]}
+
             />
+
           </nav>
 
-          {/* ================================================= */}
-          {/* DESKTOP ICONS */}
-          {/* ================================================= */}
+
+
+          {/* =================================================
+              DESKTOP RIGHT ICONS
+          ================================================= */}
 
           <div
+
             className="
               flex
+
               items-center
+
               gap-5
+
               justify-end
+
               w-[200px]
+
               h-full
             "
+
           >
+
             <SearchModal
+
               triggerClass="
                 text-gray-900
+
                 hover:text-gray-500
+
                 transition-colors
+
                 p-1
               "
+
             />
 
+
+
             {/* PROFILE */}
+
             <div
+
               className="
                 relative
+
                 group/profile
+
                 h-full
+
                 flex
+
                 items-center
               "
+
             >
+
               {user ? (
+
                 <Link
+
                   href="/profile"
+
                   className="
                     text-gray-900
+
                     hover:text-gray-500
+
                     transition-colors
+
                     p-1
+
                     flex
+
                     items-center
+
                     h-full
                   "
+
                 >
+
                   <User
-                    className="w-[27px] h-[27px]"
+
+                    className="
+                      w-[27px]
+                      h-[27px]
+                    "
+
                     strokeWidth={2}
+
                   />
+
                 </Link>
+
               ) : (
+
                 <button
+
                   suppressHydrationWarning
+
                   onClick={() => {
-                    setAuthModalMode('login');
-                    setIsAuthModalOpen(true);
+
+                    setAuthModalMode(
+                      'login'
+                    );
+
+                    setIsAuthModalOpen(
+                      true
+                    );
+
                   }}
+
                   className="
                     text-gray-900
+
                     hover:text-gray-500
+
                     transition-colors
+
                     p-1
+
                     flex
+
                     items-center
+
                     h-full
                   "
+
                 >
+
                   <User
-                    className="w-[27px] h-[27px]"
+
+                    className="
+                      w-[27px]
+                      h-[27px]
+                    "
+
                     strokeWidth={2}
+
                   />
+
                 </button>
+
               )}
+
+
 
               {/* PROFILE DROPDOWN */}
+
               <div
+
                 className="
                   absolute
+
                   top-full
+
                   right-0
+
                   w-[200px]
+
                   bg-white
+
                   border
+
                   border-gray-100
+
                   shadow-xl
+
                   opacity-0
+
                   invisible
+
                   group-hover/profile:opacity-100
+
                   group-hover/profile:visible
+
                   transition-all
+
                   duration-300
+
                   z-50
+
                   flex
+
                   flex-col
+
                   py-2
+
                   rounded-b-md
                 "
+
               >
+
                 {user ? (
+
                   <>
+
                     <div
+
                       className="
                         px-4
+
                         py-2
+
                         border-b
+
                         border-gray-100
+
                         mb-1
                       "
+
                     >
+
                       <span
+
                         className="
                           block
+
                           text-[11px]
+
                           font-semibold
+
                           text-gray-900
+
                           truncate
                         "
+
                       >
-                        {user.displayName || user.email}
+
+                        {user.displayName ||
+                          user.email}
+
                       </span>
+
                     </div>
 
+
                     {sanityUser?.isAdmin && (
+
                       <Link
+
                         href="/admin"
+
                         className="
                           px-4
+
                           py-2.5
+
                           text-[11px]
+
                           font-bold
+
                           tracking-wider
+
                           uppercase
+
                           text-blue-600
+
                           hover:bg-blue-50
+
                           transition-colors
                         "
+
                       >
+
                         Admin Portal
+
                       </Link>
+
                     )}
 
+
                     <Link
+
                       href="/profile"
+
                       className="
                         px-4
+
                         py-2.5
+
                         text-[11px]
+
                         font-semibold
+
                         tracking-wider
+
                         uppercase
+
                         text-gray-700
+
                         hover:bg-gray-50
+
                         hover:text-black
+
                         transition-colors
                       "
+
                     >
+
                       Profile
+
                     </Link>
 
-                    <button
-                      onClick={() => signOut(auth)}
-                      className="
-                        text-left
-                        cursor-pointer
-                        px-4
-                        py-2.5
-                        text-[11px]
-                        font-semibold
-                        tracking-wider
-                        uppercase
-                        text-red-600
-                        hover:bg-gray-50
-                        transition-colors
-                        border-t
-                        border-gray-100
-                        mt-1
-                        pt-3.5
-                        w-full
-                      "
-                    >
-                      Logout
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      suppressHydrationWarning
-                      onClick={() => {
-                        setAuthModalMode('login');
-                        setIsAuthModalOpen(true);
-                      }}
-                      className="
-                        text-left
-                        w-full
-                        cursor-pointer
-                        px-4
-                        py-2.5
-                        text-[11px]
-                        font-semibold
-                        tracking-wider
-                        uppercase
-                        text-gray-700
-                        hover:bg-gray-50
-                        hover:text-black
-                        transition-colors
-                      "
-                    >
-                      Log In
-                    </button>
 
                     <button
-                      suppressHydrationWarning
-                      onClick={() => {
-                        setAuthModalMode('signup');
-                        setIsAuthModalOpen(true);
-                      }}
+
+                      onClick={() =>
+                        signOut(auth)
+                      }
+
                       className="
                         text-left
-                        w-full
+
                         cursor-pointer
+
                         px-4
+
                         py-2.5
+
                         text-[11px]
+
                         font-semibold
+
                         tracking-wider
+
                         uppercase
-                        text-gray-700
+
+                        text-red-600
+
                         hover:bg-gray-50
+
+                        transition-colors
+
+                        border-t
+
+                        border-gray-100
+
+                        mt-1
+
+                        pt-3.5
+
+                        w-full
+                      "
+
+                    >
+
+                      Logout
+
+                    </button>
+
+                  </>
+
+                ) : (
+
+                  <>
+
+                    <button
+
+                      suppressHydrationWarning
+
+                      onClick={() => {
+
+                        setAuthModalMode(
+                          'login'
+                        );
+
+                        setIsAuthModalOpen(
+                          true
+                        );
+
+                      }}
+
+                      className="
+                        text-left
+
+                        w-full
+
+                        cursor-pointer
+
+                        px-4
+
+                        py-2.5
+
+                        text-[11px]
+
+                        font-semibold
+
+                        tracking-wider
+
+                        uppercase
+
+                        text-gray-700
+
+                        hover:bg-gray-50
+
                         hover:text-black
+
                         transition-colors
                       "
+
                     >
-                      Create Account
+
+                      Log In
+
                     </button>
+
+
+                    <button
+
+                      suppressHydrationWarning
+
+                      onClick={() => {
+
+                        setAuthModalMode(
+                          'signup'
+                        );
+
+                        setIsAuthModalOpen(
+                          true
+                        );
+
+                      }}
+
+                      className="
+                        text-left
+
+                        w-full
+
+                        cursor-pointer
+
+                        px-4
+
+                        py-2.5
+
+                        text-[11px]
+
+                        font-semibold
+
+                        tracking-wider
+
+                        uppercase
+
+                        text-gray-700
+
+                        hover:bg-gray-50
+
+                        hover:text-black
+
+                        transition-colors
+                      "
+
+                    >
+
+                      Create Account
+
+                    </button>
+
                   </>
+
                 )}
+
               </div>
+
             </div>
 
-            {/* CART */}
+
+
+            {/* DESKTOP CART */}
+
             <button
+
               suppressHydrationWarning
-              onClick={() => setIsCartOpen(true)}
+
+              onClick={() =>
+                setIsCartOpen(true)
+              }
+
               className="
                 text-gray-900
+
                 hover:text-gray-500
+
                 transition-colors
+
                 relative
+
                 p-1
+
                 -mr-1
+
                 cursor-pointer
               "
+
             >
+
               <ShoppingBag
-                className="w-[27px] h-[27px]"
+
+                className="
+                  w-[27px]
+                  h-[27px]
+                "
+
                 strokeWidth={2}
+
               />
 
+
               {cartCount > 0 && (
+
                 <span
+
                   className="
                     absolute
+
                     -top-1
+
                     -right-1
+
                     bg-black
+
                     text-white
+
                     text-[9px]
+
                     font-bold
+
                     w-4
+
                     h-4
+
                     rounded-full
+
                     flex
+
                     items-center
+
                     justify-center
                   "
+
                 >
+
                   {cartCount}
+
                 </span>
+
               )}
+
             </button>
+
           </div>
+
         </div>
+
       </header>
 
-      {/* ================================================= */}
-      {/* AUTH MODAL */}
-      {/* ================================================= */}
+
+
+      {/* ===================================================
+          AUTH MODAL
+      =================================================== */}
 
       <AuthModal
+
         isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
+
+        onClose={() =>
+          setIsAuthModalOpen(false)
+        }
+
         initialMode={authModalMode}
+
       />
 
-      {/* ================================================= */}
-      {/* MOBILE MENU */}
-      {/* ================================================= */}
+
+
+      {/* ===================================================
+          MOBILE MENU
+      =================================================== */}
 
       {isMobileMenuOpen && (
+
         <div
+
           className="
             fixed
+
             inset-0
+
             z-[100]
+
             lg:hidden
           "
+
         >
+
+
           {/* OVERLAY */}
+
           <div
+
             className="
               absolute
+
               inset-0
+
               bg-black/50
+
               transition-opacity
             "
+
             onClick={() =>
               setIsMobileMenuOpen(false)
             }
+
           />
 
+
+
           {/* MOBILE SIDEBAR */}
+
           <div
+
             className="
               absolute
+
               inset-y-0
+
               left-0
+
               w-[85%]
+
               max-w-[400px]
+
               bg-white
+
               flex
+
               flex-col
+
               h-full
+
               shadow-2xl
+
               animate-in
+
               slide-in-from-left
+
               duration-300
             "
+
           >
+
+
             {/* MOBILE MENU HEADER */}
+
             <div
+
               className="
                 flex
+
                 items-center
+
                 justify-between
+
                 p-4
+
                 border-b
+
                 border-gray-100
               "
+
             >
+
               <span
+
                 className="
                   text-[13px]
+
                   font-semibold
+
                   uppercase
+
                   tracking-wider
+
                   text-gray-900
                 "
+
               >
+
                 Menu
+
               </span>
 
+
               <button
+
                 onClick={() =>
-                  setIsMobileMenuOpen(false)
+                  setIsMobileMenuOpen(
+                    false
+                  )
                 }
+
                 className="
                   p-2
+
                   text-gray-500
+
                   hover:text-gray-900
+
                   transition-colors
+
                   -mr-2
                 "
+
               >
+
                 <X
+
                   className="w-5 h-5"
+
                   strokeWidth={1.5}
+
                 />
+
               </button>
+
             </div>
 
+
+
             {/* MOBILE NAVIGATION */}
+
             <div
+
               className="
                 flex-1
+
                 overflow-y-auto
+
                 py-4
               "
+
             >
+
               <nav
+
                 className="
                   flex
+
                   flex-col
+
                   text-[13px]
+
                   font-semibold
+
                   tracking-wider
+
                   uppercase
+
                   text-gray-900
                 "
+
               >
+
+
                 <Link
+
                   href="/collection/new-in"
+
                   className="
                     px-6
+
                     py-4
+
                     border-b
+
                     border-gray-50
+
                     flex
+
                     items-center
+
                     justify-between
                   "
+
                   onClick={() =>
-                    setIsMobileMenuOpen(false)
+                    setIsMobileMenuOpen(
+                      false
+                    )
                   }
+
                 >
+
                   New In
 
+
                   <ChevronRight
+
                     className="
                       w-4
+
                       h-4
+
                       text-gray-400
                     "
+
                   />
+
                 </Link>
+
+
 
                 {navigation?.categories?.map(
                   (cat: any) => (
+
                     <div
+
                       key={cat.slug}
+
                       className="
                         flex
+
                         flex-col
+
                         border-b
+
                         border-gray-50
                       "
+
                     >
+
                       <Link
-                        href={`/category/${cat.slug}`}
+
+                        href={
+                          `/category/${cat.slug}`
+                        }
+
                         className="
                           px-6
+
                           py-4
+
                           flex
+
                           items-center
+
                           justify-between
                         "
+
                         onClick={() =>
-                          setIsMobileMenuOpen(false)
+                          setIsMobileMenuOpen(
+                            false
+                          )
                         }
+
                       >
+
                         {cat.title}
 
+
                         <ChevronRight
+
                           className="
                             w-4
+
                             h-4
+
                             text-gray-400
                           "
+
                         />
+
                       </Link>
 
-                      {cat.subcategories?.map(
-                        (sub: any) => (
-                          <Link
-                            key={sub.slug}
-                            href={`/category/${sub.slug}`}
-                            className="
-                              px-10
-                              py-3
-                              text-[11px]
-                              text-gray-600
-                              flex
-                              items-center
-                              justify-between
-                            "
-                            onClick={() =>
-                              setIsMobileMenuOpen(false)
-                            }
-                          >
-                            {sub.title}
-                          </Link>
+
+
+                      {
+                        cat.subcategories?.map(
+                          (sub: any) => (
+
+                            <Link
+
+                              key={
+                                sub.slug
+                              }
+
+                              href={
+                                `/category/${sub.slug}`
+                              }
+
+                              className="
+                                px-10
+
+                                py-3
+
+                                text-[11px]
+
+                                text-gray-600
+
+                                flex
+
+                                items-center
+
+                                justify-between
+                              "
+
+                              onClick={() =>
+                                setIsMobileMenuOpen(
+                                  false
+                                )
+                              }
+
+                            >
+
+                              {sub.title}
+
+                            </Link>
+
+                          )
                         )
-                      )}
-                    </div>
-                  )
-                )}
-
-                {navigation?.collections?.map(
-                  (col: any) => (
-                    <Link
-                      key={col.slug}
-                      href={`/collection/${col.slug}`}
-                      className="
-                        px-6
-                        py-4
-                        border-b
-                        border-gray-50
-                        flex
-                        items-center
-                        justify-between
-                      "
-                      onClick={() =>
-                        setIsMobileMenuOpen(false)
                       }
-                    >
-                      {col.title}
 
-                      <ChevronRight
-                        className="
-                          w-4
-                          h-4
-                          text-gray-400
-                        "
-                      />
-                    </Link>
+                    </div>
+
                   )
                 )}
+
+
+
+                {
+                  navigation?.collections?.map(
+                    (col: any) => (
+
+                      <Link
+
+                        key={col.slug}
+
+                        href={
+                          `/collection/${col.slug}`
+                        }
+
+                        className="
+                          px-6
+
+                          py-4
+
+                          border-b
+
+                          border-gray-50
+
+                          flex
+
+                          items-center
+
+                          justify-between
+                        "
+
+                        onClick={() =>
+                          setIsMobileMenuOpen(
+                            false
+                          )
+                        }
+
+                      >
+
+                        {col.title}
+
+
+                        <ChevronRight
+
+                          className="
+                            w-4
+
+                            h-4
+
+                            text-gray-400
+                          "
+
+                        />
+
+                      </Link>
+
+                    )
+                  )
+                }
+
               </nav>
+
             </div>
+
+
 
             {/* MOBILE ACCOUNT AREA */}
+
             <div
+
               className="
                 p-6
+
                 bg-gray-50
+
                 border-t
+
                 border-gray-100
+
                 flex
+
                 flex-col
+
                 gap-4
               "
+
             >
+
               {user ? (
+
                 <>
+
                   <div
+
                     className="
                       flex
+
                       items-center
+
                       gap-3
+
                       text-sm
+
                       font-medium
+
                       text-gray-700
+
                       pb-2
+
                       border-b
+
                       border-gray-200
                     "
+
                   >
+
                     <User
+
                       className="w-5 h-5"
+
                       strokeWidth={1.5}
+
                     />
 
+
                     <div
+
                       className="
                         flex
+
                         flex-col
                       "
+
                     >
-                      <span>My Account</span>
+
+                      <span>
+                        My Account
+                      </span>
+
 
                       <span
+
                         className="
                           text-[11px]
+
                           font-normal
+
                           text-gray-500
                         "
+
                       >
+
                         {user.displayName ||
                           user.email}
+
                       </span>
+
                     </div>
+
                   </div>
+
+
 
                   <div
+
                     className="
                       flex
+
                       flex-col
+
                       gap-1
                     "
+
                   >
+
                     {sanityUser?.isAdmin && (
+
                       <Link
+
                         href="/admin"
+
                         className="
                           text-left
+
                           w-full
+
                           px-4
+
                           py-3
+
                           text-[13px]
+
                           font-semibold
+
                           text-blue-600
+
                           bg-blue-50/50
+
                           rounded-lg
                         "
+
                         onClick={() =>
-                          setIsMobileMenuOpen(false)
+                          setIsMobileMenuOpen(
+                            false
+                          )
                         }
+
                       >
+
                         Admin Portal
+
                       </Link>
+
                     )}
 
+
                     <Link
+
                       href="/profile"
+
                       className="
                         text-left
+
                         w-full
+
                         px-4
+
                         py-3
+
                         text-[13px]
+
                         font-semibold
+
                         text-gray-900
+
                         bg-gray-100/50
+
                         rounded-lg
                       "
+
                       onClick={() =>
-                        setIsMobileMenuOpen(false)
+                        setIsMobileMenuOpen(
+                          false
+                        )
                       }
+
                     >
+
                       Profile
+
                     </Link>
 
+
                     <button
+
                       onClick={() => {
-                        setIsMobileMenuOpen(false);
+
+                        setIsMobileMenuOpen(
+                          false
+                        );
+
                         signOut(auth);
+
                       }}
+
                       className="
                         text-left
+
                         w-full
+
                         px-4
+
                         py-3
+
                         text-[13px]
+
                         font-semibold
+
                         text-red-600
+
                         bg-red-50/50
+
                         rounded-lg
                       "
+
                     >
+
                       Logout
+
                     </button>
+
                   </div>
+
                 </>
+
               ) : (
+
                 <div
+
                   className="
                     flex
+
                     flex-col
+
                     gap-3
                   "
+
                 >
+
                   <button
+
                     onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      setAuthModalMode('login');
-                      setIsAuthModalOpen(true);
+
+                      setIsMobileMenuOpen(
+                        false
+                      );
+
+                      setAuthModalMode(
+                        'login'
+                      );
+
+                      setIsAuthModalOpen(
+                        true
+                      );
+
                     }}
+
                     className="
                       w-full
+
                       px-4
+
                       py-3.5
+
                       text-[13px]
+
                       font-semibold
+
                       text-gray-900
+
                       bg-gray-200/50
+
                       rounded-lg
+
                       flex
+
                       items-center
+
                       justify-center
+
                       gap-2
+
                       transition-colors
+
                       hover:bg-gray-200
                     "
+
                   >
-                    <User className="w-4 h-4" />
+
+                    <User
+                      className="w-4 h-4"
+                    />
 
                     Log In
+
                   </button>
 
+
                   <button
+
                     onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      setAuthModalMode('signup');
-                      setIsAuthModalOpen(true);
+
+                      setIsMobileMenuOpen(
+                        false
+                      );
+
+                      setAuthModalMode(
+                        'signup'
+                      );
+
+                      setIsAuthModalOpen(
+                        true
+                      );
+
                     }}
+
                     className="
                       w-full
+
                       px-4
+
                       py-3.5
+
                       text-[13px]
+
                       font-semibold
+
                       text-white
+
                       bg-black
+
                       hover:bg-[#222]
+
                       transition-colors
+
                       rounded-lg
+
                       text-center
                     "
+
                   >
+
                     Create Account
+
                   </button>
+
                 </div>
+
               )}
+
             </div>
+
           </div>
+
         </div>
+
       )}
+
     </>
+
   );
+
 }
