@@ -1,38 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const WHATSAPP_NUMBER = "919625981155";
 const CALL_NUMBER = "+919625981155";
 
 export default function FloatingSocialBar() {
-  const pathname = usePathname();
-
+  const [isExpanded, setIsExpanded] = useState(false);
   const [showContactOptions, setShowContactOptions] = useState(false);
 
-  /*
-    Homepage = open
-    Other pages = collapsed
-  */
-  const [isExpanded, setIsExpanded] = useState(true);
-
-  useEffect(() => {
-    if (pathname === "/") {
-      setIsExpanded(true);
-    } else {
-      setIsExpanded(false);
-    }
-  }, [pathname]);
-
   const iconBox =
-    "group flex h-9 w-9 md:h-14 md:w-14 items-center justify-center border-b border-gray-100 bg-white transition-all duration-300 hover:bg-gray-50 md:hover:w-[62px]";
+    "flex h-10 w-10 md:h-11 md:w-11 items-center justify-center border-b border-gray-100 bg-white transition-all duration-300 hover:bg-gray-50";
 
   return (
     <>
       {/* =====================================================
-          GLOBAL WHATSAPP BUTTON
-          BOTTOM RIGHT
+          BOTTOM RIGHT WHATSAPP
       ===================================================== */}
 
       <a
@@ -45,8 +28,6 @@ export default function FloatingSocialBar() {
           fixed
           bottom-4
           right-4
-          md:bottom-6
-          md:right-6
           z-[9999]
 
           flex
@@ -59,7 +40,6 @@ export default function FloatingSocialBar() {
           justify-center
 
           rounded-full
-
           bg-[#25D366]
 
           shadow-[0_8px_28px_rgba(0,0,0,0.25)]
@@ -67,7 +47,7 @@ export default function FloatingSocialBar() {
           transition-all
           duration-300
 
-          hover:scale-110
+          hover:scale-105
           active:scale-95
         "
       >
@@ -80,9 +60,8 @@ export default function FloatingSocialBar() {
         </svg>
       </a>
 
-
       {/* =====================================================
-          LEFT SOCIAL BAR WRAPPER
+          LEFT EDGE SOCIAL DRAWER
       ===================================================== */}
 
       <div
@@ -90,25 +69,22 @@ export default function FloatingSocialBar() {
           fixed
           left-0
           top-1/2
-
           z-[9998]
-
           -translate-y-1/2
-
-          flex
-          items-center
         "
       >
         {/* =================================================
-            SOCIAL BUTTONS PANEL
+            SOCIAL ICON PANEL
         ================================================= */}
 
         <div
           className={`
+            w-10
+            md:w-11
+
             overflow-hidden
 
             rounded-r-lg
-            md:rounded-r-2xl
 
             border
             border-l-0
@@ -117,11 +93,10 @@ export default function FloatingSocialBar() {
             bg-white
 
             shadow-xl
-            md:shadow-2xl
 
             transition-all
-            duration-500
-            ease-in-out
+            duration-300
+            ease-out
 
             ${
               isExpanded
@@ -130,7 +105,7 @@ export default function FloatingSocialBar() {
             }
           `}
         >
-          {/* CALL BUTTON */}
+          {/* CALL */}
 
           <button
             type="button"
@@ -138,14 +113,12 @@ export default function FloatingSocialBar() {
             aria-label="Contact Anup Gupta Studio"
             title="Call"
             className="
-              group
               flex
+              h-10
+              w-10
 
-              h-9
-              w-9
-
-              md:h-14
-              md:w-14
+              md:h-11
+              md:w-11
 
               items-center
               justify-center
@@ -159,19 +132,16 @@ export default function FloatingSocialBar() {
               duration-300
 
               hover:bg-[#bbf7d0]
-
-              md:hover:w-[62px]
             "
           >
             <svg
               viewBox="0 0 24 24"
-              className="h-4 w-4 md:h-6 md:w-6 fill-[#15803d]"
+              className="h-4 w-4 fill-[#15803d]"
               aria-hidden="true"
             >
               <path d="M6.62 10.79a15.46 15.46 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z" />
             </svg>
           </button>
-
 
           {/* FACEBOOK */}
 
@@ -185,13 +155,12 @@ export default function FloatingSocialBar() {
           >
             <svg
               viewBox="0 0 24 24"
-              className="h-4 w-4 md:h-6 md:w-6 fill-[#1877F2]"
+              className="h-4 w-4 fill-[#1877F2]"
               aria-hidden="true"
             >
               <path d="M13.5 22v-9h3l.45-3.5H13.5V7.27c0-1.01.28-1.7 1.73-1.7H17V2.44A23.5 23.5 0 0 0 14.4 2c-2.57 0-4.33 1.57-4.33 4.45V9.5H7v3.5h3.07v9h3.43Z" />
             </svg>
           </a>
-
 
           {/* INSTAGRAM */}
 
@@ -205,7 +174,7 @@ export default function FloatingSocialBar() {
           >
             <svg
               viewBox="0 0 24 24"
-              className="h-4 w-4 md:h-6 md:w-6"
+              className="h-4 w-4"
               aria-hidden="true"
             >
               <defs>
@@ -230,7 +199,6 @@ export default function FloatingSocialBar() {
             </svg>
           </a>
 
-
           {/* LINKEDIN */}
 
           <a
@@ -243,13 +211,12 @@ export default function FloatingSocialBar() {
           >
             <svg
               viewBox="0 0 24 24"
-              className="h-4 w-4 md:h-6 md:w-6 fill-[#0A66C2]"
+              className="h-4 w-4 fill-[#0A66C2]"
               aria-hidden="true"
             >
               <path d="M5.34 3.5A2.34 2.34 0 1 1 .66 3.5a2.34 2.34 0 0 1 4.68 0ZM1 7h4.67v15H1V7Zm7.5 0h4.48v2.05h.06c.62-1.18 2.15-2.42 4.42-2.42 4.73 0 5.6 3.11 5.6 7.16V22h-4.67v-7.27c0-1.74-.03-3.97-2.42-3.97-2.42 0-2.79 1.89-2.79 3.84V22H8.5V7Z" />
             </svg>
           </a>
-
 
           {/* YOUTUBE */}
 
@@ -263,7 +230,7 @@ export default function FloatingSocialBar() {
           >
             <svg
               viewBox="0 0 24 24"
-              className="h-[17px] w-[17px] md:h-7 md:w-7 fill-[#FF0000]"
+              className="h-[17px] w-[17px] fill-[#FF0000]"
               aria-hidden="true"
             >
               <path d="M23.5 6.2a3.02 3.02 0 0 0-2.13-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.37.51A3.02 3.02 0 0 0 .5 6.2 31.58 31.58 0 0 0 0 12a31.58 31.58 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.13 2.14c1.87.51 9.37.51 9.37.51s7.5 0 9.37-.51a3.02 3.02 0 0 0 2.13-2.14A31.58 31.58 0 0 0 24 12a31.58 31.58 0 0 0-.5-5.8ZM9.6 15.62V8.38L15.86 12 9.6 15.62Z" />
@@ -271,48 +238,47 @@ export default function FloatingSocialBar() {
           </a>
         </div>
 
-
         {/* =================================================
-            OPEN / CLOSE ARROW
+            VERY SLIM LEFT EDGE ARROW
         ================================================= */}
 
         <button
           type="button"
           onClick={() => setIsExpanded((prev) => !prev)}
-          aria-label={
-            isExpanded
-              ? "Hide social buttons"
-              : "Show social buttons"
-          }
-          title={
-            isExpanded
-              ? "Hide"
-              : "Connect With Us"
-          }
+          aria-label={isExpanded ? "Hide social menu" : "Show social menu"}
+          title={isExpanded ? "Hide" : "Connect"}
           className={`
-            flex
-            h-12
-            w-7
-            md:h-14
-            md:w-8
+            absolute
+            top-1/2
+            -translate-y-1/2
 
+            flex
             items-center
             justify-center
+
+            h-11
+            w-[16px]
+
+            md:h-12
+            md:w-[18px]
+
+            rounded-r-md
 
             bg-black
             text-white
 
-            shadow-lg
+            shadow-[2px_2px_8px_rgba(0,0,0,0.25)]
 
             transition-all
             duration-300
+            ease-out
 
             hover:bg-neutral-800
 
             ${
               isExpanded
-                ? "rounded-r-lg"
-                : "rounded-r-xl"
+                ? "left-10 md:left-11"
+                : "left-0"
             }
           `}
         >
@@ -320,14 +286,16 @@ export default function FloatingSocialBar() {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2.2"
+            strokeWidth="2.6"
             strokeLinecap="round"
             strokeLinejoin="round"
             className={`
-              h-4
-              w-4
+              h-[10px]
+              w-[10px]
+
               transition-transform
               duration-300
+
               ${
                 isExpanded
                   ? "rotate-180"
@@ -340,9 +308,8 @@ export default function FloatingSocialBar() {
         </button>
       </div>
 
-
       {/* =====================================================
-          CALL / WHATSAPP POPUP
+          CONTACT POPUP
       ===================================================== */}
 
       {showContactOptions && (
@@ -363,9 +330,7 @@ export default function FloatingSocialBar() {
 
             backdrop-blur-sm
           "
-          onClick={() =>
-            setShowContactOptions(false)
-          }
+          onClick={() => setShowContactOptions(false)}
         >
           <div
             className="
@@ -382,17 +347,13 @@ export default function FloatingSocialBar() {
 
               shadow-2xl
             "
-            onClick={(e) =>
-              e.stopPropagation()
-            }
+            onClick={(e) => e.stopPropagation()}
           >
             {/* CLOSE */}
 
             <button
               type="button"
-              onClick={() =>
-                setShowContactOptions(false)
-              }
+              onClick={() => setShowContactOptions(false)}
               aria-label="Close"
               className="
                 absolute
@@ -422,29 +383,23 @@ export default function FloatingSocialBar() {
               ×
             </button>
 
-
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#a18150]">
               Anup Gupta Studio
             </p>
-
 
             <h3 className="mt-2 text-xl font-semibold text-neutral-950">
               Connect With Us
             </h3>
 
-
             <p className="mt-2 text-sm text-gray-500">
               Choose how you would like to contact our team.
             </p>
-
 
             <p className="mt-4 text-sm font-semibold text-neutral-900">
               +91 96259 81155
             </p>
 
-
             <div className="mt-6 space-y-3">
-
               {/* CALL NOW */}
 
               <a
@@ -481,13 +436,13 @@ export default function FloatingSocialBar() {
                 <svg
                   viewBox="0 0 24 24"
                   className="h-5 w-5 fill-[#15803d]"
+                  aria-hidden="true"
                 >
                   <path d="M6.62 10.79a15.46 15.46 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z" />
                 </svg>
 
                 Call Now
               </a>
-
 
               {/* WHATSAPP */}
 
@@ -534,7 +489,6 @@ export default function FloatingSocialBar() {
 
                 WhatsApp
               </a>
-
             </div>
           </div>
         </div>
