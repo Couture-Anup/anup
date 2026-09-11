@@ -603,37 +603,101 @@ async function HomeContent() {
         </div>
 
 
-       {/* ==================================================
-    HEADLINE BELOW IMAGE
-================================================== */}
+          {/* ==================================================
+            MOVING HEADLINE BELOW IMAGE
+        ================================================== */}
 
-<div className="w-full bg-white px-5 md:px-10 py-8 md:py-12">
+        <div className="w-full bg-white overflow-hidden py-8 md:py-10">
 
-  <div className="max-w-[1600px] mx-auto text-center">
+          <div className="relative w-full overflow-hidden">
 
-    <h2
-      className="
-        text-[26px]
-        sm:text-[32px]
-        md:text-[44px]
-        lg:text-[54px]
+            <div
+              className="
+                animate-marquee
+                flex
+                w-max
+                items-center
+                whitespace-nowrap
+              "
+            >
 
-        leading-[1.15]
+              <span
+                className="
+                  shrink-0
+                  text-[28px]
+                  sm:text-[34px]
+                  md:text-[46px]
+                  lg:text-[56px]
+                  font-semibold
+                  leading-none
+                  tracking-tight
+                  text-black
+                  pr-16
+                  md:pr-24
+                "
+              >
+                {marquee.text}
+              </span>
 
-        font-semibold
-        tracking-tight
-        text-black
+              <span
+                className="
+                  shrink-0
+                  text-[28px]
+                  sm:text-[34px]
+                  md:text-[46px]
+                  lg:text-[56px]
+                  font-semibold
+                  leading-none
+                  tracking-tight
+                  text-black
+                  pr-16
+                  md:pr-24
+                "
+              >
+                {marquee.text}
+              </span>
 
-        whitespace-normal
-        break-normal
-      "
-    >
-      {marquee.text}
-    </h2>
+              <span
+                className="
+                  shrink-0
+                  text-[28px]
+                  sm:text-[34px]
+                  md:text-[46px]
+                  lg:text-[56px]
+                  font-semibold
+                  leading-none
+                  tracking-tight
+                  text-black
+                  pr-16
+                  md:pr-24
+                "
+              >
+                {marquee.text}
+              </span>
 
-  </div>
+              <span
+                className="
+                  shrink-0
+                  text-[28px]
+                  sm:text-[34px]
+                  md:text-[46px]
+                  lg:text-[56px]
+                  font-semibold
+                  leading-none
+                  tracking-tight
+                  text-black
+                  pr-16
+                  md:pr-24
+                "
+              >
+                {marquee.text}
+              </span>
 
-</div>
+            </div>
+
+          </div>
+
+        </div>
       </section>
 
 
