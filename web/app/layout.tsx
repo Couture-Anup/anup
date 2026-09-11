@@ -8,6 +8,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { CartProvider } from '@/contexts/CartContext';
 import { ToastProvider } from '@/contexts/ToastContext';
 import { CartSidebar } from '@/components/cart-sidebar';
+
 import { client } from '@/lib/sanity';
 import {
   ANNOUNCEMENT_BAR_QUERY,
@@ -16,9 +17,11 @@ import {
 
 import FloatingSocialBar from '@/components/FloatingSocialBar';
 import TextOverride from '@/components/TextOverride';
+import HeroHeadingOverride from '@/components/HeroHeadingOverride';
 
 export const metadata: Metadata = {
   title: "Premium Men's Ethnic Wear & Party Shirts Online – Anup Gupta",
+
   description:
     "Premium Men's Ethnic Wear & Party Shirts Online. Crafted to stand out with signature hand embroidery.",
 
@@ -29,6 +32,7 @@ export const metadata: Metadata = {
         type: 'image/png',
       },
     ],
+
     shortcut: '/logo/icon.png',
     apple: '/logo/icon.png',
   },
@@ -40,39 +44,55 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const [announcements, navigationData] = await Promise.all([
-    client.fetch(ANNOUNCEMENT_BAR_QUERY).catch(() => []),
-    client.fetch(NAVIGATION_QUERY).catch(() => null),
+    client
+      .fetch(ANNOUNCEMENT_BAR_QUERY)
+      .catch(() => []),
+
+    client
+      .fetch(NAVIGATION_QUERY)
+      .catch(() => null),
   ]);
 
   return (
     <html lang="en">
       <head>
-        {/* Google Tag Manager */}
-        <Script id="google-tag-manager" strategy="beforeInteractive">
+        {/* GOOGLE TAG MANAGER */}
+        <Script
+          id="google-tag-manager"
+          strategy="beforeInteractive"
+        >
           {`
             (function(w,d,s,l,i){
               w[l]=w[l]||[];
+
               w[l].push({
                 'gtm.start': new Date().getTime(),
                 event:'gtm.js'
               });
+
               var f=d.getElementsByTagName(s)[0],
                   j=d.createElement(s),
                   dl=l!='dataLayer'?'&l='+l:'';
+
               j.async=true;
-              j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+
+              j.src=
+                'https://www.googletagmanager.com/gtm.js?id='
+                +i+dl;
+
               f.parentNode.insertBefore(j,f);
+
             })(window,document,'script','dataLayer','GTM-5MHQ73ZH');
           `}
         </Script>
-        {/* End Google Tag Manager */}
+        {/* END GOOGLE TAG MANAGER */}
       </head>
 
       <body
         className="antialiased bg-white"
         suppressHydrationWarning
       >
-        {/* Google Tag Manager (noscript) */}
+        {/* GOOGLE TAG MANAGER NOSCRIPT */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-5MHQ73ZH"
@@ -84,12 +104,13 @@ export default async function RootLayout({
             }}
           />
         </noscript>
-        {/* End Google Tag Manager (noscript) */}
+        {/* END GOOGLE TAG MANAGER NOSCRIPT */}
 
         <ToastProvider>
           <AuthProvider>
             <CartProvider>
 
+              {/* NAVBAR */}
               <div className="print:hidden contents">
                 <Navbar
                   announcements={announcements}
@@ -97,8 +118,15 @@ export default async function RootLayout({
                 />
               </div>
 
-              <main>{children}</main>
+              {/* MAIN WEBSITE */}
+              <main>
+                {children}
 
+                {/* HERO HEADING OVERRIDE */}
+                <HeroHeadingOverride />
+              </main>
+
+              {/* FOOTER */}
               <div className="print:hidden">
                 <Footer />
               </div>
