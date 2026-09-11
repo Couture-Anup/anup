@@ -253,7 +253,7 @@ async function HomeContent() {
   const marquee = {
     text:
       marqueeRaw?.text ||
-      "Not for every day — only for defining days.",
+      "We Don’t Design Clothes- We Design Happiness.",
 
     imageUrl:
       marqueeRaw?.imageUrl ||
