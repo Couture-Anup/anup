@@ -26,3 +26,67 @@
     scrollbar-width: none;
   }
 }
+/* =========================================================
+   ANUP GUPTA - FLOATING HEADLINE
+   Text stays visible while gently moving right ↔ left
+========================================================= */
+
+@keyframes headlineFloat {
+  0% {
+    transform: translateX(20px);
+  }
+
+  50% {
+    transform: translateX(-20px);
+  }
+
+  100% {
+    transform: translateX(20px);
+  }
+}
+
+.headline-floating {
+  animation: headlineFloat 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+
+/* TABLET */
+@media (max-width: 1024px) {
+  @keyframes headlineFloat {
+    0% {
+      transform: translateX(12px);
+    }
+
+    50% {
+      transform: translateX(-12px);
+    }
+
+    100% {
+      transform: translateX(12px);
+    }
+  }
+}
+
+
+/* MOBILE */
+@media (max-width: 640px) {
+  .headline-floating {
+    white-space: normal;
+    animation: headlineFloat 6s ease-in-out infinite;
+  }
+
+  @keyframes headlineFloat {
+    0% {
+      transform: translateX(5px);
+    }
+
+    50% {
+      transform: translateX(-5px);
+    }
+
+    100% {
+      transform: translateX(5px);
+    }
+  }
+}
