@@ -54,11 +54,7 @@ function NavItem({
   };
 
   const handleNavigation = () => {
-    // Close dropdown immediately after click
     setIsOpen(false);
-
-    // Prevent dropdown from reopening while cursor
-    // is still sitting on the same navigation section
     setPreventReopen(true);
   };
 
@@ -110,6 +106,7 @@ function NavItem({
           `}
         >
           <div className="max-w-[1600px] mx-auto px-8 py-10 flex">
+
             {/* STANDARD LINKS COLUMN */}
             {links && !columns && (
               <div className="w-[400px] flex flex-col gap-4">
@@ -143,14 +140,16 @@ function NavItem({
                     className="flex flex-col gap-4 w-[250px]"
                   >
                     {col.title && (
-                      <h4 className="
-                        text-xs
-                        text-gray-500
-                        font-semibold
-                        tracking-widest
-                        uppercase
-                        mb-1
-                      ">
+                      <h4
+                        className="
+                          text-xs
+                          text-gray-500
+                          font-semibold
+                          tracking-widest
+                          uppercase
+                          mb-1
+                        "
+                      >
                         {col.title}
                       </h4>
                     )}
@@ -209,22 +208,26 @@ function NavItem({
                       referrerPolicy="no-referrer"
                     />
 
-                    <div className="
-                      absolute
-                      inset-x-0
-                      bottom-0
-                      p-4
-                      bg-gradient-to-t
-                      from-black/60
-                      to-transparent
-                    ">
-                      <span className="
-                        text-white
-                        text-xs
-                        font-semibold
-                        uppercase
-                        tracking-wider
-                      ">
+                    <div
+                      className="
+                        absolute
+                        inset-x-0
+                        bottom-0
+                        p-4
+                        bg-gradient-to-t
+                        from-black/60
+                        to-transparent
+                      "
+                    >
+                      <span
+                        className="
+                          text-white
+                          text-xs
+                          font-semibold
+                          uppercase
+                          tracking-wider
+                        "
+                      >
                         {img.label}
                       </span>
                     </div>
@@ -232,6 +235,7 @@ function NavItem({
                 ))}
               </div>
             )}
+
           </div>
         </div>
       )}
@@ -303,16 +307,21 @@ export function Navbar({
 
   return (
     <>
+      {/* ================================================= */}
       {/* ANNOUNCEMENT BAR */}
-      <div className="
-        bg-[#1c1c1c]
-        text-white
-        py-2.5
-        relative
-        flex
-        items-center
-        justify-center
-      ">
+      {/* ================================================= */}
+
+      <div
+        className="
+          bg-[#1c1c1c]
+          text-white
+          py-2.5
+          relative
+          flex
+          items-center
+          justify-center
+        "
+      >
         {activeAnnouncements.length > 1 && (
           <button
             suppressHydrationWarning
@@ -375,24 +384,96 @@ export function Navbar({
         )}
       </div>
 
-      {/* MAIN HEADER */}
-      <header className="
-        sticky
-        top-0
-        z-50
-        bg-white
-        border-b
-        border-gray-100
-      ">
-        {/* MOBILE HEADER */}
-        <div className="
-          lg:hidden
-          px-4
-          h-[80px]
+      {/* ================================================= */}
+      {/* WHATSAPP ASSISTANCE BAR */}
+      {/* ================================================= */}
+
+      <a
+        href="https://wa.me/917411295951"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Contact us on WhatsApp"
+        className="
+          w-full
+          min-h-[42px]
+          bg-white
+          border-b
+          border-gray-200
+          px-3
+          py-2
           flex
           items-center
-          justify-between
-        ">
+          justify-center
+          gap-2.5
+          text-black
+          hover:bg-gray-50
+          transition-colors
+        "
+      >
+        {/* WhatsApp Icon */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="
+            w-[19px]
+            h-[19px]
+            md:w-[21px]
+            md:h-[21px]
+            shrink-0
+          "
+        >
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z" />
+        </svg>
+
+        <span
+          className="
+            text-[10px]
+            sm:text-xs
+            md:text-[14px]
+            lg:text-[15px]
+            font-normal
+            leading-tight
+            text-center
+          "
+        >
+          For any assistance, queries, or early delivery requests, WhatsApp us
+          at{' '}
+          <strong className="text-red-600 font-bold whitespace-nowrap">
+            +91 96259 81155
+          </strong>
+        </span>
+      </a>
+
+      {/* ================================================= */}
+      {/* MAIN HEADER */}
+      {/* ================================================= */}
+
+      <header
+        className="
+          sticky
+          top-0
+          z-50
+          bg-white
+          border-b
+          border-gray-100
+        "
+      >
+        {/* MOBILE HEADER */}
+        <div
+          className="
+            lg:hidden
+            px-4
+            h-[80px]
+            flex
+            items-center
+            justify-between
+          "
+        >
           <div className="flex items-center gap-4 flex-1">
             <button
               className="
@@ -440,13 +521,15 @@ export function Navbar({
           </Link>
 
           {/* MOBILE ICONS */}
-          <div className="
-            flex
-            items-center
-            gap-4
-            justify-end
-            flex-1
-          ">
+          <div
+            className="
+              flex
+              items-center
+              gap-4
+              justify-end
+              flex-1
+            "
+          >
             <SearchModal
               triggerClass="
                 text-gray-900
@@ -476,21 +559,23 @@ export function Navbar({
               />
 
               {cartCount > 0 && (
-                <span className="
-                  absolute
-                  -top-1
-                  -right-1
-                  bg-black
-                  text-white
-                  text-[9px]
-                  font-bold
-                  w-4
-                  h-4
-                  rounded-full
-                  flex
-                  items-center
-                  justify-center
-                ">
+                <span
+                  className="
+                    absolute
+                    -top-1
+                    -right-1
+                    bg-black
+                    text-white
+                    text-[9px]
+                    font-bold
+                    w-4
+                    h-4
+                    rounded-full
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
                   {cartCount}
                 </span>
               )}
@@ -498,17 +583,22 @@ export function Navbar({
           </div>
         </div>
 
+        {/* ================================================= */}
         {/* DESKTOP HEADER */}
-        <div className="
-          hidden
-          lg:flex
-          px-8
-          h-[92px]
-          items-center
-          justify-between
-          max-w-[1800px]
-          mx-auto
-        ">
+        {/* ================================================= */}
+
+        <div
+          className="
+            hidden
+            lg:flex
+            px-8
+            h-[92px]
+            items-center
+            justify-between
+            max-w-[1800px]
+            mx-auto
+          "
+        >
           {/* DESKTOP LOGO */}
           <Link
             href="/"
@@ -521,12 +611,14 @@ export function Navbar({
               w-[200px]
             "
           >
-            <div className="
-              flex
-              flex-col
-              items-center
-              w-fit
-            ">
+            <div
+              className="
+                flex
+                flex-col
+                items-center
+                w-fit
+              "
+            >
               <Image
                 src="/logo/ANUP GUPTA LOGO.png.png"
                 alt="Anup Gupta Studio"
@@ -543,19 +635,24 @@ export function Navbar({
             </div>
           </Link>
 
+          {/* ================================================= */}
           {/* DESKTOP NAVIGATION */}
-          <nav className="
-            flex
-            gap-6
-            xl:gap-8
-            text-[11px]
-            font-semibold
-            tracking-wider
-            uppercase
-            h-full
-            flex-1
-            justify-center
-          ">
+          {/* ================================================= */}
+
+          <nav
+            className="
+              flex
+              gap-6
+              xl:gap-8
+              text-[11px]
+              font-semibold
+              tracking-wider
+              uppercase
+              h-full
+              flex-1
+              justify-center
+            "
+          >
             {navigation?.categories?.map((cat: any) => {
               const links =
                 cat.subcategories?.length > 0
@@ -642,15 +739,20 @@ export function Navbar({
             />
           </nav>
 
+          {/* ================================================= */}
           {/* DESKTOP ICONS */}
-          <div className="
-            flex
-            items-center
-            gap-5
-            justify-end
-            w-[200px]
-            h-full
-          ">
+          {/* ================================================= */}
+
+          <div
+            className="
+              flex
+              items-center
+              gap-5
+              justify-end
+              w-[200px]
+              h-full
+            "
+          >
             <SearchModal
               triggerClass="
                 text-gray-900
@@ -661,13 +763,15 @@ export function Navbar({
             />
 
             {/* PROFILE */}
-            <div className="
-              relative
-              group/profile
-              h-full
-              flex
-              items-center
-            ">
+            <div
+              className="
+                relative
+                group/profile
+                h-full
+                flex
+                items-center
+              "
+            >
               {user ? (
                 <Link
                   href="/profile"
@@ -711,43 +815,49 @@ export function Navbar({
               )}
 
               {/* PROFILE DROPDOWN */}
-              <div className="
-                absolute
-                top-full
-                right-0
-                w-[200px]
-                bg-white
-                border
-                border-gray-100
-                shadow-xl
-                opacity-0
-                invisible
-                group-hover/profile:opacity-100
-                group-hover/profile:visible
-                transition-all
-                duration-300
-                z-50
-                flex
-                flex-col
-                py-2
-                rounded-b-md
-              ">
+              <div
+                className="
+                  absolute
+                  top-full
+                  right-0
+                  w-[200px]
+                  bg-white
+                  border
+                  border-gray-100
+                  shadow-xl
+                  opacity-0
+                  invisible
+                  group-hover/profile:opacity-100
+                  group-hover/profile:visible
+                  transition-all
+                  duration-300
+                  z-50
+                  flex
+                  flex-col
+                  py-2
+                  rounded-b-md
+                "
+              >
                 {user ? (
                   <>
-                    <div className="
-                      px-4
-                      py-2
-                      border-b
-                      border-gray-100
-                      mb-1
-                    ">
-                      <span className="
-                        block
-                        text-[11px]
-                        font-semibold
-                        text-gray-900
-                        truncate
-                      ">
+                    <div
+                      className="
+                        px-4
+                        py-2
+                        border-b
+                        border-gray-100
+                        mb-1
+                      "
+                    >
+                      <span
+                        className="
+                          block
+                          text-[11px]
+                          font-semibold
+                          text-gray-900
+                          truncate
+                        "
+                      >
                         {user.displayName || user.email}
                       </span>
                     </div>
@@ -889,21 +999,23 @@ export function Navbar({
               />
 
               {cartCount > 0 && (
-                <span className="
-                  absolute
-                  -top-1
-                  -right-1
-                  bg-black
-                  text-white
-                  text-[9px]
-                  font-bold
-                  w-4
-                  h-4
-                  rounded-full
-                  flex
-                  items-center
-                  justify-center
-                ">
+                <span
+                  className="
+                    absolute
+                    -top-1
+                    -right-1
+                    bg-black
+                    text-white
+                    text-[9px]
+                    font-bold
+                    w-4
+                    h-4
+                    rounded-full
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
                   {cartCount}
                 </span>
               )}
@@ -912,21 +1024,29 @@ export function Navbar({
         </div>
       </header>
 
+      {/* ================================================= */}
       {/* AUTH MODAL */}
+      {/* ================================================= */}
+
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         initialMode={authModalMode}
       />
 
+      {/* ================================================= */}
       {/* MOBILE MENU */}
+      {/* ================================================= */}
+
       {isMobileMenuOpen && (
-        <div className="
-          fixed
-          inset-0
-          z-[100]
-          lg:hidden
-        ">
+        <div
+          className="
+            fixed
+            inset-0
+            z-[100]
+            lg:hidden
+          "
+        >
           {/* OVERLAY */}
           <div
             className="
@@ -941,37 +1061,43 @@ export function Navbar({
           />
 
           {/* MOBILE SIDEBAR */}
-          <div className="
-            absolute
-            inset-y-0
-            left-0
-            w-[85%]
-            max-w-[400px]
-            bg-white
-            flex
-            flex-col
-            h-full
-            shadow-2xl
-            animate-in
-            slide-in-from-left
-            duration-300
-          ">
-            {/* MOBILE MENU HEADER */}
-            <div className="
+          <div
+            className="
+              absolute
+              inset-y-0
+              left-0
+              w-[85%]
+              max-w-[400px]
+              bg-white
               flex
-              items-center
-              justify-between
-              p-4
-              border-b
-              border-gray-100
-            ">
-              <span className="
-                text-[13px]
-                font-semibold
-                uppercase
-                tracking-wider
-                text-gray-900
-              ">
+              flex-col
+              h-full
+              shadow-2xl
+              animate-in
+              slide-in-from-left
+              duration-300
+            "
+          >
+            {/* MOBILE MENU HEADER */}
+            <div
+              className="
+                flex
+                items-center
+                justify-between
+                p-4
+                border-b
+                border-gray-100
+              "
+            >
+              <span
+                className="
+                  text-[13px]
+                  font-semibold
+                  uppercase
+                  tracking-wider
+                  text-gray-900
+                "
+              >
                 Menu
               </span>
 
@@ -995,20 +1121,24 @@ export function Navbar({
             </div>
 
             {/* MOBILE NAVIGATION */}
-            <div className="
-              flex-1
-              overflow-y-auto
-              py-4
-            ">
-              <nav className="
-                flex
-                flex-col
-                text-[13px]
-                font-semibold
-                tracking-wider
-                uppercase
-                text-gray-900
-              ">
+            <div
+              className="
+                flex-1
+                overflow-y-auto
+                py-4
+              "
+            >
+              <nav
+                className="
+                  flex
+                  flex-col
+                  text-[13px]
+                  font-semibold
+                  tracking-wider
+                  uppercase
+                  text-gray-900
+                "
+              >
                 <Link
                   href="/collection/new-in"
                   className="
@@ -1026,11 +1156,13 @@ export function Navbar({
                 >
                   New In
 
-                  <ChevronRight className="
-                    w-4
-                    h-4
-                    text-gray-400
-                  " />
+                  <ChevronRight
+                    className="
+                      w-4
+                      h-4
+                      text-gray-400
+                    "
+                  />
                 </Link>
 
                 {navigation?.categories?.map(
@@ -1059,11 +1191,13 @@ export function Navbar({
                       >
                         {cat.title}
 
-                        <ChevronRight className="
-                          w-4
-                          h-4
-                          text-gray-400
-                        " />
+                        <ChevronRight
+                          className="
+                            w-4
+                            h-4
+                            text-gray-400
+                          "
+                        />
                       </Link>
 
                       {cat.subcategories?.map(
@@ -1112,11 +1246,13 @@ export function Navbar({
                     >
                       {col.title}
 
-                      <ChevronRight className="
-                        w-4
-                        h-4
-                        text-gray-400
-                      " />
+                      <ChevronRight
+                        className="
+                          w-4
+                          h-4
+                          text-gray-400
+                        "
+                      />
                     </Link>
                   )
                 )}
@@ -1124,55 +1260,65 @@ export function Navbar({
             </div>
 
             {/* MOBILE ACCOUNT AREA */}
-            <div className="
-              p-6
-              bg-gray-50
-              border-t
-              border-gray-100
-              flex
-              flex-col
-              gap-4
-            ">
+            <div
+              className="
+                p-6
+                bg-gray-50
+                border-t
+                border-gray-100
+                flex
+                flex-col
+                gap-4
+              "
+            >
               {user ? (
                 <>
-                  <div className="
-                    flex
-                    items-center
-                    gap-3
-                    text-sm
-                    font-medium
-                    text-gray-700
-                    pb-2
-                    border-b
-                    border-gray-200
-                  ">
+                  <div
+                    className="
+                      flex
+                      items-center
+                      gap-3
+                      text-sm
+                      font-medium
+                      text-gray-700
+                      pb-2
+                      border-b
+                      border-gray-200
+                    "
+                  >
                     <User
                       className="w-5 h-5"
                       strokeWidth={1.5}
                     />
 
-                    <div className="
-                      flex
-                      flex-col
-                    ">
+                    <div
+                      className="
+                        flex
+                        flex-col
+                      "
+                    >
                       <span>My Account</span>
 
-                      <span className="
-                        text-[11px]
-                        font-normal
-                        text-gray-500
-                      ">
+                      <span
+                        className="
+                          text-[11px]
+                          font-normal
+                          text-gray-500
+                        "
+                      >
                         {user.displayName ||
                           user.email}
                       </span>
                     </div>
                   </div>
 
-                  <div className="
-                    flex
-                    flex-col
-                    gap-1
-                  ">
+                  <div
+                    className="
+                      flex
+                      flex-col
+                      gap-1
+                    "
+                  >
                     {sanityUser?.isAdmin && (
                       <Link
                         href="/admin"
@@ -1237,11 +1383,13 @@ export function Navbar({
                   </div>
                 </>
               ) : (
-                <div className="
-                  flex
-                  flex-col
-                  gap-3
-                ">
+                <div
+                  className="
+                    flex
+                    flex-col
+                    gap-3
+                  "
+                >
                   <button
                     onClick={() => {
                       setIsMobileMenuOpen(false);
