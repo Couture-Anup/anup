@@ -1,22 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const WHATSAPP_NUMBER = "919625981155";
 const CALL_NUMBER = "+919625981155";
 
 export default function FloatingSocialBar() {
+  const pathname = usePathname();
+
   const [showContactOptions, setShowContactOptions] = useState(false);
+
+  /*
+    Homepage = open
+    Other pages = collapsed
+  */
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  useEffect(() => {
+    if (pathname === "/") {
+      setIsExpanded(true);
+    } else {
+      setIsExpanded(false);
+    }
+  }, [pathname]);
 
   const iconBox =
     "group flex h-9 w-9 md:h-14 md:w-14 items-center justify-center border-b border-gray-100 bg-white transition-all duration-300 hover:bg-gray-50 md:hover:w-[62px]";
 
   return (
     <>
-      {/* =========================================
+      {/* =====================================================
           GLOBAL WHATSAPP BUTTON
-          ALL DEVICES
-      ========================================== */}
+          BOTTOM RIGHT
+      ===================================================== */}
 
       <a
         href={`https://wa.me/${WHATSAPP_NUMBER}`}
@@ -25,16 +42,31 @@ export default function FloatingSocialBar() {
         aria-label="WhatsApp Anup Gupta Studio"
         title="WhatsApp"
         className="
-          fixed bottom-4 right-4
-          md:bottom-6 md:right-6
+          fixed
+          bottom-4
+          right-4
+          md:bottom-6
+          md:right-6
           z-[9999]
-          flex h-11 w-11
-          md:h-14 md:w-14
-          items-center justify-center
+
+          flex
+          h-11
+          w-11
+          md:h-14
+          md:w-14
+
+          items-center
+          justify-center
+
           rounded-full
+
           bg-[#25D366]
+
           shadow-[0_8px_28px_rgba(0,0,0,0.25)]
-          transition-all duration-300
+
+          transition-all
+          duration-300
+
           hover:scale-110
           active:scale-95
         "
@@ -48,185 +80,341 @@ export default function FloatingSocialBar() {
         </svg>
       </a>
 
-      {/* =========================================
-          LEFT FLOATING SOCIAL BAR
-      ========================================== */}
+
+      {/* =====================================================
+          LEFT SOCIAL BAR WRAPPER
+      ===================================================== */}
 
       <div
         className="
-          fixed left-0 top-1/2
+          fixed
+          left-0
+          top-1/2
+
           z-[9998]
+
           -translate-y-1/2
-          overflow-hidden
-          rounded-r-lg
-          md:rounded-r-2xl
-          border border-l-0 border-gray-200
-          bg-white
-          shadow-xl md:shadow-2xl
+
+          flex
+          items-center
         "
       >
-        {/* CALL BUTTON - LIGHT GREEN */}
+        {/* =================================================
+            SOCIAL BUTTONS PANEL
+        ================================================= */}
+
+        <div
+          className={`
+            overflow-hidden
+
+            rounded-r-lg
+            md:rounded-r-2xl
+
+            border
+            border-l-0
+            border-gray-200
+
+            bg-white
+
+            shadow-xl
+            md:shadow-2xl
+
+            transition-all
+            duration-500
+            ease-in-out
+
+            ${
+              isExpanded
+                ? "translate-x-0 opacity-100"
+                : "-translate-x-full opacity-0 pointer-events-none"
+            }
+          `}
+        >
+          {/* CALL BUTTON */}
+
+          <button
+            type="button"
+            onClick={() => setShowContactOptions(true)}
+            aria-label="Contact Anup Gupta Studio"
+            title="Call"
+            className="
+              group
+              flex
+
+              h-9
+              w-9
+
+              md:h-14
+              md:w-14
+
+              items-center
+              justify-center
+
+              border-b
+              border-green-100
+
+              bg-[#dcfce7]
+
+              transition-all
+              duration-300
+
+              hover:bg-[#bbf7d0]
+
+              md:hover:w-[62px]
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4 md:h-6 md:w-6 fill-[#15803d]"
+              aria-hidden="true"
+            >
+              <path d="M6.62 10.79a15.46 15.46 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z" />
+            </svg>
+          </button>
+
+
+          {/* FACEBOOK */}
+
+          <a
+            href="https://www.facebook.com/profile.php?id=61561000412885"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            title="Facebook"
+            className={iconBox}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4 md:h-6 md:w-6 fill-[#1877F2]"
+              aria-hidden="true"
+            >
+              <path d="M13.5 22v-9h3l.45-3.5H13.5V7.27c0-1.01.28-1.7 1.73-1.7H17V2.44A23.5 23.5 0 0 0 14.4 2c-2.57 0-4.33 1.57-4.33 4.45V9.5H7v3.5h3.07v9h3.43Z" />
+            </svg>
+          </a>
+
+
+          {/* INSTAGRAM */}
+
+          <a
+            href="https://www.instagram.com/anupguptadesigner/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            title="Instagram"
+            className={iconBox}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4 md:h-6 md:w-6"
+              aria-hidden="true"
+            >
+              <defs>
+                <linearGradient
+                  id="instagramGradient"
+                  x1="0%"
+                  y1="100%"
+                  x2="100%"
+                  y2="0%"
+                >
+                  <stop offset="0%" stopColor="#FFD600" />
+                  <stop offset="35%" stopColor="#FF7A00" />
+                  <stop offset="65%" stopColor="#FF0169" />
+                  <stop offset="100%" stopColor="#D300C5" />
+                </linearGradient>
+              </defs>
+
+              <path
+                fill="url(#instagramGradient)"
+                d="M7.2 2h9.6A5.2 5.2 0 0 1 22 7.2v9.6a5.2 5.2 0 0 1-5.2 5.2H7.2A5.2 5.2 0 0 1 2 16.8V7.2A5.2 5.2 0 0 1 7.2 2Zm0 1.8A3.4 3.4 0 0 0 3.8 7.2v9.6a3.4 3.4 0 0 0 3.4 3.4h9.6a3.4 3.4 0 0 0 3.4-3.4V7.2a3.4 3.4 0 0 0-3.4-3.4H7.2Zm9.95 1.35a1.22 1.22 0 1 1 0 2.44 1.22 1.22 0 0 1 0-2.44ZM12 6.87A5.13 5.13 0 1 1 12 17.13 5.13 5.13 0 0 1 12 6.87Zm0 1.8A3.33 3.33 0 1 0 12 15.33 3.33 3.33 0 0 0 12 8.67Z"
+              />
+            </svg>
+          </a>
+
+
+          {/* LINKEDIN */}
+
+          <a
+            href="https://www.linkedin.com/in/anup-gupta-b05b99425/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            title="LinkedIn"
+            className={iconBox}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4 md:h-6 md:w-6 fill-[#0A66C2]"
+              aria-hidden="true"
+            >
+              <path d="M5.34 3.5A2.34 2.34 0 1 1 .66 3.5a2.34 2.34 0 0 1 4.68 0ZM1 7h4.67v15H1V7Zm7.5 0h4.48v2.05h.06c.62-1.18 2.15-2.42 4.42-2.42 4.73 0 5.6 3.11 5.6 7.16V22h-4.67v-7.27c0-1.74-.03-3.97-2.42-3.97-2.42 0-2.79 1.89-2.79 3.84V22H8.5V7Z" />
+            </svg>
+          </a>
+
+
+          {/* YOUTUBE */}
+
+          <a
+            href="https://www.youtube.com/channel/UCmSXqR5sF3Kz-FKenpm7rHg"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="YouTube"
+            title="YouTube"
+            className={iconBox}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-[17px] w-[17px] md:h-7 md:w-7 fill-[#FF0000]"
+              aria-hidden="true"
+            >
+              <path d="M23.5 6.2a3.02 3.02 0 0 0-2.13-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.37.51A3.02 3.02 0 0 0 .5 6.2 31.58 31.58 0 0 0 0 12a31.58 31.58 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.13 2.14c1.87.51 9.37.51 9.37.51s7.5 0 9.37-.51a3.02 3.02 0 0 0 2.13-2.14A31.58 31.58 0 0 0 24 12a31.58 31.58 0 0 0-.5-5.8ZM9.6 15.62V8.38L15.86 12 9.6 15.62Z" />
+            </svg>
+          </a>
+        </div>
+
+
+        {/* =================================================
+            OPEN / CLOSE ARROW
+        ================================================= */}
 
         <button
           type="button"
-          onClick={() => setShowContactOptions(true)}
-          aria-label="Contact Anup Gupta Studio"
-          title="Call"
-          className="
-            group flex
-            h-9 w-9
-            md:h-14 md:w-14
-            items-center justify-center
-            border-b border-green-100
-            bg-[#dcfce7]
-            transition-all duration-300
-            hover:bg-[#bbf7d0]
-            md:hover:w-[62px]
-          "
+          onClick={() => setIsExpanded((prev) => !prev)}
+          aria-label={
+            isExpanded
+              ? "Hide social buttons"
+              : "Show social buttons"
+          }
+          title={
+            isExpanded
+              ? "Hide"
+              : "Connect With Us"
+          }
+          className={`
+            flex
+            h-12
+            w-7
+            md:h-14
+            md:w-8
+
+            items-center
+            justify-center
+
+            bg-black
+            text-white
+
+            shadow-lg
+
+            transition-all
+            duration-300
+
+            hover:bg-neutral-800
+
+            ${
+              isExpanded
+                ? "rounded-r-lg"
+                : "rounded-r-xl"
+            }
+          `}
         >
           <svg
             viewBox="0 0 24 24"
-            className="h-4 w-4 md:h-6 md:w-6 fill-[#15803d]"
-            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={`
+              h-4
+              w-4
+              transition-transform
+              duration-300
+              ${
+                isExpanded
+                  ? "rotate-180"
+                  : "rotate-0"
+              }
+            `}
           >
-            <path d="M6.62 10.79a15.46 15.46 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z" />
+            <path d="m9 18 6-6-6-6" />
           </svg>
         </button>
-
-        {/* FACEBOOK */}
-
-        <a
-          href="https://www.facebook.com/profile.php?id=61561000412885"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Facebook"
-          title="Facebook"
-          className={iconBox}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            className="h-4 w-4 md:h-6 md:w-6 fill-[#1877F2]"
-            aria-hidden="true"
-          >
-            <path d="M13.5 22v-9h3l.45-3.5H13.5V7.27c0-1.01.28-1.7 1.73-1.7H17V2.44A23.5 23.5 0 0 0 14.4 2c-2.57 0-4.33 1.57-4.33 4.45V9.5H7v3.5h3.07v9h3.43Z" />
-          </svg>
-        </a>
-
-        {/* INSTAGRAM */}
-
-        <a
-          href="https://www.instagram.com/anupguptadesigner/"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Instagram"
-          title="Instagram"
-          className={iconBox}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            className="h-4 w-4 md:h-6 md:w-6"
-            aria-hidden="true"
-          >
-            <defs>
-              <linearGradient
-                id="instagramGradient"
-                x1="0%"
-                y1="100%"
-                x2="100%"
-                y2="0%"
-              >
-                <stop offset="0%" stopColor="#FFD600" />
-                <stop offset="35%" stopColor="#FF7A00" />
-                <stop offset="65%" stopColor="#FF0169" />
-                <stop offset="100%" stopColor="#D300C5" />
-              </linearGradient>
-            </defs>
-
-            <path
-              fill="url(#instagramGradient)"
-              d="M7.2 2h9.6A5.2 5.2 0 0 1 22 7.2v9.6a5.2 5.2 0 0 1-5.2 5.2H7.2A5.2 5.2 0 0 1 2 16.8V7.2A5.2 5.2 0 0 1 7.2 2Zm0 1.8A3.4 3.4 0 0 0 3.8 7.2v9.6a3.4 3.4 0 0 0 3.4 3.4h9.6a3.4 3.4 0 0 0 3.4-3.4V7.2a3.4 3.4 0 0 0-3.4-3.4H7.2Zm9.95 1.35a1.22 1.22 0 1 1 0 2.44 1.22 1.22 0 0 1 0-2.44ZM12 6.87A5.13 5.13 0 1 1 12 17.13 5.13 5.13 0 0 1 12 6.87Zm0 1.8A3.33 3.33 0 1 0 12 15.33 3.33 3.33 0 0 0 12 8.67Z"
-            />
-          </svg>
-        </a>
-
-        {/* LINKEDIN */}
-
-        <a
-          href="https://www.linkedin.com/in/anup-gupta-b05b99425/"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="LinkedIn"
-          title="LinkedIn"
-          className={iconBox}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            className="h-4 w-4 md:h-6 md:w-6 fill-[#0A66C2]"
-            aria-hidden="true"
-          >
-            <path d="M5.34 3.5A2.34 2.34 0 1 1 .66 3.5a2.34 2.34 0 0 1 4.68 0ZM1 7h4.67v15H1V7Zm7.5 0h4.48v2.05h.06c.62-1.18 2.15-2.42 4.42-2.42 4.73 0 5.6 3.11 5.6 7.16V22h-4.67v-7.27c0-1.74-.03-3.97-2.42-3.97-2.42 0-2.79 1.89-2.79 3.84V22H8.5V7Z" />
-          </svg>
-        </a>
-
-        {/* YOUTUBE */}
-
-        <a
-          href="https://www.youtube.com/channel/UCmSXqR5sF3Kz-FKenpm7rHg"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="YouTube"
-          title="YouTube"
-          className={iconBox}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            className="h-[17px] w-[17px] md:h-7 md:w-7 fill-[#FF0000]"
-            aria-hidden="true"
-          >
-            <path d="M23.5 6.2a3.02 3.02 0 0 0-2.13-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.37.51A3.02 3.02 0 0 0 .5 6.2 31.58 31.58 0 0 0 0 12a31.58 31.58 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.13 2.14c1.87.51 9.37.51 9.37.51s7.5 0 9.37-.51a3.02 3.02 0 0 0 2.13-2.14A31.58 31.58 0 0 0 24 12a31.58 31.58 0 0 0-.5-5.8ZM9.6 15.62V8.38L15.86 12 9.6 15.62Z" />
-          </svg>
-        </a>
       </div>
 
-      {/* =========================================
+
+      {/* =====================================================
           CALL / WHATSAPP POPUP
-      ========================================== */}
+      ===================================================== */}
 
       {showContactOptions && (
         <div
           className="
-            fixed inset-0
+            fixed
+            inset-0
+
             z-[100000]
-            flex items-center justify-center
+
+            flex
+            items-center
+            justify-center
+
             bg-black/45
+
             px-5
+
             backdrop-blur-sm
           "
-          onClick={() => setShowContactOptions(false)}
+          onClick={() =>
+            setShowContactOptions(false)
+          }
         >
           <div
             className="
               relative
-              w-full max-w-[340px]
+
+              w-full
+              max-w-[340px]
+
               rounded-3xl
+
               bg-white
+
               p-7
+
               shadow-2xl
             "
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) =>
+              e.stopPropagation()
+            }
           >
+            {/* CLOSE */}
+
             <button
               type="button"
-              onClick={() => setShowContactOptions(false)}
+              onClick={() =>
+                setShowContactOptions(false)
+              }
               aria-label="Close"
               className="
-                absolute right-4 top-4
-                flex h-8 w-8
-                items-center justify-center
+                absolute
+                right-4
+                top-4
+
+                flex
+                h-8
+                w-8
+
+                items-center
+                justify-center
+
                 rounded-full
+
                 bg-gray-100
-                text-lg text-gray-500
+
+                text-lg
+                text-gray-500
+
                 transition
+
                 hover:bg-gray-200
                 hover:text-black
               "
@@ -234,21 +422,26 @@ export default function FloatingSocialBar() {
               ×
             </button>
 
+
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#a18150]">
               Anup Gupta Studio
             </p>
+
 
             <h3 className="mt-2 text-xl font-semibold text-neutral-950">
               Connect With Us
             </h3>
 
+
             <p className="mt-2 text-sm text-gray-500">
               Choose how you would like to contact our team.
             </p>
 
+
             <p className="mt-4 text-sm font-semibold text-neutral-900">
               +91 96259 81155
             </p>
+
 
             <div className="mt-6 space-y-3">
 
@@ -257,16 +450,31 @@ export default function FloatingSocialBar() {
               <a
                 href={`tel:${CALL_NUMBER}`}
                 className="
-                  flex w-full
-                  items-center justify-center
+                  flex
+                  w-full
+
+                  items-center
+                  justify-center
+
                   gap-3
+
                   rounded-xl
+
                   bg-[#dcfce7]
-                  px-5 py-4
-                  text-sm font-semibold
+
+                  px-5
+                  py-4
+
+                  text-sm
+                  font-semibold
+
                   text-[#166534]
-                  transition-all duration-300
+
+                  transition-all
+                  duration-300
+
                   hover:bg-[#bbf7d0]
+
                   active:scale-[0.98]
                 "
               >
@@ -280,6 +488,7 @@ export default function FloatingSocialBar() {
                 Call Now
               </a>
 
+
               {/* WHATSAPP */}
 
               <a
@@ -287,21 +496,45 @@ export default function FloatingSocialBar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="
-                  flex w-full
-                  items-center justify-center
+                  flex
+                  w-full
+
+                  items-center
+                  justify-center
+
                   gap-3
+
                   rounded-xl
+
                   bg-[#25D366]
-                  px-5 py-4
-                  text-sm font-semibold
+
+                  px-5
+                  py-4
+
+                  text-sm
+                  font-semibold
+
                   text-white
-                  transition-all duration-300
+
+                  transition-all
+                  duration-300
+
                   hover:opacity-90
+
                   active:scale-[0.98]
                 "
               >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-5 w-5 fill-white"
+                  aria-hidden="true"
+                >
+                  <path d="M12.04 2a9.84 9.84 0 0 0-8.42 14.93L2 22l5.21-1.56A9.93 9.93 0 1 0 12.04 2Zm0 17.98a8.14 8.14 0 0 1-4.15-1.13l-.3-.18-3.09.92.94-3.01-.2-.31A8.13 8.13 0 1 1 12.04 19.98Z" />
+                </svg>
+
                 WhatsApp
               </a>
+
             </div>
           </div>
         </div>
