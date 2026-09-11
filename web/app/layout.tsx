@@ -17,7 +17,6 @@ import {
 
 import FloatingSocialBar from '@/components/FloatingSocialBar';
 import TextOverride from '@/components/TextOverride';
-import HeroHeadingOverride from '@/components/HeroHeadingOverride';
 
 export const metadata: Metadata = {
   title: "Premium Men's Ethnic Wear & Party Shirts Online – Anup Gupta",
@@ -121,9 +120,6 @@ export default async function RootLayout({
               {/* MAIN WEBSITE */}
               <main>
                 {children}
-
-                {/* HERO HEADING OVERRIDE */}
-                <HeroHeadingOverride />
               </main>
 
               {/* FOOTER */}
