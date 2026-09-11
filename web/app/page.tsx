@@ -603,96 +603,36 @@ async function HomeContent() {
         </div>
 
 
-          {/* ==================================================
-            MOVING HEADLINE BELOW IMAGE
+           {/* ==================================================
+            FLOATING HEADLINE BELOW IMAGE
         ================================================== */}
 
-        <div className="w-full bg-white overflow-hidden py-8 md:py-10">
+        <div className="w-full bg-white py-8 md:py-10 overflow-hidden">
 
-          <div className="relative w-full overflow-hidden">
+          <div className="w-full px-5 md:px-10 lg:px-14">
 
             <div
               className="
-                animate-marquee
-                flex
-                w-max
-                items-center
+                headline-floating
+                mx-auto
+                w-fit
+                max-w-full
+                text-center
                 whitespace-nowrap
+
+                text-[20px]
+                sm:text-[26px]
+                md:text-[34px]
+                lg:text-[42px]
+                xl:text-[46px]
+
+                font-semibold
+                leading-[1.2]
+                tracking-tight
+                text-black
               "
             >
-
-              <span
-                className="
-                  shrink-0
-                  text-[28px]
-                  sm:text-[34px]
-                  md:text-[46px]
-                  lg:text-[56px]
-                  font-semibold
-                  leading-none
-                  tracking-tight
-                  text-black
-                  pr-16
-                  md:pr-24
-                "
-              >
-                {marquee.text}
-              </span>
-
-              <span
-                className="
-                  shrink-0
-                  text-[28px]
-                  sm:text-[34px]
-                  md:text-[46px]
-                  lg:text-[56px]
-                  font-semibold
-                  leading-none
-                  tracking-tight
-                  text-black
-                  pr-16
-                  md:pr-24
-                "
-              >
-                {marquee.text}
-              </span>
-
-              <span
-                className="
-                  shrink-0
-                  text-[28px]
-                  sm:text-[34px]
-                  md:text-[46px]
-                  lg:text-[56px]
-                  font-semibold
-                  leading-none
-                  tracking-tight
-                  text-black
-                  pr-16
-                  md:pr-24
-                "
-              >
-                {marquee.text}
-              </span>
-
-              <span
-                className="
-                  shrink-0
-                  text-[28px]
-                  sm:text-[34px]
-                  md:text-[46px]
-                  lg:text-[56px]
-                  font-semibold
-                  leading-none
-                  tracking-tight
-                  text-black
-                  pr-16
-                  md:pr-24
-                "
-              >
-                {marquee.text}
-              </span>
-
+              {marquee.text}
             </div>
 
           </div>
