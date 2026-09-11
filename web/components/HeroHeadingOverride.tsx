@@ -4,153 +4,247 @@ import { useEffect } from 'react';
 
 export default function HeroHeadingOverride() {
   useEffect(() => {
-    const TARGET_TEXT = "DON'T DESIGN CLOTHES. WE DESIGN HAPPINESS.";
-
-    const normalize = (text: string) =>
-      text
+    const clean = (value = '') =>
+      value
         .replace(/[’‘]/g, "'")
         .replace(/\s+/g, ' ')
         .trim()
-        .toUpperCase();
+        .toLowerCase();
 
-    const moveHeroHeading = () => {
-      /* Already created */
-      if (document.getElementById('hero-heading-below-image')) {
-        return;
-      }
+    const findAndMoveHeading = () => {
+      const targetWords = [
+        "don't design clothes",
+        'we design happiness',
+      ];
 
-      const headings = Array.from(
-        document.querySelectorAll<HTMLElement>('h1, h2, h3')
+      /* =====================================================
+         FIND THE SMALLEST ELEMENT CONTAINING THE HERO HEADING
+      ===================================================== */
+
+      const allElements = Array.from(
+        document.querySelectorAll<HTMLElement>(
+          'h1, h2, h3, div, p, span'
+        )
       );
 
-      const targetHeading = headings.find((heading) => {
-        const text = normalize(heading.innerText || '');
+      const matches = allElements.filter((el) => {
+        const text = clean(el.innerText || el.textContent || '');
 
         return (
-          text.includes(TARGET_TEXT) ||
-          (
-            text.includes("DON'T DESIGN CLOTHES") &&
-            text.includes('WE DESIGN HAPPINESS')
-          )
+          targetWords.every((word) => text.includes(word)) &&
+          text.length < 250
         );
       });
 
-      if (!targetHeading) return;
+      if (!matches.length) return false;
 
-      /* -------------------------------------------------
-         FIND HERO SECTION
-      ------------------------------------------------- */
+      /* Choose the smallest matching element */
+      const heading =
+        matches.sort((a, b) => {
+          const aText = clean(a.innerText || a.textContent || '');
+          const bText = clean(b.innerText || b.textContent || '');
 
-      let heroSection: HTMLElement | null =
-        targetHeading.parentElement;
+          return aText.length - bText.length;
+        })[0];
 
-      let levels = 0;
+      if (
+        heading.dataset.heroHeadingMoved === 'true'
+      ) {
+        return true;
+      }
 
-      while (heroSection && levels < 8) {
+      /* =====================================================
+         FIND HERO CONTAINER
+      ===================================================== */
+
+      let hero: HTMLElement | null = heading;
+
+      for (let i = 0; i < 10 && hero; i++) {
         const hasImage =
-          heroSection.querySelector('img') !== null;
+          hero.querySelector('img') !== null;
 
-        const sectionText = normalize(
-          heroSection.innerText || ''
+        const text = clean(
+          hero.innerText || hero.textContent || ''
         );
 
         const hasShopNow =
-          sectionText.includes('SHOP NOW');
+          text.includes('shop now');
 
         if (hasImage && hasShopNow) {
           break;
         }
 
-        heroSection = heroSection.parentElement;
-        levels++;
+        hero = hero.parentElement;
       }
 
-      if (!heroSection) return;
+      if (!hero) return false;
 
-      /* -------------------------------------------------
-         HIDE ORIGINAL OVERLAY HEADING ONLY
-      ------------------------------------------------- */
+      /* =====================================================
+         MAKE SURE WE DON'T MOVE THE WHOLE HERO
+      ===================================================== */
 
-      targetHeading.style.display = 'none';
+      if (heading === hero) {
+        const possibleHeading = Array.from(
+          hero.querySelectorAll<HTMLElement>(
+            'h1, h2, h3, p, div'
+          )
+        ).find((el) => {
+          const text = clean(
+            el.innerText || el.textContent || ''
+          );
 
-      /* -------------------------------------------------
-         CREATE NEW HEADING BELOW HERO IMAGE
-      ------------------------------------------------- */
+          return (
+            targetWords.every((word) =>
+              text.includes(word)
+            ) &&
+            !el.querySelector('img') &&
+            text.length < 250
+          );
+        });
 
-      const headingSection =
-        document.createElement('section');
+        if (!possibleHeading) return false;
 
-      headingSection.id =
-        'hero-heading-below-image';
+        moveHeading(possibleHeading, hero);
 
-      headingSection.style.width = '100%';
-      headingSection.style.background = '#ffffff';
-      headingSection.style.padding =
+        return true;
+      }
+
+      moveHeading(heading, hero);
+
+      return true;
+    };
+
+    /* =====================================================
+       MOVE ACTUAL EXISTING HEADING BELOW HERO
+    ===================================================== */
+
+    const moveHeading = (
+      heading: HTMLElement,
+      hero: HTMLElement
+    ) => {
+      if (
+        document.getElementById(
+          'moved-hero-heading-wrapper'
+        )
+      ) {
+        return;
+      }
+
+      const wrapper =
+        document.createElement('div');
+
+      wrapper.id =
+        'moved-hero-heading-wrapper';
+
+      wrapper.style.width = '100%';
+      wrapper.style.background = '#ffffff';
+      wrapper.style.textAlign = 'center';
+      wrapper.style.padding =
         '28px 20px 30px';
-      headingSection.style.textAlign = 'center';
-      headingSection.style.boxSizing = 'border-box';
+      wrapper.style.boxSizing =
+        'border-box';
+      wrapper.style.position = 'relative';
+      wrapper.style.zIndex = '5';
 
-      /* HEADING */
+      /*
+       Reset all overlay positioning from original heading
+      */
 
-      const newHeading =
-        document.createElement('h1');
+      heading.style.position = 'static';
+      heading.style.inset = 'auto';
+      heading.style.top = 'auto';
+      heading.style.bottom = 'auto';
+      heading.style.left = 'auto';
+      heading.style.right = 'auto';
 
-      newHeading.textContent =
-        "Don't Design Clothes. We Design Happiness.";
+      heading.style.transform = 'none';
 
-      newHeading.style.margin = '0';
-      newHeading.style.padding = '0';
+      heading.style.width = '100%';
+      heading.style.maxWidth = 'none';
 
-      newHeading.style.fontFamily =
-        '"Times New Roman", Times, serif';
+      heading.style.margin = '0 auto';
+      heading.style.padding = '0';
 
-      newHeading.style.fontWeight = '700';
+      heading.style.color = '#111111';
 
-      newHeading.style.fontSize =
+      heading.style.textAlign = 'center';
+
+      heading.style.fontSize =
         'clamp(26px, 3vw, 46px)';
 
-      newHeading.style.lineHeight = '1.15';
+      heading.style.lineHeight = '1.15';
 
-      newHeading.style.letterSpacing =
-        '0.01em';
+      heading.style.fontWeight = '700';
 
-      newHeading.style.color = '#111111';
+      heading.style.opacity = '1';
+      heading.style.visibility = 'visible';
+      heading.style.display = 'block';
 
-      headingSection.appendChild(newHeading);
+      heading.style.background =
+        'transparent';
 
-      /* -------------------------------------------------
-         INSERT JUST AFTER HERO
-      ------------------------------------------------- */
+      heading.style.textShadow = 'none';
 
-      heroSection.insertAdjacentElement(
+      heading.dataset.heroHeadingMoved =
+        'true';
+
+      /*
+       Move the EXISTING heading
+      */
+
+      wrapper.appendChild(heading);
+
+      /*
+       Add the wrapper after hero
+      */
+
+      hero.insertAdjacentElement(
         'afterend',
-        headingSection
+        wrapper
       );
     };
 
-    /* RUN FIRST TIME */
-    moveHeroHeading();
+    /* =====================================================
+       RUN AFTER DIFFERENT LOAD STAGES
+    ===================================================== */
 
-    /* Website content may load later */
-    const timers = [
-      setTimeout(moveHeroHeading, 300),
-      setTimeout(moveHeroHeading, 800),
-      setTimeout(moveHeroHeading, 1500),
-      setTimeout(moveHeroHeading, 2500),
+    findAndMoveHeading();
+
+    const delays = [
+      100,
+      300,
+      600,
+      1000,
+      1500,
+      2500,
+      4000,
     ];
 
-    /* Detect dynamically loaded hero */
+    const timers = delays.map((delay) =>
+      window.setTimeout(() => {
+        findAndMoveHeading();
+      }, delay)
+    );
+
+    /* =====================================================
+       WATCH FOR DYNAMIC / SLIDER CONTENT
+    ===================================================== */
+
     const observer = new MutationObserver(() => {
-      moveHeroHeading();
+      findAndMoveHeading();
     });
 
     observer.observe(document.body, {
       childList: true,
       subtree: true,
+      characterData: true,
     });
 
     return () => {
-      timers.forEach(clearTimeout);
+      timers.forEach((timer) =>
+        clearTimeout(timer)
+      );
+
       observer.disconnect();
     };
   }, []);
