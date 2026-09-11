@@ -389,7 +389,7 @@ export function Navbar({
       {/* ================================================= */}
 
       <a
-        href="https://wa.me/917411295951"
+        href="https://wa.me/9625981155"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contact us on WhatsApp"
