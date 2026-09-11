@@ -603,99 +603,37 @@ async function HomeContent() {
         </div>
 
 
-        {/* ==================================================
-            MARQUEE TEXT BELOW IMAGE
-        ================================================== */}
+       {/* ==================================================
+    HEADLINE BELOW IMAGE
+================================================== */}
 
-        <div
-          className="
-            w-full
-            bg-white
-            overflow-hidden
-            py-7
-            md:py-9
-          "
-        >
+<div className="w-full bg-white px-5 md:px-10 py-8 md:py-12">
 
-          <div
-            className="
-              w-full
-              overflow-hidden
-              whitespace-nowrap
-            "
-          >
+  <div className="max-w-[1600px] mx-auto text-center">
 
-            <div
-              className="
-                animate-marquee
-                flex
-                items-center
-                shrink-0
-              "
-            >
+    <h2
+      className="
+        text-[26px]
+        sm:text-[32px]
+        md:text-[44px]
+        lg:text-[54px]
 
-              <span
-                className="
-                  text-2xl
-                  md:text-4xl
-                  lg:text-5xl
-                  font-semibold
-                  tracking-tight
-                  text-black
-                  pr-10
-                "
-              >
-                {marquee.text}
-              </span>
+        leading-[1.15]
 
-              <span
-                className="
-                  text-2xl
-                  md:text-4xl
-                  lg:text-5xl
-                  font-semibold
-                  tracking-tight
-                  text-black
-                  pr-10
-                "
-              >
-                {marquee.text}
-              </span>
+        font-semibold
+        tracking-tight
+        text-black
 
-              <span
-                className="
-                  text-2xl
-                  md:text-4xl
-                  lg:text-5xl
-                  font-semibold
-                  tracking-tight
-                  text-black
-                  pr-10
-                "
-              >
-                {marquee.text}
-              </span>
+        whitespace-normal
+        break-normal
+      "
+    >
+      {marquee.text}
+    </h2>
 
-              <span
-                className="
-                  text-2xl
-                  md:text-4xl
-                  lg:text-5xl
-                  font-semibold
-                  tracking-tight
-                  text-black
-                  pr-10
-                "
-              >
-                {marquee.text}
-              </span>
+  </div>
 
-            </div>
-
-          </div>
-
-        </div>
-
+</div>
       </section>
 
 
