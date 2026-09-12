@@ -15,15 +15,10 @@ export default function FloatingSocialBar() {
   return (
     <>
       {/* =====================================================
-          BOTTOM RIGHT WHATSAPP
+          BOTTOM RIGHT CONTACT BUTTONS
       ===================================================== */}
 
-      <a
-        href={`https://wa.me/${WHATSAPP_NUMBER}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="WhatsApp Anup Gupta Studio"
-        title="WhatsApp"
+      <div
         className="
           fixed
           bottom-4
@@ -31,34 +26,92 @@ export default function FloatingSocialBar() {
           z-[9999]
 
           flex
-          h-11
-          w-11
-          md:h-14
-          md:w-14
-
+          flex-col
           items-center
-          justify-center
-
-          rounded-full
-          bg-[#25D366]
-
-          shadow-[0_8px_28px_rgba(0,0,0,0.25)]
-
-          transition-all
-          duration-300
-
-          hover:scale-105
-          active:scale-95
+          gap-3
         "
       >
-        <svg
-          viewBox="0 0 24 24"
-          className="h-5 w-5 md:h-7 md:w-7 fill-white"
-          aria-hidden="true"
+        {/* WHATSAPP BUTTON */}
+
+        <a
+          href={`https://wa.me/${WHATSAPP_NUMBER}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="WhatsApp Anup Gupta Studio"
+          title="WhatsApp"
+          className="
+            flex
+            h-11
+            w-11
+            md:h-14
+            md:w-14
+
+            items-center
+            justify-center
+
+            rounded-full
+            bg-[#25D366]
+
+            shadow-[0_8px_28px_rgba(0,0,0,0.25)]
+
+            transition-all
+            duration-300
+
+            hover:scale-105
+            hover:shadow-[0_10px_32px_rgba(37,211,102,0.35)]
+
+            active:scale-95
+          "
         >
-          <path d="M12.04 2a9.84 9.84 0 0 0-8.42 14.93L2 22l5.21-1.56A9.93 9.93 0 1 0 12.04 2Zm0 17.98a8.14 8.14 0 0 1-4.15-1.13l-.3-.18-3.09.92.94-3.01-.2-.31A8.13 8.13 0 1 1 12.04 19.98Zm4.46-6.09c-.24-.12-1.44-.71-1.66-.79-.22-.08-.38-.12-.54.12-.16.24-.62.79-.76.95-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.95-1.2-.72-.64-1.21-1.44-1.35-1.68-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.31-.74-1.79-.2-.47-.4-.41-.54-.42h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.16 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.58.18 1.1.16 1.52.1.46-.07 1.44-.59 1.64-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28Z" />
-        </svg>
-      </a>
+          <svg
+            viewBox="0 0 24 24"
+            className="h-5 w-5 md:h-7 md:w-7 fill-white"
+            aria-hidden="true"
+          >
+            <path d="M12.04 2a9.84 9.84 0 0 0-8.42 14.93L2 22l5.21-1.56A9.93 9.93 0 1 0 12.04 2Zm0 17.98a8.14 8.14 0 0 1-4.15-1.13l-.3-.18-3.09.92.94-3.01-.2-.31A8.13 8.13 0 1 1 12.04 19.98Zm4.46-6.09c-.24-.12-1.44-.71-1.66-.79-.22-.08-.38-.12-.54.12-.16.24-.62.79-.76.95-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.95-1.2-.72-.64-1.21-1.44-1.35-1.68-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.31-.74-1.79-.2-.47-.4-.41-.54-.42h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.16 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.58.18 1.1.16 1.52.1.46-.07 1.44-.59 1.64-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28Z" />
+          </svg>
+        </a>
+
+        {/* BLUE PHONE / CALL BUTTON */}
+
+        <a
+          href={`tel:${CALL_NUMBER}`}
+          aria-label="Call Anup Gupta Studio"
+          title="Call Now"
+          className="
+            flex
+            h-11
+            w-11
+            md:h-14
+            md:w-14
+
+            items-center
+            justify-center
+
+            rounded-full
+            bg-[#1877F2]
+
+            shadow-[0_8px_28px_rgba(0,0,0,0.25)]
+
+            transition-all
+            duration-300
+
+            hover:scale-105
+            hover:bg-[#0A66C2]
+            hover:shadow-[0_10px_32px_rgba(24,119,242,0.35)]
+
+            active:scale-95
+          "
+        >
+          <svg
+            viewBox="0 0 24 24"
+            className="h-5 w-5 md:h-7 md:w-7 fill-white"
+            aria-hidden="true"
+          >
+            <path d="M6.62 10.79a15.46 15.46 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z" />
+          </svg>
+        </a>
+      </div>
 
       {/* =====================================================
           LEFT EDGE SOCIAL DRAWER
@@ -73,9 +126,7 @@ export default function FloatingSocialBar() {
           -translate-y-1/2
         "
       >
-        {/* =================================================
-            SOCIAL ICON PANEL
-        ================================================= */}
+        {/* SOCIAL ICON PANEL */}
 
         <div
           className={`
@@ -239,7 +290,7 @@ export default function FloatingSocialBar() {
         </div>
 
         {/* =================================================
-            VERY SLIM LEFT EDGE ARROW
+            LEFT EDGE ARROW
         ================================================= */}
 
         <button
@@ -317,7 +368,6 @@ export default function FloatingSocialBar() {
           className="
             fixed
             inset-0
-
             z-[100000]
 
             flex
@@ -325,7 +375,6 @@ export default function FloatingSocialBar() {
             justify-center
 
             bg-black/45
-
             px-5
 
             backdrop-blur-sm
@@ -415,7 +464,7 @@ export default function FloatingSocialBar() {
 
                   rounded-xl
 
-                  bg-[#dcfce7]
+                  bg-[#1877F2]
 
                   px-5
                   py-4
@@ -423,19 +472,19 @@ export default function FloatingSocialBar() {
                   text-sm
                   font-semibold
 
-                  text-[#166534]
+                  text-white
 
                   transition-all
                   duration-300
 
-                  hover:bg-[#bbf7d0]
+                  hover:bg-[#0A66C2]
 
                   active:scale-[0.98]
                 "
               >
                 <svg
                   viewBox="0 0 24 24"
-                  className="h-5 w-5 fill-[#15803d]"
+                  className="h-5 w-5 fill-white"
                   aria-hidden="true"
                 >
                   <path d="M6.62 10.79a15.46 15.46 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z" />
