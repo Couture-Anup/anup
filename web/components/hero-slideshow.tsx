@@ -14,11 +14,11 @@ interface Slide {
   description?: string;
   imageUrl?: string;
   link?: string;
-}
+}slider-3.png
 
 const SLIDES: Slide[] = [
   {
-    imageUrl: '/banner/slider-1.png',
+    imageUrl: '/banner/slider-3.png',
     link: '#',
   },
   {
@@ -26,7 +26,7 @@ const SLIDES: Slide[] = [
     link: '#',
   },
   {
-    imageUrl: '/banner/slider-3.png',
+    imageUrl: '/banner/slider-1.png',
     link: '#',
   },
   {
