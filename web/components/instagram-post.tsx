@@ -1,12 +1,25 @@
+'use client';
+
 import Image from 'next/image';
+
 import {
   Instagram,
   Youtube,
+  Play,
   X,
   ExternalLink,
 } from 'lucide-react';
 
+import {
+  useEffect,
+  useState,
+} from 'react';
+
 import { fetchInstagramImage } from '@/app/actions/instagram';
+
+/* =========================================================
+   TYPES
+========================================================= */
 
 interface InstagramPostProps {
   url: string;
@@ -15,7 +28,7 @@ interface InstagramPostProps {
 }
 
 /* =========================================================
-   URL HELPERS
+   HELPERS
 ========================================================= */
 
 function cleanUrl(url: string) {
@@ -24,6 +37,10 @@ function cleanUrl(url: string) {
     .split('#')[0]
     .replace(/\/$/, '');
 }
+
+/* =========================================================
+   PLATFORM CHECK
+========================================================= */
 
 function isInstagramUrl(url: string) {
   const value = (url || '').toLowerCase();
@@ -65,22 +82,28 @@ function getInstagramEmbedUrl(url: string) {
 }
 
 /* =========================================================
-   YOUTUBE VIDEO ID
+   YOUTUBE ID
 ========================================================= */
 
 function getYoutubeId(url: string) {
   try {
     const parsed = new URL(url);
 
-    /* youtu.be/VIDEO_ID */
-    if (parsed.hostname.includes('youtu.be')) {
+    /* youtu.be/VIDEOID */
+
+    if (
+      parsed.hostname.includes('youtu.be')
+    ) {
       return parsed.pathname
         .replace('/', '')
         .split('/')[0];
     }
 
-    /* youtube.com/shorts/VIDEO_ID */
-    if (parsed.pathname.includes('/shorts/')) {
+    /* youtube shorts */
+
+    if (
+      parsed.pathname.includes('/shorts/')
+    ) {
       return (
         parsed.pathname
           .split('/shorts/')[1]
@@ -88,8 +111,11 @@ function getYoutubeId(url: string) {
       );
     }
 
-    /* youtube.com/embed/VIDEO_ID */
-    if (parsed.pathname.includes('/embed/')) {
+    /* youtube embed */
+
+    if (
+      parsed.pathname.includes('/embed/')
+    ) {
       return (
         parsed.pathname
           .split('/embed/')[1]
@@ -97,7 +123,8 @@ function getYoutubeId(url: string) {
       );
     }
 
-    /* youtube.com/watch?v=VIDEO_ID */
+    /* standard youtube */
+
     return parsed.searchParams.get('v');
   } catch {
     return null;
@@ -108,11 +135,34 @@ function getYoutubeId(url: string) {
    MAIN COMPONENT
 ========================================================= */
 
-export async function InstagramPost({
+export function InstagramPost({
   url,
   index,
   coverImage,
 }: InstagramPostProps) {
+
+  /* ======================================================
+     STATES
+  ====================================================== */
+
+  const [mediaCover, setMediaCover] =
+    useState<string | null>(
+      coverImage || null
+    );
+
+  const [isOpen, setIsOpen] =
+    useState(false);
+
+  const [isPlaying, setIsPlaying] =
+    useState(false);
+
+  const [isLoading, setIsLoading] =
+    useState(!coverImage);
+
+  /* ======================================================
+     MEDIA TYPE
+  ====================================================== */
+
   const isLink =
     Boolean(url) && url !== '#';
 
@@ -135,53 +185,160 @@ export async function InstagramPost({
       : null;
 
   /* ======================================================
-     FETCH ACTUAL COVER
+     GET REAL COVER IMAGE
   ====================================================== */
 
-  let mediaCover:
-    | string
-    | null
-    | undefined = coverImage;
+  useEffect(() => {
+    let cancelled = false;
 
-  /*
-    INSTAGRAM IMAGE / REEL COVER
-  */
+    async function loadCover() {
 
-  if (
-    !mediaCover &&
-    isLink &&
-    instagram
-  ) {
-    try {
-      mediaCover =
-        await fetchInstagramImage(url);
-    } catch (error) {
-      console.error(
-        'Instagram cover fetch error:',
-        error
-      );
+      /* -------------------------------
+         MANUAL COVER ALREADY EXISTS
+      -------------------------------- */
+
+      if (coverImage) {
+        setMediaCover(coverImage);
+        setIsLoading(false);
+        return;
+      }
+
+      /* -------------------------------
+         YOUTUBE
+      -------------------------------- */
+
+      if (
+        youtube &&
+        youtubeId
+      ) {
+        setMediaCover(
+          `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
+        );
+
+        setIsLoading(false);
+
+        return;
+      }
+
+      /* -------------------------------
+         INSTAGRAM IMAGE / REEL
+      -------------------------------- */
+
+      if (
+        instagram &&
+        isLink
+      ) {
+        try {
+          setIsLoading(true);
+
+          const image =
+            await fetchInstagramImage(url);
+
+          if (
+            !cancelled &&
+            image
+          ) {
+            setMediaCover(image);
+          }
+        } catch (error) {
+          console.error(
+            'Instagram cover fetch error:',
+            error
+          );
+        } finally {
+          if (!cancelled) {
+            setIsLoading(false);
+          }
+        }
+
+        return;
+      }
+
+      setIsLoading(false);
     }
-  }
 
-  /*
-    YOUTUBE COVER
-  */
+    loadCover();
 
-  if (
-    !mediaCover &&
-    youtube &&
-    youtubeId
-  ) {
-    mediaCover =
-      `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    url,
+    coverImage,
+    instagram,
+    youtube,
+    youtubeId,
+    isLink,
+  ]);
+
+  /* ======================================================
+     BODY SCROLL LOCK
+  ====================================================== */
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const oldOverflow =
+      document.body.style.overflow;
+
+    document.body.style.overflow =
+      'hidden';
+
+    return () => {
+      document.body.style.overflow =
+        oldOverflow;
+    };
+  }, [isOpen]);
+
+  /* ======================================================
+     ESC CLOSE
+  ====================================================== */
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handleEscape(
+      event: KeyboardEvent
+    ) {
+      if (
+        event.key === 'Escape'
+      ) {
+        setIsOpen(false);
+        setIsPlaying(false);
+      }
+    }
+
+    window.addEventListener(
+      'keydown',
+      handleEscape
+    );
+
+    return () => {
+      window.removeEventListener(
+        'keydown',
+        handleEscape
+      );
+    };
+  }, [isOpen]);
+
+  /* ======================================================
+     CLOSE FUNCTION
+  ====================================================== */
+
+  function closeModal() {
+    setIsOpen(false);
+
+    /*
+      Important:
+      Stop video when popup closes.
+    */
+
+    setIsPlaying(false);
   }
 
   /* ======================================================
-     MODAL ID
+     PLATFORM NAME
   ====================================================== */
-
-  const modalId =
-    `social-post-modal-${index}`;
 
   const platformName =
     youtube
@@ -190,35 +347,26 @@ export async function InstagramPost({
         ? 'Instagram Reel'
         : 'Instagram Post';
 
+  /* ======================================================
+     RETURN
+  ====================================================== */
+
   return (
-    <div className="relative w-full">
+    <>
 
       {/* ===================================================
-          POPUP CONTROL
+          HOMEPAGE CARD
       =================================================== */}
 
-      <input
-        type="checkbox"
-        id={modalId}
-        className="peer sr-only"
-      />
+      <button
+        type="button"
+        onClick={() => {
+          if (!isLink) return;
 
-      {/* ===================================================
-          HOMEPAGE POST
-      =================================================== */}
-
-      <label
-        htmlFor={
-          isLink
-            ? modalId
-            : undefined
-        }
-        aria-label={
-          isLink
-            ? `Open ${platformName}`
-            : undefined
-        }
-        className={`
+          setIsPlaying(false);
+          setIsOpen(true);
+        }}
+        className="
           relative
           block
 
@@ -228,44 +376,54 @@ export async function InstagramPost({
 
           overflow-hidden
 
-          bg-[#f5f5f3]
+          bg-[#f4f2ef]
 
-          ${
-            isLink
-              ? 'cursor-pointer'
-              : 'cursor-default'
-          }
-        `}
+          border-0
+
+          p-0
+          m-0
+
+          cursor-pointer
+        "
+        aria-label={`Open ${platformName}`}
       >
 
         {/* =================================================
-            COVER IMAGE
-
-            IMPORTANT:
-            - NO PLAY BUTTON
-            - NO INSTAGRAM ICON
-            - NO HOVER ICON
-            - NO ZOOM
-            - NO CROPPING
+            LOADING
         ================================================= */}
 
-        {mediaCover ? (
+        {isLoading && (
           <div
             className="
               absolute
               inset-0
 
-              flex
-              items-center
-              justify-center
+              bg-neutral-100
+
+              animate-pulse
             "
-          >
+          />
+        )}
+
+        {/* =================================================
+            ACTUAL CLEAN COVER
+
+            NO:
+            - PLAY BUTTON
+            - INSTAGRAM ICON
+            - HOVER ICON
+            - ZOOM
+            - SCALE
+        ================================================= */}
+
+        {!isLoading &&
+          mediaCover && (
             <Image
               src={mediaCover}
               alt={`${platformName} ${index + 1}`}
               fill
               sizes="
-                (max-width: 768px) 50vw,
+                (max-width: 640px) 50vw,
                 (max-width: 1024px) 33vw,
                 16vw
               "
@@ -274,68 +432,53 @@ export async function InstagramPost({
               "
               referrerPolicy="no-referrer"
               unoptimized
+              priority={index < 6}
             />
-          </div>
-        ) : (
-          <div
-            className="
-              absolute
-              inset-0
-
-              flex
-              items-center
-              justify-center
-
-              bg-neutral-100
-            "
-          >
-            <span
-              className="
-                text-[10px]
-
-                uppercase
-
-                tracking-[0.15em]
-
-                text-neutral-400
-              "
-            >
-              Media
-            </span>
-          </div>
-        )}
+          )}
 
         {/* =================================================
-            VERY LIGHT HOVER ONLY
+            FALLBACK
 
-            NO ICON.
-            NO PLAY.
-            NO ZOOM.
+            NO RANDOM IMAGE
         ================================================= */}
 
-        {isLink && (
-          <div
-            className="
-              absolute
-              inset-0
+        {!isLoading &&
+          !mediaCover && (
+            <div
+              className="
+                absolute
+                inset-0
 
-              bg-black/0
+                flex
+                items-center
+                justify-center
 
-              hover:bg-black/[0.04]
+                bg-neutral-100
+              "
+            >
+              <span
+                className="
+                  text-[10px]
 
-              transition-colors
-              duration-300
-            "
-          />
-        )}
+                  uppercase
 
-      </label>
+                  tracking-[0.18em]
+
+                  text-neutral-400
+                "
+              >
+                Media
+              </span>
+            </div>
+          )}
+
+      </button>
 
       {/* ===================================================
-          MODAL
+          POPUP
       =================================================== */}
 
-      {isLink && (
+      {isOpen && (
         <div
           className="
             fixed
@@ -343,9 +486,7 @@ export async function InstagramPost({
 
             z-[999999]
 
-            hidden
-            peer-checked:flex
-
+            flex
             items-center
             justify-center
 
@@ -354,38 +495,27 @@ export async function InstagramPost({
             backdrop-blur-[2px]
 
             px-4
-            py-8
+            py-6
 
             sm:px-8
+            sm:py-8
 
             md:px-14
+            md:py-10
 
             lg:px-20
           "
+          onClick={closeModal}
         >
-
-          {/* =================================================
-              CLICK DARK AREA TO CLOSE
-          ================================================= */}
-
-          <label
-            htmlFor={modalId}
-            aria-label="Close"
-            className="
-              absolute
-              inset-0
-
-              cursor-pointer
-            "
-          />
 
           {/* =================================================
               CLOSE BUTTON
           ================================================= */}
 
-          <label
-            htmlFor={modalId}
-            aria-label="Close media"
+          <button
+            type="button"
+            onClick={closeModal}
+            aria-label="Close"
             className="
               fixed
 
@@ -400,20 +530,21 @@ export async function InstagramPost({
               w-10
               h-10
 
+              md:w-11
+              md:h-11
+
               rounded-full
+
+              bg-black/35
+
+              border
+              border-white/40
+
+              text-white
 
               flex
               items-center
               justify-center
-
-              bg-black/40
-
-              border
-              border-white/30
-
-              text-white
-
-              cursor-pointer
 
               hover:bg-white
               hover:text-black
@@ -429,29 +560,28 @@ export async function InstagramPost({
               "
               strokeWidth={1.5}
             />
-          </label>
+          </button>
 
           {/* =================================================
               POPUP BOX
           ================================================= */}
 
           <div
+            onClick={(event) =>
+              event.stopPropagation()
+            }
             className="
               relative
 
-              z-[1000001]
-
               w-full
-
               max-w-[1000px]
 
-              h-[74vh]
-
-              max-h-[700px]
+              h-[76vh]
+              max-h-[720px]
 
               bg-white
 
-              rounded-[14px]
+              rounded-[16px]
 
               overflow-hidden
 
@@ -473,30 +603,24 @@ export async function InstagramPost({
                 relative
 
                 w-full
-
                 md:w-[58%]
 
-                h-[55%]
-
+                h-[58%]
                 md:h-full
 
-                bg-[#f5f5f3]
-
-                overflow-hidden
+                bg-[#f5f3f0]
 
                 flex
                 items-center
                 justify-center
+
+                overflow-hidden
               "
             >
 
-              {/* =============================================
+              {/* =================================================
                   IMAGE POST
-
-                  FULL IMAGE
-                  NO CROPPING
-                  NO ZOOM
-              ============================================= */}
+              ================================================= */}
 
               {!isVideo &&
                 mediaCover && (
@@ -516,54 +640,151 @@ export async function InstagramPost({
                   />
                 )}
 
-              {/* =============================================
-                  INSTAGRAM REEL
+              {/* =================================================
+                  VIDEO / REEL
 
-                  PLAY OPTION APPEARS HERE ONLY
-                  INSIDE INSTAGRAM PLAYER
-              ============================================= */}
+                  FIRST SHOW CLEAN COVER.
 
-              {reel && (
-                <iframe
-                  src={
-                    getInstagramEmbedUrl(url)
-                  }
-                  title={`Instagram Reel ${index + 1}`}
-                  allow="
-                    autoplay;
-                    clipboard-write;
-                    encrypted-media;
-                    picture-in-picture;
-                    web-share
-                  "
-                  allowFullScreen
-                  loading="lazy"
-                  className="
-                    absolute
-                    inset-0
+                  PLAYER DOES NOT LOAD YET.
+              ================================================= */}
 
-                    w-full
-                    h-full
+              {isVideo &&
+                !isPlaying &&
+                mediaCover && (
+                  <>
+                    <Image
+                      src={mediaCover}
+                      alt={`${platformName} cover`}
+                      fill
+                      sizes="
+                        (max-width: 768px) 100vw,
+                        58vw
+                      "
+                      className="
+                        object-contain
+                      "
+                      referrerPolicy="no-referrer"
+                      unoptimized
+                    />
 
-                    border-0
+                    {/* =========================================
+                        PLAY BUTTON
 
-                    bg-black
-                  "
-                />
-              )}
+                        ONLY INSIDE POPUP.
+                    ========================================= */}
 
-              {/* =============================================
-                  YOUTUBE VIDEO
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setIsPlaying(true)
+                      }
+                      aria-label="Play video"
+                      className="
+                        absolute
 
-                  PLAY OPTION APPEARS INSIDE
-                  YOUTUBE PLAYER ONLY
-              ============================================= */}
+                        z-20
+
+                        left-1/2
+                        top-1/2
+
+                        -translate-x-1/2
+                        -translate-y-1/2
+
+                        w-12
+                        h-12
+
+                        md:w-14
+                        md:h-14
+
+                        rounded-full
+
+                        bg-black/55
+
+                        backdrop-blur-sm
+
+                        border
+                        border-white/40
+
+                        text-white
+
+                        flex
+                        items-center
+                        justify-center
+
+                        shadow-xl
+
+                        hover:bg-black/70
+                        hover:scale-105
+
+                        transition-all
+                        duration-300
+                      "
+                    >
+                      <Play
+                        className="
+                          w-5
+                          h-5
+
+                          md:w-6
+                          md:h-6
+
+                          ml-[3px]
+
+                          fill-white
+                        "
+                        strokeWidth={1.2}
+                      />
+                    </button>
+                  </>
+                )}
+
+              {/* =================================================
+                  INSTAGRAM PLAYER
+
+                  ONLY AFTER PLAY CLICK
+              ================================================= */}
+
+              {reel &&
+                isPlaying && (
+                  <iframe
+                    src={
+                      getInstagramEmbedUrl(url)
+                    }
+                    title={`Instagram Reel ${index + 1}`}
+                    allow="
+                      autoplay;
+                      clipboard-write;
+                      encrypted-media;
+                      picture-in-picture;
+                      web-share
+                    "
+                    allowFullScreen
+                    className="
+                      absolute
+                      inset-0
+
+                      w-full
+                      h-full
+
+                      border-0
+
+                      bg-black
+                    "
+                  />
+                )}
+
+              {/* =================================================
+                  YOUTUBE PLAYER
+
+                  ONLY AFTER PLAY CLICK
+              ================================================= */}
 
               {youtube &&
-                youtubeId && (
+                youtubeId &&
+                isPlaying && (
                   <iframe
-                    src={`https://www.youtube.com/embed/${youtubeId}?rel=0`}
-                    title={`YouTube video ${index + 1}`}
+                    src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`}
+                    title={`YouTube Video ${index + 1}`}
                     allow="
                       accelerometer;
                       autoplay;
@@ -574,7 +795,6 @@ export async function InstagramPost({
                       web-share
                     "
                     allowFullScreen
-                    loading="lazy"
                     className="
                       absolute
                       inset-0
@@ -592,17 +812,15 @@ export async function InstagramPost({
             </div>
 
             {/* =================================================
-                RIGHT SIDE
+                RIGHT INFORMATION
             ================================================= */}
 
             <div
               className="
                 w-full
-
                 md:w-[42%]
 
-                h-[45%]
-
+                h-[42%]
                 md:h-full
 
                 bg-white
@@ -612,21 +830,23 @@ export async function InstagramPost({
               "
             >
 
-              {/* =============================================
-                  HEADER
-              ============================================= */}
+              {/* =================================================
+                  PROFILE HEADER
+              ================================================= */}
 
               <div
                 className="
                   min-h-[70px]
 
-                  shrink-0
+                  md:min-h-[76px]
 
-                  px-5
-                  md:px-6
+                  shrink-0
 
                   border-b
                   border-gray-200
+
+                  px-5
+                  md:px-6
 
                   flex
                   items-center
@@ -635,12 +855,15 @@ export async function InstagramPost({
                 "
               >
 
-                {/* BRAND */}
+                {/* LOGO */}
 
                 <div
                   className="
                     w-9
                     h-9
+
+                    md:w-10
+                    md:h-10
 
                     rounded-full
 
@@ -672,10 +895,10 @@ export async function InstagramPost({
 
                 <div
                   className="
+                    min-w-0
+
                     flex
                     flex-col
-
-                    min-w-0
                   "
                 >
                   <span
@@ -707,11 +930,9 @@ export async function InstagramPost({
                   </span>
                 </div>
 
-                {/* PLATFORM ICON */}
+                {/* PLATFORM */}
 
-                <div
-                  className="ml-auto"
-                >
+                <div className="ml-auto">
                   {youtube ? (
                     <Youtube
                       className="
@@ -733,9 +954,9 @@ export async function InstagramPost({
 
               </div>
 
-              {/* =============================================
-                  TEXT
-              ============================================= */}
+              {/* =================================================
+                  CONTENT
+              ================================================= */}
 
               <div
                 className="
@@ -799,16 +1020,17 @@ export async function InstagramPost({
                     text-gray-600
                   "
                 >
-                  Discover our latest designer
-                  menswear, craftsmanship and
-                  signature creations.
+                  Designer menswear,
+                  handcrafted details and
+                  signature creations from
+                  Anup Gupta Studio.
                 </p>
 
               </div>
 
-              {/* =============================================
-                  BOTTOM
-              ============================================= */}
+              {/* =================================================
+                  BOTTOM BAR
+              ================================================= */}
 
               <div
                 className="
@@ -887,6 +1109,6 @@ export async function InstagramPost({
         </div>
       )}
 
-    </div>
+    </>
   );
 }
