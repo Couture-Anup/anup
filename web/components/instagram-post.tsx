@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-
 import {
   Instagram,
   Youtube,
@@ -16,10 +15,6 @@ import {
 } from 'react';
 
 import { fetchInstagramImage } from '@/app/actions/instagram';
-
-/* =========================================================
-   TYPES
-========================================================= */
 
 interface InstagramPostProps {
   url: string;
@@ -37,10 +32,6 @@ function cleanUrl(url: string) {
     .split('#')[0]
     .replace(/\/$/, '');
 }
-
-/* =========================================================
-   PLATFORM CHECK
-========================================================= */
 
 function isInstagramUrl(url: string) {
   const value = (url || '').toLowerCase();
@@ -70,7 +61,7 @@ function isInstagramReel(url: string) {
 }
 
 /* =========================================================
-   INSTAGRAM EMBED
+   INSTAGRAM EMBED URL
 ========================================================= */
 
 function getInstagramEmbedUrl(url: string) {
@@ -89,21 +80,13 @@ function getYoutubeId(url: string) {
   try {
     const parsed = new URL(url);
 
-    /* youtu.be/VIDEOID */
-
-    if (
-      parsed.hostname.includes('youtu.be')
-    ) {
+    if (parsed.hostname.includes('youtu.be')) {
       return parsed.pathname
         .replace('/', '')
         .split('/')[0];
     }
 
-    /* youtube shorts */
-
-    if (
-      parsed.pathname.includes('/shorts/')
-    ) {
+    if (parsed.pathname.includes('/shorts/')) {
       return (
         parsed.pathname
           .split('/shorts/')[1]
@@ -111,19 +94,13 @@ function getYoutubeId(url: string) {
       );
     }
 
-    /* youtube embed */
-
-    if (
-      parsed.pathname.includes('/embed/')
-    ) {
+    if (parsed.pathname.includes('/embed/')) {
       return (
         parsed.pathname
           .split('/embed/')[1]
           ?.split('/')[0] || null
       );
     }
-
-    /* standard youtube */
 
     return parsed.searchParams.get('v');
   } catch {
@@ -140,24 +117,19 @@ export function InstagramPost({
   index,
   coverImage,
 }: InstagramPostProps) {
-
-  /* ======================================================
-     STATES
-  ====================================================== */
-
   const [mediaCover, setMediaCover] =
     useState<string | null>(
       coverImage || null
     );
+
+  const [isLoading, setIsLoading] =
+    useState(!coverImage);
 
   const [isOpen, setIsOpen] =
     useState(false);
 
   const [isPlaying, setIsPlaying] =
     useState(false);
-
-  const [isLoading, setIsLoading] =
-    useState(!coverImage);
 
   /* ======================================================
      MEDIA TYPE
@@ -184,29 +156,33 @@ export function InstagramPost({
       ? getYoutubeId(url)
       : null;
 
+  const platformName =
+    youtube
+      ? 'YouTube'
+      : reel
+        ? 'Instagram Reel'
+        : 'Instagram Post';
+
   /* ======================================================
-     GET REAL COVER IMAGE
+     LOAD COVER IMAGE
   ====================================================== */
 
   useEffect(() => {
     let cancelled = false;
 
     async function loadCover() {
-
-      /* -------------------------------
-         MANUAL COVER ALREADY EXISTS
-      -------------------------------- */
-
+      /*
+       * Manual cover image
+       */
       if (coverImage) {
         setMediaCover(coverImage);
         setIsLoading(false);
         return;
       }
 
-      /* -------------------------------
-         YOUTUBE
-      -------------------------------- */
-
+      /*
+       * YouTube cover
+       */
       if (
         youtube &&
         youtubeId
@@ -220,10 +196,9 @@ export function InstagramPost({
         return;
       }
 
-      /* -------------------------------
-         INSTAGRAM IMAGE / REEL
-      -------------------------------- */
-
+      /*
+       * Instagram cover
+       */
       if (
         instagram &&
         isLink
@@ -272,7 +247,7 @@ export function InstagramPost({
   ]);
 
   /* ======================================================
-     BODY SCROLL LOCK
+     LOCK PAGE SCROLL
   ====================================================== */
 
   useEffect(() => {
@@ -300,9 +275,7 @@ export function InstagramPost({
     function handleEscape(
       event: KeyboardEvent
     ) {
-      if (
-        event.key === 'Escape'
-      ) {
+      if (event.key === 'Escape') {
         setIsOpen(false);
         setIsPlaying(false);
       }
@@ -321,39 +294,13 @@ export function InstagramPost({
     };
   }, [isOpen]);
 
-  /* ======================================================
-     CLOSE FUNCTION
-  ====================================================== */
-
   function closeModal() {
     setIsOpen(false);
-
-    /*
-      Important:
-      Stop video when popup closes.
-    */
-
     setIsPlaying(false);
   }
 
-  /* ======================================================
-     PLATFORM NAME
-  ====================================================== */
-
-  const platformName =
-    youtube
-      ? 'YouTube'
-      : reel
-        ? 'Instagram Reel'
-        : 'Instagram Post';
-
-  /* ======================================================
-     RETURN
-  ====================================================== */
-
   return (
     <>
-
       {/* ===================================================
           HOMEPAGE CARD
       =================================================== */}
@@ -366,17 +313,18 @@ export function InstagramPost({
           setIsPlaying(false);
           setIsOpen(true);
         }}
+        aria-label={`Open ${platformName}`}
         className="
           relative
           block
 
           w-full
 
-          aspect-[4/5]
+          aspect-[9/16]
 
           overflow-hidden
 
-          bg-[#f4f2ef]
+          bg-[#f3f3f3]
 
           border-0
 
@@ -385,9 +333,7 @@ export function InstagramPost({
 
           cursor-pointer
         "
-        aria-label={`Open ${platformName}`}
       >
-
         {/* =================================================
             LOADING
         ================================================= */}
@@ -406,14 +352,11 @@ export function InstagramPost({
         )}
 
         {/* =================================================
-            ACTUAL CLEAN COVER
+            HOMEPAGE COVER
 
-            NO:
-            - PLAY BUTTON
-            - INSTAGRAM ICON
-            - HOVER ICON
-            - ZOOM
-            - SCALE
+            IMPORTANT:
+            object-cover = fills entire box.
+            No zoom animation.
         ================================================= */}
 
         {!isLoading &&
@@ -428,7 +371,8 @@ export function InstagramPost({
                 16vw
               "
               className="
-                object-contain
+                object-cover
+                object-center
               "
               referrerPolicy="no-referrer"
               unoptimized
@@ -438,8 +382,6 @@ export function InstagramPost({
 
         {/* =================================================
             FALLBACK
-
-            NO RANDOM IMAGE
         ================================================= */}
 
         {!isLoading &&
@@ -471,7 +413,6 @@ export function InstagramPost({
               </span>
             </div>
           )}
-
       </button>
 
       {/* ===================================================
@@ -507,7 +448,6 @@ export function InstagramPost({
           "
           onClick={closeModal}
         >
-
           {/* =================================================
               CLOSE BUTTON
           ================================================= */}
@@ -549,7 +489,7 @@ export function InstagramPost({
               hover:bg-white
               hover:text-black
 
-              transition-all
+              transition-colors
               duration-300
             "
           >
@@ -593,9 +533,8 @@ export function InstagramPost({
               md:flex-row
             "
           >
-
             {/* =================================================
-                LEFT MEDIA
+                LEFT MEDIA AREA
             ================================================= */}
 
             <div
@@ -610,17 +549,20 @@ export function InstagramPost({
 
                 bg-[#f5f3f0]
 
+                overflow-hidden
+
                 flex
                 items-center
                 justify-center
-
-                overflow-hidden
               "
             >
-
-              {/* =================================================
+              {/* =============================================
                   IMAGE POST
-              ================================================= */}
+
+                  IMPORTANT:
+                  Popup uses object-contain.
+                  Full original image visible.
+              ============================================= */}
 
               {!isVideo &&
                 mediaCover && (
@@ -634,19 +576,16 @@ export function InstagramPost({
                     "
                     className="
                       object-contain
+                      object-center
                     "
                     referrerPolicy="no-referrer"
                     unoptimized
                   />
                 )}
 
-              {/* =================================================
-                  VIDEO / REEL
-
-                  FIRST SHOW CLEAN COVER.
-
-                  PLAYER DOES NOT LOAD YET.
-              ================================================= */}
+              {/* =============================================
+                  VIDEO COVER BEFORE PLAY
+              ============================================= */}
 
               {isVideo &&
                 !isPlaying &&
@@ -662,16 +601,13 @@ export function InstagramPost({
                       "
                       className="
                         object-contain
+                        object-center
                       "
                       referrerPolicy="no-referrer"
                       unoptimized
                     />
 
-                    {/* =========================================
-                        PLAY BUTTON
-
-                        ONLY INSIDE POPUP.
-                    ========================================= */}
+                    {/* PLAY INSIDE POPUP ONLY */}
 
                     <button
                       type="button"
@@ -682,10 +618,10 @@ export function InstagramPost({
                       className="
                         absolute
 
-                        z-20
-
                         left-1/2
                         top-1/2
+
+                        z-20
 
                         -translate-x-1/2
                         -translate-y-1/2
@@ -700,10 +636,10 @@ export function InstagramPost({
 
                         bg-black/55
 
-                        backdrop-blur-sm
-
                         border
                         border-white/40
+
+                        backdrop-blur-sm
 
                         text-white
 
@@ -714,9 +650,8 @@ export function InstagramPost({
                         shadow-xl
 
                         hover:bg-black/70
-                        hover:scale-105
 
-                        transition-all
+                        transition-colors
                         duration-300
                       "
                     >
@@ -738,11 +673,9 @@ export function InstagramPost({
                   </>
                 )}
 
-              {/* =================================================
-                  INSTAGRAM PLAYER
-
-                  ONLY AFTER PLAY CLICK
-              ================================================= */}
+              {/* =============================================
+                  INSTAGRAM REEL PLAYER
+              ============================================= */}
 
               {reel &&
                 isPlaying && (
@@ -773,11 +706,9 @@ export function InstagramPost({
                   />
                 )}
 
-              {/* =================================================
+              {/* =============================================
                   YOUTUBE PLAYER
-
-                  ONLY AFTER PLAY CLICK
-              ================================================= */}
+              ============================================= */}
 
               {youtube &&
                 youtubeId &&
@@ -808,11 +739,10 @@ export function InstagramPost({
                     "
                   />
                 )}
-
             </div>
 
             {/* =================================================
-                RIGHT INFORMATION
+                RIGHT SIDE
             ================================================= */}
 
             <div
@@ -829,10 +759,9 @@ export function InstagramPost({
                 flex-col
               "
             >
-
-              {/* =================================================
+              {/* =============================================
                   PROFILE HEADER
-              ================================================= */}
+              ============================================= */}
 
               <div
                 className="
@@ -854,9 +783,6 @@ export function InstagramPost({
                   gap-3
                 "
               >
-
-                {/* LOGO */}
-
                 <div
                   className="
                     w-9
@@ -890,8 +816,6 @@ export function InstagramPost({
                     AG
                   </span>
                 </div>
-
-                {/* PROFILE */}
 
                 <div
                   className="
@@ -930,8 +854,6 @@ export function InstagramPost({
                   </span>
                 </div>
 
-                {/* PLATFORM */}
-
                 <div className="ml-auto">
                   {youtube ? (
                     <Youtube
@@ -951,12 +873,11 @@ export function InstagramPost({
                     />
                   )}
                 </div>
-
               </div>
 
-              {/* =================================================
-                  CONTENT
-              ================================================= */}
+              {/* =============================================
+                  CONTENT AREA
+              ============================================= */}
 
               <div
                 className="
@@ -971,7 +892,6 @@ export function InstagramPost({
                   md:py-7
                 "
               >
-
                 <span
                   className="
                     text-[9px]
@@ -1020,17 +940,15 @@ export function InstagramPost({
                     text-gray-600
                   "
                 >
-                  Designer menswear,
-                  handcrafted details and
-                  signature creations from
-                  Anup Gupta Studio.
+                  Designer menswear, handcrafted
+                  details and signature creations
+                  from Anup Gupta Studio.
                 </p>
-
               </div>
 
-              {/* =================================================
+              {/* =============================================
                   BOTTOM BAR
-              ================================================= */}
+              ============================================= */}
 
               <div
                 className="
@@ -1051,7 +969,6 @@ export function InstagramPost({
                   gap-4
                 "
               >
-
                 <span
                   className="
                     text-[9px]
@@ -1099,16 +1016,11 @@ export function InstagramPost({
                     "
                   />
                 </a>
-
               </div>
-
             </div>
-
           </div>
-
         </div>
       )}
-
     </>
   );
 }
