@@ -1,13 +1,19 @@
 import Image from 'next/image';
+
 import {
   Instagram,
   Youtube,
   Play,
   X,
   ExternalLink,
+  ImageIcon,
 } from 'lucide-react';
 
 import { fetchInstagramImage } from '@/app/actions/instagram';
+
+/* =========================================================
+   TYPES
+========================================================= */
 
 interface InstagramPostProps {
   url: string;
@@ -16,7 +22,7 @@ interface InstagramPostProps {
 }
 
 /* =========================================================
-   HELPERS
+   URL HELPERS
 ========================================================= */
 
 function cleanUrl(url: string) {
@@ -25,6 +31,10 @@ function cleanUrl(url: string) {
     .split('#')[0]
     .replace(/\/$/, '');
 }
+
+/* =========================================================
+   PLATFORM DETECTION
+========================================================= */
 
 function isInstagramUrl(url: string) {
   const value = (url || '').toLowerCase();
@@ -44,6 +54,10 @@ function isYoutubeUrl(url: string) {
   );
 }
 
+/* =========================================================
+   INSTAGRAM REEL DETECTION
+========================================================= */
+
 function isInstagramReel(url: string) {
   const value = (url || '').toLowerCase();
 
@@ -53,24 +67,34 @@ function isInstagramReel(url: string) {
   );
 }
 
+/* =========================================================
+   INSTAGRAM EMBED URL
+========================================================= */
+
 function getInstagramEmbedUrl(url: string) {
-  const cleaned = cleanUrl(url);
+  const cleanedUrl = cleanUrl(url);
 
-  if (!cleaned) return '';
+  if (!cleanedUrl) {
+    return '';
+  }
 
-  return `${cleaned}/embed/`;
+  return `${cleanedUrl}/embed/`;
 }
+
+/* =========================================================
+   YOUTUBE VIDEO ID
+========================================================= */
 
 function getYoutubeId(url: string) {
   try {
-    const parsed = new URL(url);
+    const parsedUrl = new URL(url);
 
     /* youtu.be/VIDEO_ID */
 
     if (
-      parsed.hostname.includes('youtu.be')
+      parsedUrl.hostname.includes('youtu.be')
     ) {
-      return parsed.pathname
+      return parsedUrl.pathname
         .replace('/', '')
         .split('/')[0];
     }
@@ -78,26 +102,30 @@ function getYoutubeId(url: string) {
     /* youtube.com/shorts/VIDEO_ID */
 
     if (
-      parsed.pathname.includes('/shorts/')
+      parsedUrl.pathname.includes('/shorts/')
     ) {
-      return parsed.pathname
-        .split('/shorts/')[1]
-        ?.split('/')[0];
+      return (
+        parsedUrl.pathname
+          .split('/shorts/')[1]
+          ?.split('/')[0] || null
+      );
     }
 
     /* youtube.com/embed/VIDEO_ID */
 
     if (
-      parsed.pathname.includes('/embed/')
+      parsedUrl.pathname.includes('/embed/')
     ) {
-      return parsed.pathname
-        .split('/embed/')[1]
-        ?.split('/')[0];
+      return (
+        parsedUrl.pathname
+          .split('/embed/')[1]
+          ?.split('/')[0] || null
+      );
     }
 
     /* youtube.com/watch?v=VIDEO_ID */
 
-    return parsed.searchParams.get('v');
+    return parsedUrl.searchParams.get('v');
   } catch {
     return null;
   }
@@ -112,6 +140,10 @@ export async function InstagramPost({
   index,
   coverImage,
 }: InstagramPostProps) {
+  /* ======================================================
+     BASIC MEDIA INFORMATION
+  ====================================================== */
+
   const isLink =
     Boolean(url) && url !== '#';
 
@@ -125,103 +157,116 @@ export async function InstagramPost({
     instagram &&
     isInstagramReel(url);
 
-  const isVideo =
+  const video =
     reel || youtube;
 
   /* ======================================================
-     GET COVER IMAGE
+     YOUTUBE ID
   ====================================================== */
-
-  let imageUrl =
-    coverImage || null;
-
-  /*
-    Keep your existing automatic Instagram
-    thumbnail fetching.
-  */
-
-  if (
-    !imageUrl &&
-    isLink &&
-    instagram
-  ) {
-    try {
-      imageUrl =
-        await fetchInstagramImage(url);
-    } catch (error) {
-      console.error(
-        'Instagram cover fetch error:',
-        error
-      );
-    }
-  }
-
-  /*
-    YouTube automatic thumbnail fallback.
-  */
 
   const youtubeId =
     youtube
       ? getYoutubeId(url)
       : null;
 
+  /* ======================================================
+     GET ACTUAL COVER IMAGE
+  ====================================================== */
+
+  let mediaCover:
+    | string
+    | null
+    | undefined = coverImage;
+
+  /*
+   * INSTAGRAM:
+   * Get actual Instagram post / Reel thumbnail
+   * if no manual cover image exists.
+   */
+
   if (
-    !imageUrl &&
-    youtube &&
-    youtubeId
+    !mediaCover &&
+    isLink &&
+    instagram
   ) {
-    imageUrl =
-      `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
+    try {
+      mediaCover =
+        await fetchInstagramImage(url);
+    } catch (error) {
+      console.error(
+        'Unable to fetch Instagram cover:',
+        error
+      );
+    }
   }
 
   /*
-    Final fallback.
-  */
+   * YOUTUBE:
+   * Use actual YouTube video thumbnail.
+   */
 
-  const finalImage =
-    imageUrl ||
-    `https://picsum.photos/seed/instagram_new_${index}/600/900`;
+  if (
+    !mediaCover &&
+    youtube &&
+    youtubeId
+  ) {
+    mediaCover =
+      `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+  }
 
   /* ======================================================
-     UNIQUE POPUP CONTROL
+     UNIQUE POPUP ID
   ====================================================== */
 
   const modalId =
-    `media-popup-${index}`;
+    `social-media-popup-${index}`;
+
+  /* ======================================================
+     PLATFORM LABEL
+  ====================================================== */
 
   const platformName =
     youtube
       ? 'YouTube'
-      : instagram
-        ? reel
-          ? 'Instagram Reel'
-          : 'Instagram Post'
-        : 'Media';
+      : reel
+        ? 'Instagram Reel'
+        : instagram
+          ? 'Instagram Post'
+          : 'Media';
+
+  /* ======================================================
+     RETURN
+  ====================================================== */
 
   return (
     <div className="relative w-full">
 
       {/* ===================================================
-          HIDDEN POPUP CONTROLLER
+          POPUP STATE
 
-          This allows everything to remain inside this
-          single instagram-post.tsx file.
+          No second component required.
+          Everything stays inside instagram-post.tsx
       =================================================== */}
 
       <input
-        type="checkbox"
         id={modalId}
-        className="peer hidden"
+        type="checkbox"
+        className="peer sr-only"
       />
 
       {/* ===================================================
-          HOMEPAGE POST / COVER
+          HOMEPAGE MEDIA CARD
       =================================================== */}
 
       <label
         htmlFor={
           isLink
             ? modalId
+            : undefined
+        }
+        aria-label={
+          isLink
+            ? `Open ${platformName}`
             : undefined
         }
         className={`
@@ -234,7 +279,7 @@ export async function InstagramPost({
 
           overflow-hidden
 
-          bg-gray-100
+          bg-[#f4f4f4]
 
           border-0
           p-0
@@ -246,395 +291,428 @@ export async function InstagramPost({
           }
         `}
       >
+
         {/* ===============================================
-            REAL COVER IMAGE
+            ACTUAL COVER IMAGE
         =============================================== */}
 
-        <Image
-          src={finalImage}
-          alt={`${platformName} ${index + 1}`}
-          fill
-          sizes="
-            (max-width: 768px) 50vw,
-            (max-width: 1024px) 33vw,
-            16vw
-          "
-          className="
-            object-cover
-          "
-          referrerPolicy="no-referrer"
-          unoptimized
-        />
+        {mediaCover ? (
+          <Image
+            src={mediaCover}
+            alt={`${platformName} ${index + 1}`}
+            fill
+            sizes="
+              (max-width: 768px) 50vw,
+              (max-width: 1024px) 33vw,
+              16vw
+            "
+            className="
+              object-cover
+            "
+            referrerPolicy="no-referrer"
+            unoptimized
+          />
+        ) : (
+
+          /* =============================================
+             ONLY SHOWN IF REAL COVER COULD NOT LOAD
+             NO RANDOM IMAGE
+          ============================================= */
+
+          <div
+            className="
+              absolute
+              inset-0
+
+              flex
+              flex-col
+              items-center
+              justify-center
+
+              gap-2
+
+              bg-neutral-100
+
+              text-neutral-400
+            "
+          >
+            {youtube ? (
+              <Youtube
+                className="w-6 h-6"
+                strokeWidth={1.4}
+              />
+            ) : instagram ? (
+              <Instagram
+                className="w-6 h-6"
+                strokeWidth={1.4}
+              />
+            ) : (
+              <ImageIcon
+                className="w-6 h-6"
+                strokeWidth={1.4}
+              />
+            )}
+
+            <span
+              className="
+                text-[9px]
+                uppercase
+                tracking-widest
+              "
+            >
+              Media
+            </span>
+          </div>
+        )}
 
         {/* ===============================================
-            HOVER OVERLAY
+            VERY LIGHT HOVER OVERLAY
 
-            NO ZOOM.
-            Image stays exactly in position.
+            NO IMAGE ZOOM
         =============================================== */}
 
         {isLink && (
-          <>
+          <div
+            className="
+              absolute
+              inset-0
+
+              bg-black/0
+
+              group-hover:bg-black/20
+
+              transition-colors
+              duration-300
+            "
+          />
+        )}
+
+        {/* ===============================================
+            SMALL CENTER ICON
+
+            ONLY ON HOVER
+        =============================================== */}
+
+        {isLink && (
+          <div
+            className="
+              absolute
+              inset-0
+
+              flex
+              items-center
+              justify-center
+
+              opacity-0
+
+              group-hover:opacity-100
+
+              transition-opacity
+              duration-300
+
+              pointer-events-none
+            "
+          >
             <div
               className="
-                absolute
-                inset-0
+                w-9
+                h-9
 
-                bg-black/0
+                md:w-10
+                md:h-10
 
-                group-hover:bg-black/20
+                rounded-full
 
-                transition-colors
-                duration-300
-              "
-            />
+                bg-black/45
 
-            {/* ===========================================
-                SMALL CENTER ICON
-                ONLY SHOWS ON HOVER
-            =========================================== */}
+                backdrop-blur-sm
 
-            <div
-              className="
-                absolute
-                inset-0
+                border
+                border-white/20
+
+                text-white
 
                 flex
                 items-center
                 justify-center
 
-                opacity-0
-
-                group-hover:opacity-100
-
-                transition-opacity
-                duration-300
+                shadow-lg
               "
             >
-              <div
-                className="
-                  w-9
-                  h-9
 
-                  md:w-10
-                  md:h-10
+              {/* VIDEO = PLAY */}
 
-                  rounded-full
+              {video ? (
+                <Play
+                  className="
+                    w-[15px]
+                    h-[15px]
 
-                  bg-black/45
+                    md:w-4
+                    md:h-4
 
-                  backdrop-blur-sm
+                    ml-[2px]
 
-                  border
-                  border-white/20
+                    fill-white
+                  "
+                  strokeWidth={1.5}
+                />
+              ) : (
 
-                  flex
-                  items-center
-                  justify-center
+                /* IMAGE POST = INSTAGRAM ICON */
 
-                  text-white
+                <Instagram
+                  className="
+                    w-4
+                    h-4
 
-                  shadow-lg
-                "
-              >
-                {isVideo ? (
-                  <Play
-                    className="
-                      w-4
-                      h-4
-
-                      md:w-[18px]
-                      md:h-[18px]
-
-                      ml-[2px]
-
-                      fill-white
-                    "
-                    strokeWidth={1.4}
-                  />
-                ) : (
-                  <Instagram
-                    className="
-                      w-[17px]
-                      h-[17px]
-
-                      md:w-[18px]
-                      md:h-[18px]
-                    "
-                    strokeWidth={1.7}
-                  />
-                )}
-              </div>
+                    md:w-[17px]
+                    md:h-[17px]
+                  "
+                  strokeWidth={1.7}
+                />
+              )}
             </div>
+          </div>
+        )}
 
-            {/* ===========================================
-                PLATFORM ICON - TOP RIGHT
-                ALSO ONLY ON HOVER
-            =========================================== */}
+        {/* ===============================================
+            SMALL PLATFORM ICON
+            TOP RIGHT
+            ONLY ON HOVER
+        =============================================== */}
 
+        {isLink && (
+          <div
+            className="
+              absolute
+
+              top-3
+              right-3
+
+              opacity-0
+
+              group-hover:opacity-100
+
+              transition-opacity
+              duration-300
+
+              pointer-events-none
+            "
+          >
             <div
               className="
-                absolute
+                w-8
+                h-8
 
-                top-3
-                right-3
+                rounded-full
 
-                opacity-0
+                bg-white/95
 
-                group-hover:opacity-100
+                text-black
 
-                transition-opacity
-                duration-300
+                flex
+                items-center
+                justify-center
+
+                shadow-md
               "
             >
-              <div
-                className="
-                  w-8
-                  h-8
-
-                  rounded-full
-
-                  bg-white/95
-
-                  text-black
-
-                  flex
-                  items-center
-                  justify-center
-
-                  shadow-md
-                "
-              >
-                {youtube ? (
-                  <Youtube
-                    className="
-                      w-4
-                      h-4
-                    "
-                    strokeWidth={1.8}
-                  />
-                ) : (
-                  <Instagram
-                    className="
-                      w-4
-                      h-4
-                    "
-                    strokeWidth={1.8}
-                  />
-                )}
-              </div>
+              {youtube ? (
+                <Youtube
+                  className="w-4 h-4"
+                  strokeWidth={1.8}
+                />
+              ) : (
+                <Instagram
+                  className="w-4 h-4"
+                  strokeWidth={1.8}
+                />
+              )}
             </div>
-          </>
+          </div>
         )}
+
       </label>
 
       {/* ===================================================
-          PREMIUM POPUP
-
-          Overlay covers screen.
-          White popup DOES NOT cover whole screen.
+          PREMIUM SAME-PAGE POPUP
       =================================================== */}
 
-      <div
-        className="
-          fixed
-          inset-0
-
-          z-[999999]
-
-          hidden
-
-          peer-checked:flex
-
-          items-center
-          justify-center
-
-          bg-black/75
-
-          backdrop-blur-[2px]
-
-          px-4
-          py-8
-
-          sm:px-8
-
-          md:px-14
-
-          lg:px-20
-        "
-      >
-
-        {/* =================================================
-            CLICK DARK AREA TO CLOSE
-        ================================================= */}
-
-        <label
-          htmlFor={modalId}
-          aria-label="Close popup"
-          className="
-            absolute
-            inset-0
-            cursor-pointer
-          "
-        />
-
-        {/* =================================================
-            CLOSE BUTTON
-        ================================================= */}
-
-        <label
-          htmlFor={modalId}
-          aria-label="Close media"
+      {isLink && (
+        <div
           className="
             fixed
+            inset-0
 
-            top-5
-            right-5
+            z-[999999]
 
-            md:top-7
-            md:right-8
+            hidden
+            peer-checked:flex
 
-            z-[1000001]
-
-            w-10
-            h-10
-
-            md:w-11
-            md:h-11
-
-            flex
             items-center
             justify-center
 
-            text-white
+            bg-black/75
 
-            bg-black/25
+            backdrop-blur-[2px]
 
-            border
-            border-white/40
+            px-4
+            py-8
 
-            cursor-pointer
+            sm:px-8
 
-            hover:bg-white
-            hover:text-black
+            md:px-14
 
-            transition-all
-            duration-300
-          "
-        >
-          <X
-            className="
-              w-6
-              h-6
-            "
-            strokeWidth={1.4}
-          />
-        </label>
-
-        {/* =================================================
-            CENTER POPUP
-        ================================================= */}
-
-        <div
-          className="
-            relative
-
-            z-[1000000]
-
-            w-full
-
-            max-w-[1050px]
-
-            h-[76vh]
-
-            max-h-[720px]
-
-            bg-white
-
-            rounded-[14px]
-
-            overflow-hidden
-
-            shadow-[0_35px_100px_rgba(0,0,0,0.65)]
-
-            flex
-
-            flex-col
-
-            md:flex-row
+            lg:px-20
           "
         >
 
           {/* =================================================
-              LEFT MEDIA AREA
+              DARK BACKGROUND
+              CLICK TO CLOSE
+          ================================================= */}
+
+          <label
+            htmlFor={modalId}
+            aria-label="Close popup"
+            className="
+              absolute
+              inset-0
+
+              cursor-pointer
+            "
+          />
+
+          {/* =================================================
+              CLOSE BUTTON
+          ================================================= */}
+
+          <label
+            htmlFor={modalId}
+            aria-label="Close media"
+            className="
+              fixed
+
+              top-5
+              right-5
+
+              md:top-7
+              md:right-8
+
+              z-[1000002]
+
+              w-10
+              h-10
+
+              md:w-11
+              md:h-11
+
+              rounded-full
+
+              flex
+              items-center
+              justify-center
+
+              bg-black/35
+
+              text-white
+
+              border
+              border-white/30
+
+              backdrop-blur-sm
+
+              cursor-pointer
+
+              hover:bg-white
+              hover:text-black
+
+              transition-all
+              duration-300
+            "
+          >
+            <X
+              className="w-5 h-5"
+              strokeWidth={1.5}
+            />
+          </label>
+
+          {/* =================================================
+              MAIN POPUP
+
+              MEDIUM SIZE — NOT FULL SCREEN
           ================================================= */}
 
           <div
             className="
               relative
 
+              z-[1000001]
+
               w-full
 
-              md:w-[52%]
+              max-w-[1000px]
 
-              h-[52%]
+              h-[74vh]
 
-              md:h-full
+              max-h-[700px]
 
-              bg-[#f3f3f1]
+              bg-white
+
+              rounded-[14px]
 
               overflow-hidden
+
+              shadow-[0_35px_100px_rgba(0,0,0,0.65)]
+
+              flex
+              flex-col
+
+              md:flex-row
             "
           >
 
-            {/* ===============================================
-                INSTAGRAM REEL
-            =============================================== */}
+            {/* =================================================
+                LEFT MEDIA AREA
+            ================================================= */}
 
-            {reel && (
-              <iframe
-                src={
-                  getInstagramEmbedUrl(url)
-                }
-                title={`Instagram Reel ${index + 1}`}
-                allow="
-                  autoplay;
-                  clipboard-write;
-                  encrypted-media;
-                  picture-in-picture;
-                  web-share
-                "
-                allowFullScreen
-                loading="lazy"
-                className="
-                  absolute
-                  inset-0
+            <div
+              className="
+                relative
 
-                  w-full
-                  h-full
+                w-full
 
-                  border-0
+                md:w-[55%]
 
-                  bg-black
-                "
-              />
-            )}
+                h-[55%]
 
-            {/* ===============================================
-                YOUTUBE VIDEO
-            =============================================== */}
+                md:h-full
 
-            {youtube &&
-              youtubeId && (
+                bg-[#f3f3f1]
+
+                overflow-hidden
+
+                flex
+                items-center
+                justify-center
+              "
+            >
+
+              {/* =============================================
+                  INSTAGRAM REEL / VIDEO
+              ============================================= */}
+
+              {reel && (
                 <iframe
-                  src={`https://www.youtube.com/embed/${youtubeId}?rel=0`}
-                  title={`YouTube Video ${index + 1}`}
+                  src={
+                    getInstagramEmbedUrl(url)
+                  }
+                  title={`Instagram Reel ${index + 1}`}
                   allow="
-                    accelerometer;
                     autoplay;
                     clipboard-write;
                     encrypted-media;
-                    gyroscope;
                     picture-in-picture;
                     web-share
                   "
@@ -654,221 +732,341 @@ export async function InstagramPost({
                 />
               )}
 
-            {/* ===============================================
-                INSTAGRAM IMAGE POST
+              {/* =============================================
+                  YOUTUBE VIDEO
+              ============================================= */}
 
-                Uses same cover.
-                No zoom.
-                No crop inside popup.
-            =============================================== */}
+              {youtube &&
+                youtubeId && (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`}
+                    title={`YouTube video ${index + 1}`}
+                    allow="
+                      accelerometer;
+                      autoplay;
+                      clipboard-write;
+                      encrypted-media;
+                      gyroscope;
+                      picture-in-picture;
+                      web-share
+                    "
+                    allowFullScreen
+                    loading="lazy"
+                    className="
+                      absolute
+                      inset-0
 
-            {!isVideo && (
-              <Image
-                src={finalImage}
-                alt={`Instagram Post ${index + 1}`}
-                fill
-                sizes="
-                  (max-width: 768px) 100vw,
-                  52vw
-                "
-                className="
-                  object-contain
-                "
-                referrerPolicy="no-referrer"
-                unoptimized
-              />
-            )}
-          </div>
+                      w-full
+                      h-full
 
-          {/* =================================================
-              RIGHT CONTENT AREA
-          ================================================= */}
+                      border-0
 
-          <div
-            className="
-              relative
+                      bg-black
+                    "
+                  />
+                )}
 
-              w-full
+              {/* =============================================
+                  INSTAGRAM IMAGE POST
 
-              md:w-[48%]
+                  Exact fetched cover.
+                  NO CROPPING.
+                  NO ZOOM.
+              ============================================= */}
 
-              h-[48%]
+              {!video &&
+                mediaCover && (
+                  <Image
+                    src={mediaCover}
+                    alt={`Instagram post ${index + 1}`}
+                    fill
+                    sizes="
+                      (max-width: 768px) 100vw,
+                      55vw
+                    "
+                    className="
+                      object-contain
+                    "
+                    referrerPolicy="no-referrer"
+                    unoptimized
+                  />
+                )}
 
-              md:h-full
+            </div>
 
-              bg-white
-
-              flex
-              flex-col
-            "
-          >
-
-            {/* ===============================================
-                PROFILE HEADER
-            =============================================== */}
+            {/* =================================================
+                RIGHT INFORMATION AREA
+            ================================================= */}
 
             <div
               className="
-                min-h-[68px]
+                relative
 
-                md:min-h-[76px]
+                w-full
 
-                shrink-0
+                md:w-[45%]
 
-                border-b
-                border-gray-200
+                h-[45%]
 
-                px-5
+                md:h-full
 
-                md:px-6
+                bg-white
 
                 flex
-                items-center
-
-                gap-3
+                flex-col
               "
             >
 
-              {/* LOGO */}
+              {/* =============================================
+                  PROFILE HEADER
+              ============================================= */}
 
               <div
                 className="
-                  w-9
-                  h-9
+                  min-h-[68px]
 
-                  md:w-10
-                  md:h-10
+                  md:min-h-[76px]
 
-                  rounded-full
+                  shrink-0
 
-                  bg-black
+                  border-b
+                  border-gray-200
 
-                  text-white
+                  px-5
+
+                  md:px-6
 
                   flex
                   items-center
-                  justify-center
 
-                  shrink-0
+                  gap-3
                 "
               >
-                <span
+
+                {/* BRAND ICON */}
+
+                <div
                   className="
-                    text-[9px]
+                    w-9
+                    h-9
 
-                    font-serif
+                    md:w-10
+                    md:h-10
 
-                    tracking-wide
+                    rounded-full
+
+                    bg-black
+
+                    text-white
+
+                    flex
+                    items-center
+                    justify-center
+
+                    shrink-0
                   "
                 >
-                  AG
-                </span>
+                  <span
+                    className="
+                      font-serif
+
+                      text-[9px]
+
+                      tracking-wide
+                    "
+                  >
+                    AG
+                  </span>
+                </div>
+
+                {/* PROFILE */}
+
+                <div
+                  className="
+                    min-w-0
+
+                    flex
+                    flex-col
+                  "
+                >
+                  <span
+                    className="
+                      text-[13px]
+
+                      md:text-[14px]
+
+                      font-semibold
+
+                      text-black
+
+                      truncate
+                    "
+                  >
+                    anupguptadesigner
+                  </span>
+
+                  <span
+                    className="
+                      text-[10px]
+
+                      md:text-[11px]
+
+                      text-gray-500
+                    "
+                  >
+                    Anup Gupta Studio
+                  </span>
+                </div>
+
+                {/* SOURCE ICON */}
+
+                <div className="ml-auto">
+                  {youtube ? (
+                    <Youtube
+                      className="
+                        w-5
+                        h-5
+                      "
+                      strokeWidth={1.6}
+                    />
+                  ) : (
+                    <Instagram
+                      className="
+                        w-5
+                        h-5
+                      "
+                      strokeWidth={1.6}
+                    />
+                  )}
+                </div>
+
               </div>
 
-              {/* ACCOUNT */}
+              {/* =============================================
+                  CONTENT
+              ============================================= */}
 
               <div
                 className="
-                  flex
-                  flex-col
+                  flex-1
+
+                  overflow-y-auto
+
+                  px-5
+                  py-5
+
+                  md:px-7
+                  md:py-7
                 "
               >
-                <span
+
+                {/* PLATFORM */}
+
+                <div
                   className="
-                    text-[13px]
+                    flex
+                    items-center
+                    gap-2
 
-                    md:text-[14px]
-
-                    font-semibold
-
-                    text-black
+                    mb-5
                   "
                 >
-                  anupguptadesigner
-                </span>
+                  {youtube ? (
+                    <Youtube
+                      className="w-4 h-4"
+                      strokeWidth={1.6}
+                    />
+                  ) : (
+                    <Instagram
+                      className="w-4 h-4"
+                      strokeWidth={1.6}
+                    />
+                  )}
 
-                <span
+                  <span
+                    className="
+                      text-[9px]
+
+                      md:text-[10px]
+
+                      uppercase
+
+                      tracking-[0.18em]
+
+                      font-semibold
+
+                      text-gray-500
+                    "
+                  >
+                    {platformName}
+                  </span>
+                </div>
+
+                {/* TITLE */}
+
+                <h3
                   className="
-                    text-[10px]
+                    text-[17px]
 
-                    md:text-[11px]
+                    md:text-[19px]
 
-                    text-gray-500
+                    font-medium
+
+                    text-black
+
+                    mb-3
                   "
                 >
                   Anup Gupta Studio
-                </span>
+                </h3>
+
+                {/* DESCRIPTION */}
+
+                <p
+                  className="
+                    max-w-md
+
+                    text-[12px]
+
+                    md:text-[13px]
+
+                    leading-[1.7]
+
+                    text-gray-600
+                  "
+                >
+                  Discover our latest designer
+                  menswear, handcrafted details,
+                  signature styles and premium
+                  creations.
+                </p>
+
               </div>
 
-              {/* PLATFORM ICON */}
+              {/* =============================================
+                  BOTTOM ACTION BAR
+              ============================================= */}
 
               <div
                 className="
-                  ml-auto
-                "
-              >
-                {youtube ? (
-                  <Youtube
-                    className="
-                      w-5
-                      h-5
-                    "
-                    strokeWidth={1.6}
-                  />
-                ) : (
-                  <Instagram
-                    className="
-                      w-5
-                      h-5
-                    "
-                    strokeWidth={1.6}
-                  />
-                )}
-              </div>
-            </div>
+                  min-h-[54px]
 
-            {/* ===============================================
-                DESCRIPTION AREA
-            =============================================== */}
+                  shrink-0
 
-            <div
-              className="
-                flex-1
+                  border-t
+                  border-gray-200
 
-                overflow-y-auto
+                  px-5
 
-                px-5
-                py-5
+                  md:px-6
 
-                md:px-7
-                md:py-7
-              "
-            >
-
-              <div
-                className="
                   flex
                   items-center
-                  gap-2
+                  justify-between
 
-                  mb-4
+                  gap-4
                 "
               >
-                {youtube ? (
-                  <Youtube
-                    className="
-                      w-4
-                      h-4
-                    "
-                  />
-                ) : (
-                  <Instagram
-                    className="
-                      w-4
-                      h-4
-                    "
-                  />
-                )}
 
                 <span
                   className="
@@ -878,136 +1076,63 @@ export async function InstagramPost({
 
                     uppercase
 
-                    tracking-[0.18em]
-
-                    font-semibold
+                    tracking-[0.14em]
 
                     text-gray-500
                   "
                 >
-                  {platformName}
+                  Anup Gupta Studio
                 </span>
+
+                {/* ORIGINAL SOURCE LINK */}
+
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+                    flex
+                    items-center
+                    gap-1.5
+
+                    text-[9px]
+
+                    md:text-[10px]
+
+                    font-semibold
+
+                    uppercase
+
+                    tracking-[0.14em]
+
+                    text-black
+
+                    hover:opacity-60
+
+                    transition-opacity
+                  "
+                >
+                  {youtube
+                    ? 'View on YouTube'
+                    : 'View on Instagram'}
+
+                  <ExternalLink
+                    className="
+                      w-3
+                      h-3
+                    "
+                  />
+                </a>
+
               </div>
 
-              <h3
-                className="
-                  text-[17px]
-
-                  md:text-[19px]
-
-                  font-medium
-
-                  text-black
-
-                  mb-3
-                "
-              >
-                Anup Gupta Studio
-              </h3>
-
-              <p
-                className="
-                  text-[12px]
-
-                  md:text-[13px]
-
-                  leading-[1.7]
-
-                  text-gray-600
-
-                  max-w-md
-                "
-              >
-                Discover our latest designer
-                menswear, handcrafted details,
-                signature styles and premium
-                creations.
-              </p>
             </div>
 
-            {/* ===============================================
-                BOTTOM BAR
-            =============================================== */}
-
-            <div
-              className="
-                min-h-[52px]
-
-                md:min-h-[56px]
-
-                shrink-0
-
-                border-t
-                border-gray-200
-
-                px-5
-
-                md:px-6
-
-                flex
-                items-center
-                justify-between
-
-                gap-4
-              "
-            >
-              <span
-                className="
-                  text-[9px]
-
-                  md:text-[10px]
-
-                  uppercase
-
-                  tracking-[0.14em]
-
-                  text-gray-500
-                "
-              >
-                Anup Gupta Studio
-              </span>
-
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="
-                  flex
-                  items-center
-                  gap-1.5
-
-                  text-[9px]
-
-                  md:text-[10px]
-
-                  font-semibold
-
-                  uppercase
-
-                  tracking-[0.14em]
-
-                  text-black
-
-                  hover:opacity-60
-
-                  transition-opacity
-                "
-              >
-                {youtube
-                  ? 'YouTube'
-                  : 'Instagram'}
-
-                <ExternalLink
-                  className="
-                    w-3
-                    h-3
-                  "
-                />
-              </a>
-            </div>
           </div>
+
         </div>
-      </div>
+      )}
+
     </div>
   );
 }
