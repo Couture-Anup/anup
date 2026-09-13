@@ -11,7 +11,6 @@ import { InstagramPost } from "@/components/instagram-post";
 import { client } from "@/lib/sanity";
 
 import {
-  HERO_QUERY,
   CATEGORIES_QUERY,
   MARQUEE_QUERY,
   NEW_ARRIVALS_QUERY,
@@ -20,7 +19,6 @@ import {
   CELEBRITIES_QUERY,
   GLOBAL_SETTINGS_QUERY,
 } from "@/lib/queries";
-
 
 const FALLBACK_CELEBRITIES = [
   {
@@ -65,7 +63,6 @@ const FALLBACK_CELEBRITIES = [
   },
 ];
 
-
 const FALLBACK_NEW_DROPS = [
   {
     title: "Slither(Snake) - Hand Embroidered Designer Shirt",
@@ -93,7 +90,6 @@ const FALLBACK_NEW_DROPS = [
     seed: "zodiac",
   },
 ];
-
 
 const FALLBACK_BESTSELLERS = [
   {
@@ -123,7 +119,6 @@ const FALLBACK_BESTSELLERS = [
     seed: "scorpion",
   },
 ];
-
 
 const mapProduct = (product: any) => ({
   title: product.title,
@@ -161,21 +156,17 @@ const mapProduct = (product: any) => ({
   categorySlugs: product.categorySlugs,
 });
 
-
 function HomeLoader() {
   return (
     <div className="w-full min-h-screen flex flex-col">
-
       {/* HERO SKELETON */}
       <div className="w-full h-[80vh] md:h-screen bg-gray-100 animate-pulse" />
 
       {/* SECTION SKELETON */}
       <div className="max-w-[1600px] mx-auto px-4 lg:px-8 py-16 w-full">
-
         <div className="h-6 w-64 bg-gray-200 mb-8 animate-pulse" />
 
         <div className="flex gap-4 overflow-hidden">
-
           <div className="w-[75vw] sm:w-[350px] shrink-0 aspect-[3/4] bg-gray-100 animate-pulse" />
 
           <div className="w-[75vw] sm:w-[350px] shrink-0 aspect-[3/4] bg-gray-100 animate-pulse" />
@@ -183,20 +174,14 @@ function HomeLoader() {
           <div className="w-[75vw] sm:w-[350px] shrink-0 aspect-[3/4] bg-gray-100 animate-pulse" />
 
           <div className="w-[75vw] sm:w-[350px] shrink-0 aspect-[3/4] bg-gray-100 animate-pulse hidden md:block" />
-
         </div>
-
       </div>
-
     </div>
   );
 }
 
-
 async function HomeContent() {
-
   const [
-    heroRaw,
     categoriesRaw,
     marqueeRaw,
     newArrivalsRaw,
@@ -205,11 +190,6 @@ async function HomeContent() {
     celebritiesRaw,
     settingsRaw,
   ] = await Promise.all([
-
-    client
-      .fetch(HERO_QUERY)
-      .catch(() => []),
-
     client
       .fetch(CATEGORIES_QUERY)
       .catch(() => []),
@@ -239,16 +219,7 @@ async function HomeContent() {
       .catch(() => null),
   ]);
 
-
-  const heroSlides =
-    heroRaw.length > 0
-      ? heroRaw
-      : undefined;
-
-
-  const categories =
-    categoriesRaw;
-
+  const categories = categoriesRaw;
 
   const marquee = {
     text:
@@ -260,39 +231,32 @@ async function HomeContent() {
       "https://picsum.photos/seed/defining_days_new/1920/1080",
   };
 
-
   const newDrops =
     newArrivalsRaw.length > 0
       ? newArrivalsRaw
       : FALLBACK_NEW_DROPS;
-
 
   const bestsellers =
     bestsellersRaw.length > 0
       ? bestsellersRaw
       : FALLBACK_BESTSELLERS;
 
-
   const featuredSections =
     featuredSectionsRaw;
-
 
   const celebrities =
     celebritiesRaw.length > 0
       ? celebritiesRaw
       : FALLBACK_CELEBRITIES;
 
-
   const instagramLinks =
     settingsRaw?.instagramLinks || [];
-
 
   const displayInstaCount =
     Math.max(
       6,
       instagramLinks.length
     );
-
 
   return (
     <main className="min-h-screen">
@@ -301,26 +265,20 @@ async function HomeContent() {
           HERO SECTION
       ====================================================== */}
 
-      <HeroSlideshow
-        slides={heroSlides}
-      />
-
+      <HeroSlideshow />
 
       {/* ======================================================
           CELEBRITIES
       ====================================================== */}
 
       <section className="max-w-[1600px] mx-auto px-4 lg:px-8 py-16 overflow-hidden">
-
         <SectionHeader
           title="Our Customers are celebrities for us"
         />
 
         <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 lg:gap-6 no-scrollbar pb-4 -mx-4 px-4 lg:mx-0 lg:px-0">
-
           {celebrities.map(
             (celeb: any, idx: number) => (
-
               <Link
                 href={
                   celeb.link ||
@@ -340,9 +298,7 @@ async function HomeContent() {
                   md:w-[400px]
                 "
               >
-
                 <div className="relative aspect-[3/4] overflow-hidden bg-[#f5f5f5] mb-3">
-
                   <Image
                     src={
                       celeb.imageUrl ||
@@ -359,7 +315,6 @@ async function HomeContent() {
                     "
                     referrerPolicy="no-referrer"
                   />
-
                 </div>
 
                 <h3
@@ -378,34 +333,25 @@ async function HomeContent() {
                 >
                   {celeb.name}
                 </h3>
-
               </Link>
-
             )
           )}
-
         </div>
-
       </section>
-
 
       {/* ======================================================
           POPULAR CATEGORIES
       ====================================================== */}
 
       <section className="bg-white py-16 overflow-hidden">
-
         <div className="max-w-[1600px] mx-auto px-4 lg:px-8">
-
           <SectionHeader
             title="Popular Categories"
           />
 
           <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 lg:gap-6 no-scrollbar pb-4 -mx-4 px-4 lg:mx-0 lg:px-0">
-
             {categories.map(
               (cat: any) => (
-
                 <Link
                   href={`/category/${cat.slug || cat.seed}`}
                   key={cat.title}
@@ -419,9 +365,7 @@ async function HomeContent() {
                     lg:w-[360px]
                   "
                 >
-
                   <div className="relative aspect-[3/4] mb-4 overflow-hidden bg-gray-100">
-
                     <Image
                       src={
                         cat.imageUrl ||
@@ -453,7 +397,6 @@ async function HomeContent() {
                         duration-500
                       "
                     />
-
                   </div>
 
                   <h3
@@ -468,27 +411,19 @@ async function HomeContent() {
                   >
                     {cat.title}
                   </h3>
-
                 </Link>
-
               )
             )}
-
           </div>
-
         </div>
-
       </section>
-
 
       {/* ======================================================
           NEW DROPS
       ====================================================== */}
 
       <section className="bg-[#f8f8f8] py-16">
-
         <div className="max-w-[1600px] mx-auto px-4 lg:px-8">
-
           <SectionHeader
             title="New Drops"
             viewAll
@@ -496,13 +431,11 @@ async function HomeContent() {
           />
 
           <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 lg:gap-6 no-scrollbar pb-4 -mx-4 px-4 lg:mx-0 lg:px-0">
-
             {newDrops.map(
               (
                 product: any,
                 idx: number
               ) => {
-
                 const mapped =
                   mapProduct(
                     product
@@ -529,23 +462,17 @@ async function HomeContent() {
                 );
               }
             )}
-
           </div>
-
         </div>
-
       </section>
-
 
       {/* ======================================================
           DEFINING DAYS / MARQUEE BANNER
       ====================================================== */}
 
       <section className="w-full bg-white">
-
         {/* IMAGE */}
         <div className="relative w-full h-[80vh] overflow-hidden">
-
           <Image
             src={marquee.imageUrl}
             alt="Defining Days"
@@ -558,7 +485,6 @@ async function HomeContent() {
 
           {/* VERY LIGHT IMAGE OVERLAY */}
           <div className="absolute inset-0 bg-black/10" />
-
 
           {/* SHOP NOW BUTTON */}
           <div
@@ -573,7 +499,6 @@ async function HomeContent() {
               md:pb-14
             "
           >
-
             <Link
               href="/collection/all"
               className="
@@ -597,20 +522,15 @@ async function HomeContent() {
             >
               Shop Now
             </Link>
-
           </div>
-
         </div>
 
-
-           {/* ==================================================
+        {/* ==================================================
             FLOATING HEADLINE BELOW IMAGE
         ================================================== */}
 
         <div className="w-full bg-white py-8 md:py-10 overflow-hidden">
-
           <div className="w-full px-5 md:px-10 lg:px-14">
-
             <div
               className="
                 headline-floating
@@ -634,12 +554,9 @@ async function HomeContent() {
             >
               {marquee.text}
             </div>
-
           </div>
-
         </div>
       </section>
-
 
       {/* ======================================================
           DYNAMIC FEATURED SECTIONS
@@ -650,14 +567,12 @@ async function HomeContent() {
           section: any,
           sectionIdx: number
         ) => {
-
           if (
             !section.products ||
             section.products.length === 0
           ) {
             return null;
           }
-
 
           return (
             <section
@@ -674,9 +589,7 @@ async function HomeContent() {
                 }
               `}
             >
-
               <div className="max-w-[1600px] mx-auto px-4 lg:px-8">
-
                 <SectionHeader
                   title={section.title}
                   viewAll
@@ -684,13 +597,11 @@ async function HomeContent() {
                 />
 
                 <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 lg:gap-6 no-scrollbar pb-4 -mx-4 px-4 lg:mx-0 lg:px-0">
-
                   {section.products.map(
                     (
                       product: any,
                       idx: number
                     ) => {
-
                       const mapped =
                         mapProduct(
                           product
@@ -717,25 +628,19 @@ async function HomeContent() {
                       );
                     }
                   )}
-
                 </div>
-
               </div>
-
             </section>
           );
         }
       )}
-
 
       {/* ======================================================
           BESTSELLERS
       ====================================================== */}
 
       <section className="bg-white py-16">
-
         <div className="max-w-[1600px] mx-auto px-4 lg:px-8">
-
           <SectionHeader
             title="Bestsellers"
             viewAll
@@ -743,13 +648,11 @@ async function HomeContent() {
           />
 
           <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 lg:gap-6 no-scrollbar pb-4 -mx-4 px-4 lg:mx-0 lg:px-0">
-
             {bestsellers.map(
               (
                 product: any,
                 idx: number
               ) => {
-
                 const mapped =
                   mapProduct(
                     product
@@ -776,22 +679,16 @@ async function HomeContent() {
                 );
               }
             )}
-
           </div>
-
         </div>
-
       </section>
-
 
       {/* ======================================================
           PROMISES
       ====================================================== */}
 
       <section className="bg-white text-gray-900 py-16 lg:py-24 text-center border-t border-gray-100">
-
         <div className="max-w-[1600px] mx-auto px-4 lg:px-8">
-
           <h2
             className="
               text-xl
@@ -805,11 +702,8 @@ async function HomeContent() {
             Now, That&apos;s A Promise
           </h2>
 
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 max-w-4xl mx-auto">
-
             <div className="flex flex-col items-center space-y-4">
-
               <ShieldCheck
                 className="w-10 h-10 stroke-[1.5]"
               />
@@ -821,12 +715,9 @@ async function HomeContent() {
               <p className="text-gray-600 text-sm leading-relaxed max-w-[250px] mx-auto">
                 Designs that inspire.
               </p>
-
             </div>
 
-
             <div className="flex flex-col items-center space-y-4">
-
               <Award
                 className="w-10 h-10 stroke-[1.5]"
               />
@@ -838,12 +729,9 @@ async function HomeContent() {
               <p className="text-gray-600 text-sm leading-relaxed max-w-[250px] mx-auto">
                 Meticulousness and craftsmanship that is of the next level.
               </p>
-
             </div>
 
-
             <div className="flex flex-col items-center space-y-4">
-
               <ThumbsUp
                 className="w-10 h-10 stroke-[1.5]"
               />
@@ -855,24 +743,17 @@ async function HomeContent() {
               <p className="text-gray-600 text-sm leading-relaxed max-w-[250px] mx-auto">
                 A tale that speaks for itself - premium fashion has never been so accessible!
               </p>
-
             </div>
-
           </div>
-
         </div>
-
       </section>
-
 
       {/* ======================================================
           INSTAGRAM
       ====================================================== */}
 
       <section className="w-full bg-white pb-16">
-
         <div className="py-8 md:py-12 text-center border-t border-gray-100">
-
           <h2
             className="
               text-sm
@@ -884,23 +765,17 @@ async function HomeContent() {
           >
             FOLLOW US ON INSTAGRAM
           </h2>
-
         </div>
 
-
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 xl:px-12">
-
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 w-full gap-0">
-
             {Array.from({
               length:
                 displayInstaCount,
             }).map(
               (_, i) => {
-
                 const linkItem =
                   instagramLinks[i];
-
 
                 const link =
                   typeof linkItem ===
@@ -912,13 +787,11 @@ async function HomeContent() {
                     ? linkItem
                     : "#";
 
-
                 const coverImage =
                   typeof linkItem ===
                   "object"
                     ? linkItem?.coverImage
                     : undefined;
-
 
                 return (
                   <Suspense
@@ -938,12 +811,9 @@ async function HomeContent() {
                 );
               }
             )}
-
           </div>
 
-
           <div className="mt-2 md:mt-3 text-center">
-
             <a
               href="https://www.instagram.com/anupguptadesigner/"
               target="_blank"
@@ -965,17 +835,12 @@ async function HomeContent() {
             >
               @anupguptadesigner
             </a>
-
           </div>
-
         </div>
-
       </section>
-
     </main>
   );
 }
-
 
 export default function Home() {
   return (
