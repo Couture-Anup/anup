@@ -747,118 +747,113 @@ export function Navbar({
       </div>
 
 
+{/* ===================================================
+    CALL ASSISTANCE BAR
+=================================================== */}
 
-      {/* ===================================================
-          WHATSAPP ASSISTANCE BAR
-      =================================================== */}
+<a
+  href="tel:+919625981155"
+  aria-label="Call Anup Gupta Studio at +91 96259 81155"
+  className="
+    w-full
+    min-h-[44px]
+    bg-white
+    border-b
+    border-gray-200
+    px-4
+    py-2
+    flex
+    items-center
+    justify-center
+    gap-2.5
+    text-black
+    hover:bg-gray-50
+    transition-colors
+    duration-200
+    cursor-pointer
+  "
+>
+  {/* =================================================
+      CALL ICON
+  ================================================= */}
 
-      <a
-
-        href="https://wa.me/919625981155"
-
-        target="_blank"
-
-        rel="noopener noreferrer"
-
-        aria-label="WhatsApp Anup Gupta Studio"
-
-        className="
-          w-full
-
-          min-h-[44px]
-
-          bg-white
-
-          border-b
-
-          border-gray-200
-
-          px-4
-
-          py-2
-
-          flex
-
-          items-center
-
-          justify-center
-
-          gap-2.5
-
-          text-black
-
-          hover:bg-gray-50
-
-          transition-colors
+  <div
+    className="
+      w-7
+      h-7
+      rounded-full
+      bg-[#0057B8]
+      flex
+      items-center
+      justify-center
+      shrink-0
+    "
+    aria-hidden="true"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="white"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="
+        w-4
+        h-4
+      "
+    >
+      <path
+        d="
+          M22 16.92v3
+          a2 2 0 0 1-2.18 2
+          19.79 19.79 0 0 1-8.63-3.07
+          19.5 19.5 0 0 1-6-6
+          19.79 19.79 0 0 1-3.07-8.67
+          A2 2 0 0 1 4.11 2h3
+          a2 2 0 0 1 2 1.72
+          c.12.9.33 1.78.62 2.63
+          a2 2 0 0 1-.45 2.11
+          L8 9.73
+          a16 16 0 0 0 6 6
+          l1.27-1.27
+          a2 2 0 0 1 2.11-.45
+          c.85.29 1.73.5 2.63.62
+          A2 2 0 0 1 22 16.92z
         "
+      />
+    </svg>
+  </div>
 
-      >
+  {/* =================================================
+      CALL ASSISTANCE TEXT
+  ================================================= */}
 
-        {/* WHATSAPP LOGO */}
-        <div
-          className="
-            w-6
-            h-6
-            rounded-full
-            bg-[#25D366]
-            flex
-            items-center
-            justify-center
-            shrink-0
-          "
-          aria-hidden="true"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            className="w-4 h-4"
-            fill="white"
-          >
-            <path d="M12.04 2C6.58 2 2.14 6.44 2.14 11.9c0 1.74.45 3.44 1.31 4.94L2 22l5.3-1.39a9.86 9.86 0 0 0 4.73 1.2h.01c5.46 0 9.9-4.44 9.9-9.9C21.94 6.44 17.5 2 12.04 2zm5.77 14.16c-.24.67-1.4 1.28-1.93 1.36-.49.07-1.11.1-1.79-.11-.41-.13-.94-.31-1.62-.6-2.85-1.23-4.71-4.09-4.85-4.28-.14-.19-1.16-1.54-1.16-2.94 0-1.4.73-2.09.99-2.38.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.58.8 1.98.87 2.12.07.14.12.31.02.5-.1.19-.14.31-.28.48-.14.17-.3.38-.43.51-.14.14-.29.29-.12.57.17.29.76 1.25 1.63 2.02 1.12 1 2.07 1.31 2.36 1.46.29.14.46.12.63-.07.17-.19.73-.85.92-1.14.19-.29.38-.24.64-.14.26.1 1.65.78 1.93.92.29.14.48.22.55.34.07.12.07.68-.17 1.35z" />
-          </svg>
-        </div>
+  <span
+    className="
+      text-[10px]
+      sm:text-xs
+      md:text-[14px]
+      lg:text-[15px]
+      font-normal
+      leading-tight
+      text-center
+    "
+  >
+    For any assistance, queries, or early delivery requests,
+    call us at{' '}
 
-
-        <span
-
-          className="
-            text-[10px]
-
-            sm:text-xs
-
-            md:text-[14px]
-
-            lg:text-[15px]
-
-            font-normal
-
-            leading-tight
-
-            text-center
-          "
-
-        >
-
-          For any assistance, queries, or early
-          delivery requests, WhatsApp us at{' '}
-
-          <strong
-            className="
-              text-[#0057B8]
-
-              font-bold
-
-              whitespace-nowrap
-            "
-          >
-
-            +91 96259 81155
-
-          </strong>
-
-        </span>
-
-      </a>
+    <strong
+      className="
+        text-[#0057B8]
+        font-bold
+        whitespace-nowrap
+      "
+    >
+      +91 96259 81155
+    </strong>
+  </span>
+</a>
 
 
 
