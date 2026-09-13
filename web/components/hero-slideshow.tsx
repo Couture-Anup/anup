@@ -14,7 +14,7 @@ interface Slide {
   description?: string;
   imageUrl?: string;
   link?: string;
-}slider-3.png
+}
 
 const SLIDES: Slide[] = [
   {
