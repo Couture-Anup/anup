@@ -2,9 +2,19 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { ShoppingBag, MoveLeft, MoveRight } from 'lucide-react';
 import { useState } from 'react';
-import { QuickAddModal } from './quick-add-modal';
+
+const QuickAddModal = dynamic(
+  () =>
+    import('./quick-add-modal').then(
+      (mod) => mod.QuickAddModal
+    ),
+  {
+    ssr: false,
+  }
+);
 
 interface ProductCardProps {
   title: string;
@@ -40,14 +50,6 @@ export function ProductCard({
   const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
   const [currentImageIdx, setCurrentImageIdx] = useState(0);
 
-  /*
-   * Listing pages now normally receive:
-   * 1. main image
-   * 2. first gallery image as hoverImageUrl
-   *
-   * galleryUrls remains supported if another page supplies it,
-   * but it is no longer required.
-   */
   const images = Array.from(
     new Set(
       [
@@ -93,7 +95,6 @@ export function ProductCard({
           className="relative aspect-[3/4] overflow-hidden mb-3 bg-[#f5f5f5] block"
           onClick={onClick}
         >
-          {/* Main / selected image */}
           <Image
             src={displayImage}
             alt={title}
@@ -105,7 +106,6 @@ export function ProductCard({
             referrerPolicy="no-referrer"
           />
 
-          {/* Hover image */}
           {showHoverImage && (
             <Image
               src={images[1]}
@@ -117,7 +117,6 @@ export function ProductCard({
             />
           )}
 
-          {/* Image navigation arrows */}
           {images.length > 1 && (
             <>
               <button
@@ -146,7 +145,6 @@ export function ProductCard({
             </>
           )}
 
-          {/* Dots */}
           {images.length > 1 && (
             <div className="absolute bottom-3 left-0 right-0 z-10 flex justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               {images.map((_, i) => (
@@ -162,14 +160,12 @@ export function ProductCard({
             </div>
           )}
 
-          {/* Sale badge */}
           {originalPrice && (
             <div className="absolute top-3 right-3 bg-[#222] text-white text-[10px] font-medium px-2 py-1 rounded-sm shadow-sm z-10">
               Sale
             </div>
           )}
 
-          {/* Quick Add */}
           <div className="absolute bottom-4 right-4 z-20 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
             <button
               type="button"
@@ -226,20 +222,22 @@ export function ProductCard({
         </Link>
       </div>
 
-      <QuickAddModal
-        isOpen={isQuickAddOpen}
-        onClose={() => setIsQuickAddOpen(false)}
-        product={{
-          title,
-          price,
-          image: imageUrl,
-          slug: slug || href.split('/').pop() || '',
-          sizes,
-          color,
-          styles,
-          categorySlugs,
-        }}
-      />
+      {isQuickAddOpen && (
+        <QuickAddModal
+          isOpen={isQuickAddOpen}
+          onClose={() => setIsQuickAddOpen(false)}
+          product={{
+            title,
+            price,
+            image: imageUrl,
+            slug: slug || href.split('/').pop() || '',
+            sizes,
+            color,
+            styles,
+            categorySlugs,
+          }}
+        />
+      )}
     </>
   );
 }
