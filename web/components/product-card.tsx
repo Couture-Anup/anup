@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { ShoppingBag, MoveLeft, MoveRight } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const QuickAddModal = dynamic(
   () =>
@@ -60,25 +60,39 @@ export function ProductCard({
     )
   );
 
-  const displayImage = images[currentImageIdx] || imageUrl;
+  useEffect(() => {
+    setCurrentImageIdx(0);
+    setIsQuickAddOpen(false);
+  }, [imageUrl, href]);
 
-  const nextImage = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const displayImage =
+    images[currentImageIdx] || imageUrl;
 
-    if (images.length <= 1) return;
-
-    setCurrentImageIdx((prev) => (prev + 1) % images.length);
-  };
-
-  const prevImage = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const nextImage = (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (images.length <= 1) return;
 
     setCurrentImageIdx(
-      (prev) => (prev - 1 + images.length) % images.length
+      (prev) => (prev + 1) % images.length
+    );
+  };
+
+  const prevImage = (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (images.length <= 1) return;
+
+    setCurrentImageIdx(
+      (prev) =>
+        (prev - 1 + images.length) %
+        images.length
     );
   };
 
@@ -90,6 +104,7 @@ export function ProductCard({
   return (
     <>
       <div className="flex flex-col group">
+
         <Link
           href={href}
           className="relative aspect-[3/4] overflow-hidden mb-3 bg-[#f5f5f5] block"
@@ -100,7 +115,9 @@ export function ProductCard({
             alt={title}
             fill
             className={`object-cover transition-all duration-500 group-hover:scale-105 ${
-              showHoverImage ? 'group-hover:opacity-0' : ''
+              showHoverImage
+                ? 'group-hover:opacity-0'
+                : ''
             }`}
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
             referrerPolicy="no-referrer"
@@ -208,13 +225,19 @@ export function ProductCard({
 
           <div className="flex items-center gap-2">
             <span className="text-[13px] text-gray-900 font-medium">
-              Rs.{(price || 0).toLocaleString('en-IN')}.00
+              Rs.
+              {(price || 0).toLocaleString(
+                'en-IN'
+              )}
+              .00
             </span>
 
             {originalPrice && (
               <span className="text-[12px] text-gray-500 line-through">
                 Rs.
-                {(originalPrice || 0).toLocaleString('en-IN')}
+                {(originalPrice || 0).toLocaleString(
+                  'en-IN'
+                )}
                 .00
               </span>
             )}
@@ -225,12 +248,17 @@ export function ProductCard({
       {isQuickAddOpen && (
         <QuickAddModal
           isOpen={isQuickAddOpen}
-          onClose={() => setIsQuickAddOpen(false)}
+          onClose={() =>
+            setIsQuickAddOpen(false)
+          }
           product={{
             title,
             price,
             image: imageUrl,
-            slug: slug || href.split('/').pop() || '',
+            slug:
+              slug ||
+              href.split('/').pop() ||
+              '',
             sizes,
             color,
             styles,
