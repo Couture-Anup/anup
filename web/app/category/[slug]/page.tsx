@@ -12,7 +12,8 @@ import {
 } from '@/lib/queries';
 import { CollectionGrid } from '@/components/collection-grid';
 import { Suspense } from 'react';
-
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 function CategoryGridLoader() {
   return (
     <div className="w-full mt-4">
