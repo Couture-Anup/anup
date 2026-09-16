@@ -316,9 +316,9 @@ function NavItem({
                         href={link.href}
 
                         onClick={(e) => {
-                      hardNavigate(e, img.href);
-                      handleNavigation();
-                    }}
+                          hardNavigate(e, link.href);
+                          handleNavigation();
+                        }}
 
                         className="
                           text-sm
