@@ -1,220 +1,623 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { ChevronDown, Grid3x3, LayoutGrid } from 'lucide-react';
+import {
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 
-export function CollectionFilters({ 
-  totalItems, 
+import {
+  ChevronDown,
+  Grid3x3,
+  LayoutGrid,
+} from 'lucide-react';
+
+export function CollectionFilters({
+  totalItems,
   onLayoutChange,
   currentLayout,
-  highestPrice
-}: { 
-  totalItems: number,
-  onLayoutChange: (layout: 'grid-2' | 'grid-4') => void,
-  currentLayout: 'grid-2' | 'grid-4',
-  highestPrice?: number
+  highestPrice = 0,
+}: {
+  totalItems: number;
+  onLayoutChange: (
+    layout: 'grid-2' | 'grid-4'
+  ) => void;
+  currentLayout: 'grid-2' | 'grid-4';
+  highestPrice?: number;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
-  const currentSort = searchParams.get('sort') || '';
-  const currentAvailability = searchParams.get('availability') || '';
-  const currentPrice = searchParams.get('price') || '';
 
-  const [sortOpen, setSortOpen] = useState(false);
-  const [availabilityOpen, setAvailabilityOpen] = useState(false);
-  const [priceOpen, setPriceOpen] = useState(false);
+  // ======================================================
+  // CURRENT URL FILTERS
+  // ======================================================
 
-  // Parse current price min/max from URL for local state
-  const initialMinPrice = currentPrice ? currentPrice.split('-')[0] : '';
-  const initialMaxPrice = currentPrice && currentPrice.includes('-') ? currentPrice.split('-')[1] : '';
-  
-  const [minPriceInput, setMinPriceInput] = useState(initialMinPrice);
-  const [maxPriceInput, setMaxPriceInput] = useState(initialMaxPrice);
+  const currentSort =
+    searchParams.get('sort') || '';
 
-  const applyPriceFilter = () => {
-    if (!minPriceInput && !maxPriceInput) {
-      updateParam('price', '');
-    } else {
-      updateParam('price', `${minPriceInput || 0}-${maxPriceInput || highestPrice}`);
-    }
-    setPriceOpen(false);
-  };
+  const currentAvailability =
+    searchParams.get('availability') || '';
 
-  const updateParam = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+  const currentPrice =
+    searchParams.get('price') || '';
+
+  // ======================================================
+  // DROPDOWN STATES
+  // ======================================================
+
+  const [sortOpen, setSortOpen] =
+    useState(false);
+
+  const [
+    availabilityOpen,
+    setAvailabilityOpen,
+  ] = useState(false);
+
+  const [priceOpen, setPriceOpen] =
+    useState(false);
+
+  // ======================================================
+  // PRICE INPUT INITIAL VALUES
+  // ======================================================
+
+  const initialMinPrice =
+    currentPrice &&
+    currentPrice.includes('-')
+      ? currentPrice.split('-')[0]
+      : '';
+
+  const initialMaxPrice =
+    currentPrice &&
+    currentPrice.includes('-')
+      ? currentPrice.split('-')[1]
+      : '';
+
+  const [
+    minPriceInput,
+    setMinPriceInput,
+  ] = useState(initialMinPrice);
+
+  const [
+    maxPriceInput,
+    setMaxPriceInput,
+  ] = useState(initialMaxPrice);
+
+  // ======================================================
+  // UPDATE URL PARAMETER
+  // ======================================================
+
+  const updateParam = (
+    key: string,
+    value: string
+  ) => {
+    const params =
+      new URLSearchParams(
+        searchParams.toString()
+      );
+
     if (value) {
       params.set(key, value);
     } else {
       params.delete(key);
     }
-    router.push(`?${params.toString()}`);
+
+    const queryString =
+      params.toString();
+
+    router.push(
+      queryString
+        ? `?${queryString}`
+        : '?',
+      {
+        scroll: false,
+      }
+    );
+  };
+
+  // ======================================================
+  // APPLY PRICE FILTER
+  // ======================================================
+
+  const applyPriceFilter = () => {
+    if (
+      !minPriceInput &&
+      !maxPriceInput
+    ) {
+      updateParam(
+        'price',
+        ''
+      );
+    } else {
+      const minimum =
+        minPriceInput || '0';
+
+      const maximum =
+        maxPriceInput ||
+        String(highestPrice || '');
+
+      updateParam(
+        'price',
+        `${minimum}-${maximum}`
+      );
+    }
+
+    setPriceOpen(false);
+  };
+
+  // ======================================================
+  // CLOSE ALL DROPDOWNS
+  // ======================================================
+
+  const closeDropdowns = () => {
+    setSortOpen(false);
+    setAvailabilityOpen(false);
+    setPriceOpen(false);
   };
 
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-200 pb-4 mb-8">
+
+      {/* ==================================================
+          LEFT FILTERS
+      ================================================== */}
+
       <div className="flex items-center gap-6">
-        {/* Availability Dropdown */}
+
+        {/* ================================================
+            AVAILABILITY
+        ================================================ */}
+
         <div className="relative">
-          <button 
+
+          <button
+            type="button"
             suppressHydrationWarning
-            onClick={() => { setAvailabilityOpen(!availabilityOpen); setSortOpen(false); setPriceOpen(false); }}
+            onClick={() => {
+              setAvailabilityOpen(
+                !availabilityOpen
+              );
+
+              setSortOpen(false);
+              setPriceOpen(false);
+            }}
             className="flex items-center gap-2 text-sm text-gray-900 font-medium"
           >
-            Availability <ChevronDown className="w-4 h-4 text-gray-500" />
+            Availability
+
+            <ChevronDown className="w-4 h-4 text-gray-500" />
           </button>
-          
+
           {availabilityOpen && (
             <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-md z-50 py-1">
-              <button 
+
+              {/* ALL */}
+
+              <button
+                type="button"
                 suppressHydrationWarning
-                onClick={() => { updateParam('availability', ''); setAvailabilityOpen(false); }}
-                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${!currentAvailability ? 'font-bold' : ''}`}
+                onClick={() => {
+                  updateParam(
+                    'availability',
+                    ''
+                  );
+
+                  setAvailabilityOpen(
+                    false
+                  );
+                }}
+                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
+                  !currentAvailability
+                    ? 'font-bold'
+                    : ''
+                }`}
               >
                 All
               </button>
-              <button 
+
+              {/* IN STOCK */}
+
+              <button
+                type="button"
                 suppressHydrationWarning
-                onClick={() => { updateParam('availability', 'in_stock'); setAvailabilityOpen(false); }}
-                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${currentAvailability === 'in_stock' ? 'font-bold' : ''}`}
+                onClick={() => {
+                  updateParam(
+                    'availability',
+                    'in_stock'
+                  );
+
+                  setAvailabilityOpen(
+                    false
+                  );
+                }}
+                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
+                  currentAvailability ===
+                  'in_stock'
+                    ? 'font-bold'
+                    : ''
+                }`}
               >
                 In Stock
               </button>
-              <button 
+
+              {/* OUT OF STOCK */}
+
+              <button
+                type="button"
                 suppressHydrationWarning
-                onClick={() => { updateParam('availability', 'out_of_stock'); setAvailabilityOpen(false); }}
-                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${currentAvailability === 'out_of_stock' ? 'font-bold' : ''}`}
+                onClick={() => {
+                  updateParam(
+                    'availability',
+                    'out_of_stock'
+                  );
+
+                  setAvailabilityOpen(
+                    false
+                  );
+                }}
+                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
+                  currentAvailability ===
+                  'out_of_stock'
+                    ? 'font-bold'
+                    : ''
+                }`}
               >
                 Out of Stock
               </button>
+
             </div>
           )}
+
         </div>
 
-        {/* Price Dropdown */}
+        {/* ================================================
+            PRICE
+        ================================================ */}
+
         <div className="relative">
-          <button 
+
+          <button
+            type="button"
             suppressHydrationWarning
-            onClick={() => { setPriceOpen(!priceOpen); setAvailabilityOpen(false); setSortOpen(false); }}
+            onClick={() => {
+              setPriceOpen(
+                !priceOpen
+              );
+
+              setAvailabilityOpen(
+                false
+              );
+
+              setSortOpen(false);
+            }}
             className="flex items-center gap-2 text-sm text-gray-900 font-medium"
           >
-            Price <ChevronDown className="w-4 h-4 text-gray-500" />
+            Price
+
+            <ChevronDown className="w-4 h-4 text-gray-500" />
           </button>
-          
+
           {priceOpen && (
             <div className="absolute top-full left-0 mt-2 w-[320px] bg-white border border-gray-200 shadow-xl rounded-lg z-50 p-6">
+
               <div className="flex items-center gap-4 mb-6">
+
+                {/* MINIMUM PRICE */}
+
                 <div className="relative flex-1">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">₹</span>
-                  <input 
+
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">
+                    ₹
+                  </span>
+
+                  <input
                     type="number"
-                    value={minPriceInput}
-                    onChange={(e) => setMinPriceInput(e.target.value)}
+                    min="0"
+                    value={
+                      minPriceInput
+                    }
+                    onChange={(e) =>
+                      setMinPriceInput(
+                        e.target.value
+                      )
+                    }
                     placeholder="0"
                     className="w-full pl-8 pr-3 py-2 border border-gray-200 rounded-md text-sm outline-none focus:border-gray-400 transition-colors"
                   />
+
                 </div>
-                <span className="text-sm text-gray-600 font-medium">to</span>
+
+                <span className="text-sm text-gray-600 font-medium">
+                  to
+                </span>
+
+                {/* MAXIMUM PRICE */}
+
                 <div className="relative flex-1">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">₹</span>
-                  <input 
+
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">
+                    ₹
+                  </span>
+
+                  <input
                     type="number"
-                    value={maxPriceInput}
-                    onChange={(e) => setMaxPriceInput(e.target.value)}
-                    placeholder={highestPrice ? highestPrice.toLocaleString('en-IN', { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '0.00'}
+                    min="0"
+                    value={
+                      maxPriceInput
+                    }
+                    onChange={(e) =>
+                      setMaxPriceInput(
+                        e.target.value
+                      )
+                    }
+                    placeholder={
+                      highestPrice
+                        ? highestPrice.toLocaleString(
+                            'en-IN',
+                            {
+                              maximumFractionDigits: 2,
+                              minimumFractionDigits: 2,
+                            }
+                          )
+                        : '0.00'
+                    }
                     className="w-full pl-8 pr-3 py-2 border border-gray-200 rounded-md text-sm outline-none focus:border-gray-400 transition-colors"
                   />
+
                 </div>
+
               </div>
-              <div className="flex justify-between items-center">
+
+              <div className="flex justify-between items-center gap-4">
+
                 <p className="text-sm text-gray-600">
-                  The highest price is Rs.{highestPrice ? highestPrice.toLocaleString('en-IN', { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '0.00'}
+                  The highest price is
+                  Rs.
+                  {highestPrice
+                    ? highestPrice.toLocaleString(
+                        'en-IN',
+                        {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        }
+                      )
+                    : '0.00'}
                 </p>
-                <button 
+
+                <button
+                  type="button"
                   suppressHydrationWarning
-                  onClick={applyPriceFilter}
+                  onClick={
+                    applyPriceFilter
+                  }
                   className="px-4 py-1.5 bg-gray-900 text-white text-xs font-medium rounded-md hover:bg-gray-800 transition-colors"
                 >
                   Apply
                 </button>
+
               </div>
+
             </div>
           )}
+
         </div>
+
       </div>
-      
+
+      {/* ==================================================
+          RIGHT SIDE
+      ================================================== */}
+
       <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mt-4 sm:mt-0">
-        <span>{totalItems} items</span>
-        
-        {/* Sort Dropdown */}
+
+        {/* TOTAL ITEMS */}
+
+        <span>
+          {totalItems} items
+        </span>
+
+        {/* ================================================
+            SORT
+        ================================================ */}
+
         <div className="relative ml-0 sm:ml-4">
-          <button 
+
+          <button
+            type="button"
             suppressHydrationWarning
-            onClick={() => { setSortOpen(!sortOpen); setAvailabilityOpen(false); setPriceOpen(false); }}
+            onClick={() => {
+              setSortOpen(
+                !sortOpen
+              );
+
+              setAvailabilityOpen(
+                false
+              );
+
+              setPriceOpen(false);
+            }}
             className="flex items-center gap-2 text-sm text-gray-900 font-medium"
           >
-            Sort <ChevronDown className="w-4 h-4 text-gray-500" />
+            Sort
+
+            <ChevronDown className="w-4 h-4 text-gray-500" />
           </button>
-          
+
           {sortOpen && (
             <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-md z-50 py-1">
-               <button 
+
+              {/* FEATURED */}
+
+              <button
+                type="button"
                 suppressHydrationWarning
-                onClick={() => { updateParam('sort', ''); setSortOpen(false); }}
-                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${!currentSort ? 'font-bold' : ''}`}
+                onClick={() => {
+                  updateParam(
+                    'sort',
+                    ''
+                  );
+
+                  setSortOpen(
+                    false
+                  );
+                }}
+                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
+                  !currentSort
+                    ? 'font-bold'
+                    : ''
+                }`}
               >
                 Featured
               </button>
-              <button 
+
+              {/* LOW TO HIGH */}
+
+              <button
+                type="button"
                 suppressHydrationWarning
-                onClick={() => { updateParam('sort', 'price_asc'); setSortOpen(false); }}
-                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${currentSort === 'price_asc' ? 'font-bold' : ''}`}
+                onClick={() => {
+                  updateParam(
+                    'sort',
+                    'price_asc'
+                  );
+
+                  setSortOpen(
+                    false
+                  );
+                }}
+                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
+                  currentSort ===
+                  'price_asc'
+                    ? 'font-bold'
+                    : ''
+                }`}
               >
                 Price: Low to High
               </button>
-              <button 
+
+              {/* HIGH TO LOW */}
+
+              <button
+                type="button"
                 suppressHydrationWarning
-                onClick={() => { updateParam('sort', 'price_desc'); setSortOpen(false); }}
-                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${currentSort === 'price_desc' ? 'font-bold' : ''}`}
+                onClick={() => {
+                  updateParam(
+                    'sort',
+                    'price_desc'
+                  );
+
+                  setSortOpen(
+                    false
+                  );
+                }}
+                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
+                  currentSort ===
+                  'price_desc'
+                    ? 'font-bold'
+                    : ''
+                }`}
               >
                 Price: High to Low
               </button>
-              <button 
+
+              {/* NEWEST */}
+
+              <button
+                type="button"
                 suppressHydrationWarning
-                onClick={() => { updateParam('sort', 'newest'); setSortOpen(false); }}
-                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${currentSort === 'newest' ? 'font-bold' : ''}`}
+                onClick={() => {
+                  updateParam(
+                    'sort',
+                    'newest'
+                  );
+
+                  setSortOpen(
+                    false
+                  );
+                }}
+                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
+                  currentSort ===
+                  'newest'
+                    ? 'font-bold'
+                    : ''
+                }`}
               >
                 Newest Arrivals
               </button>
+
             </div>
           )}
+
         </div>
+
+        {/* ================================================
+            GRID LAYOUT
+        ================================================ */}
+
         <div className="flex items-center gap-2 ml-4">
-          <button 
+
+          {/* GRID 4 */}
+
+          <button
+            type="button"
             suppressHydrationWarning
-            onClick={() => onLayoutChange('grid-4')}
-            className={`p-1.5 rounded transition-colors ${currentLayout === 'grid-4' ? 'bg-gray-100 text-gray-900' : 'text-gray-400 hover:text-gray-900'}`}
+            onClick={() =>
+              onLayoutChange(
+                'grid-4'
+              )
+            }
+            className={`p-1.5 rounded transition-colors ${
+              currentLayout ===
+              'grid-4'
+                ? 'bg-gray-100 text-gray-900'
+                : 'text-gray-400 hover:text-gray-900'
+            }`}
+            aria-label="Show more products per row"
           >
             <Grid3x3 className="w-4 h-4" />
           </button>
-          <button 
+
+          {/* GRID 2 */}
+
+          <button
+            type="button"
             suppressHydrationWarning
-            onClick={() => onLayoutChange('grid-2')}
-            className={`p-1.5 rounded transition-colors ${currentLayout === 'grid-2' ? 'bg-gray-100 text-gray-900' : 'text-gray-400 hover:text-gray-900'}`}
+            onClick={() =>
+              onLayoutChange(
+                'grid-2'
+              )
+            }
+            className={`p-1.5 rounded transition-colors ${
+              currentLayout ===
+              'grid-2'
+                ? 'bg-gray-100 text-gray-900'
+                : 'text-gray-400 hover:text-gray-900'
+            }`}
+            aria-label="Show larger products"
           >
             <LayoutGrid className="w-4 h-4" />
           </button>
+
         </div>
+
       </div>
 
-      {/* Click outside to close dropdowns */}
-      {(sortOpen || availabilityOpen || priceOpen) && (
-        <div 
-          className="fixed inset-0 z-40" 
-          onClick={() => { setSortOpen(false); setAvailabilityOpen(false); setPriceOpen(false); }}
+      {/* ==================================================
+          CLICK OUTSIDE
+      ================================================== */}
+
+      {(
+        sortOpen ||
+        availabilityOpen ||
+        priceOpen
+      ) && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={
+            closeDropdowns
+          }
         />
       )}
+
     </div>
   );
 }
