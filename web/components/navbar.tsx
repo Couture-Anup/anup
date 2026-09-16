@@ -23,6 +23,14 @@ import { signOut } from 'firebase/auth';
 import { useCart } from '@/contexts/CartContext';
 
 
+function hardNavigate(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
+  if (href.startsWith('/category/') || href.startsWith('/collection/')) {
+    e.preventDefault();
+    window.location.assign(href);
+  }
+}
+
+
 /* =========================================================
    NAVIGATION ITEM
 ========================================================= */
@@ -112,7 +120,10 @@ function NavItem({
 
         href={href}
 
-        onClick={handleNavigation}
+        onClick={(e) => {
+          hardNavigate(e, href);
+          handleNavigation();
+        }}
 
         className={`
           text-gray-900
@@ -211,7 +222,10 @@ function NavItem({
 
                     href={link.href}
 
-                    onClick={handleNavigation}
+                    onClick={(e) => {
+                      hardNavigate(e, link.href);
+                      handleNavigation();
+                    }}
 
                     className="
                       text-sm
@@ -301,7 +315,10 @@ function NavItem({
 
                         href={link.href}
 
-                        onClick={handleNavigation}
+                        onClick={(e) => {
+                      hardNavigate(e, img.href);
+                      handleNavigation();
+                    }}
 
                         className="
                           text-sm
@@ -2184,11 +2201,10 @@ export function Navbar({
                     justify-between
                   "
 
-                  onClick={() =>
-                    setIsMobileMenuOpen(
-                      false
-                    )
-                  }
+                  onClick={(e) => {
+                    hardNavigate(e, '/collection/new-in');
+                    setIsMobileMenuOpen(false);
+                  }}
 
                 >
 
@@ -2248,11 +2264,10 @@ export function Navbar({
                           justify-between
                         "
 
-                        onClick={() =>
-                          setIsMobileMenuOpen(
-                            false
-                          )
-                        }
+                        onClick={(e) => {
+                          hardNavigate(e, `/category/${cat.slug}`);
+                          setIsMobileMenuOpen(false);
+                        }}
 
                       >
 
@@ -2305,11 +2320,10 @@ export function Navbar({
                                 justify-between
                               "
 
-                              onClick={() =>
-                                setIsMobileMenuOpen(
-                                  false
-                                )
-                              }
+                              onClick={(e) => {
+                                hardNavigate(e, `/category/${sub.slug}`);
+                                setIsMobileMenuOpen(false);
+                              }}
 
                             >
 
@@ -2356,11 +2370,10 @@ export function Navbar({
                           justify-between
                         "
 
-                        onClick={() =>
-                          setIsMobileMenuOpen(
-                            false
-                          )
-                        }
+                        onClick={(e) => {
+                          hardNavigate(e, `/collection/${col.slug}`);
+                          setIsMobileMenuOpen(false);
+                        }}
 
                       >
 
