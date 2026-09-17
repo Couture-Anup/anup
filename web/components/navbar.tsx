@@ -211,9 +211,10 @@ function NavItem({
                   grid
                   grid-cols-2
                   grid-flow-col
-                  grid-rows-4
+                  auto-rows-max
                   gap-x-12
                   gap-y-4
+                  content-start
                 "
               >
 
