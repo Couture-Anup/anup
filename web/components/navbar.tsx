@@ -207,10 +207,13 @@ function NavItem({
 
               <div
                 className="
-                  w-[400px]
-                  flex
-                  flex-col
-                  gap-4
+                  w-[500px]
+                  grid
+                  grid-cols-2
+                  grid-flow-col
+                  grid-rows-4
+                  gap-x-12
+                  gap-y-4
                 "
               >
 
