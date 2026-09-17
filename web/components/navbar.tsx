@@ -11,7 +11,7 @@ import {
   ChevronLeft,
 } from 'lucide-react';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { SearchModal } from './search-modal';
 import { AuthModal } from './auth-modal';
@@ -70,8 +70,15 @@ function NavItem({
   const [preventReopen, setPreventReopen] =
     useState(false);
 
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
 
   const handleMouseEnter = () => {
+
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
 
     if (!preventReopen) {
       setIsOpen(true);
@@ -82,14 +89,25 @@ function NavItem({
 
   const handleMouseLeave = () => {
 
-    setIsOpen(false);
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+    }
 
-    setPreventReopen(false);
+    closeTimeoutRef.current = setTimeout(() => {
+      setIsOpen(false);
+      setPreventReopen(false);
+      closeTimeoutRef.current = null;
+    }, 300);
 
   };
 
 
   const handleNavigation = () => {
+
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
 
     setIsOpen(false);
 
