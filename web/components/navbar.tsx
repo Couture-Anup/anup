@@ -204,59 +204,59 @@ function NavItem({
             {/* STANDARD LINKS COLUMN */}
 
             {links && !columns && (
+              <div className="w-[500px] flex gap-12 items-start">
 
-              <div
-                className="
-                  w-[500px]
-                  grid
-                  grid-cols-2
-                  grid-flow-col
-                  auto-rows-max
-                  gap-x-12
-                  gap-y-4
-                  content-start
-                "
-              >
+                {/* LEFT 4 */}
+                <div className="w-1/2 flex flex-col gap-[8px]">
+                  {links.slice(0, 4).map((link) => (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      onClick={(e) => {
+                        hardNavigate(e, link.href);
+                        handleNavigation();
+                      }}
+                      className="
+                        text-sm
+                        font-medium
+                        tracking-wide
+                        text-gray-900
+                        hover:text-gray-500
+                        transition-colors
+                        uppercase
+                      "
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
 
-                {links.map((link) => (
-
-                  <Link
-
-                    key={link.label}
-
-                    href={link.href}
-
-                    onClick={(e) => {
-                      hardNavigate(e, link.href);
-                      handleNavigation();
-                    }}
-
-                    className="
-                      text-sm
-
-                      font-medium
-
-                      tracking-wide
-
-                      text-gray-900
-
-                      hover:text-gray-500
-
-                      transition-colors
-
-                      uppercase
-                    "
-
-                  >
-
-                    {link.label}
-
-                  </Link>
-
-                ))}
+                {/* RIGHT 4 */}
+                <div className="w-1/2 flex flex-col gap-[8px]">
+                  {links.slice(4, 8).map((link) => (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      onClick={(e) => {
+                        hardNavigate(e, link.href);
+                        handleNavigation();
+                      }}
+                      className="
+                        text-sm
+                        font-medium
+                        tracking-wide
+                        text-gray-900
+                        hover:text-gray-500
+                        transition-colors
+                        uppercase
+                      "
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
 
               </div>
-
             )}
 
 
